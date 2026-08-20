@@ -1,0 +1,61 @@
+\subsection{Nombrado de clases}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+  \item \textbf{Los nombres de las clases deberán escribirse utilizando \texttt{PascalCase}.} Cada palabra significativa comenzará con mayúscula y no se utilizarán guiones bajos, guiones u otros separadores entre palabras. Ejemplos válidos para el videojuego son \texttt{PlayerController}, \texttt{EnemySpawner} y \texttt{GameStateManager}. Microsoft establece \texttt{PascalCase} como la convención para nombres de clases y, en general, para los tipos de C\# (Microsoft, 2026).
+
+  \item \textbf{El nombre de una clase deberá ser un sustantivo o una frase nominal que describa claramente el concepto o responsabilidad que representa.} Por ejemplo, \texttt{PlayerMovementController} identifica un componente encargado del movimiento del jugador, mientras que \texttt{EnemySpawnManager} identifica un componente relacionado con la gestión de aparición de enemigos. Las guías de diseño de .NET establecen que las clases y estructuras deben nombrarse mediante sustantivos o frases nominales y utilizar \texttt{PascalCase} (Microsoft, 2025).
+
+  \item \textbf{Se preferirán nombres descriptivos y específicos sobre nombres genéricos o excesivamente cortos.} Una clase no deberá denominarse únicamente \texttt{Controller}, \texttt{Manager}, \texttt{Handler} o \texttt{System} cuando su responsabilidad pueda expresarse con mayor precisión. En un videojuego deberán preferirse nombres como \texttt{PlayerMovementController}, \texttt{GameStateManager}, \texttt{DamageHandler} o \texttt{CombatSystem}. Microsoft recomienda utilizar identificadores significativos y descriptivos y priorizar la claridad sobre la brevedad (Microsoft, 2026). Unity también advierte que nombres genéricos como \texttt{Controller} pueden provocar ambigüedades y conflictos conforme aumenta el tamaño del proyecto (Unity Technologies, s. f.).
+
+  \item \textbf{No se utilizarán prefijos para indicar que un tipo es una clase.} Quedan prohibidos nombres como \texttt{CPlayerController}, \texttt{ClsEnemy}, \texttt{CGameManager} o equivalentes. La naturaleza del tipo ya queda determinada por su declaración mediante \texttt{class}, por lo que agregar información redundante disminuye la legibilidad. Las guías de diseño de .NET indican expresamente que los nombres de las clases no deben utilizar prefijos para identificar su tipo (Microsoft, 2025).
+
+  \item \textbf{No se utilizarán abreviaturas poco claras ni contracciones en los nombres de las clases.} Deberá preferirse \texttt{PlayerMovementController} sobre \texttt{PlayerMoveCtrl}, \texttt{EnemySpawnManager} sobre \texttt{EnemySpwnMgr} y \texttt{CharacterInventory} sobre \texttt{CharInv}. Solo podrán utilizarse acrónimos ampliamente reconocidos cuando no reduzcan la comprensión del nombre. Microsoft recomienda evitar abreviaturas y acrónimos que no sean ampliamente conocidos y utilizar nombres fácilmente legibles (Microsoft, 2023; Microsoft, 2026).
+
+  \item \textbf{Los sufijos que expresen una responsabilidad arquitectónica deberán utilizarse únicamente cuando describan realmente el rol de la clase.} En el contexto del videojuego podrán utilizarse nombres como \texttt{PlayerInputController}, \texttt{GameStateManager}, \texttt{CombatSystem}, \texttt{SaveService} o \texttt{DamageHandler}; sin embargo, el sufijo no sustituirá una descripción concreta del dominio. Esta regla adapta al videojuego la recomendación de .NET de utilizar nombres semánticamente significativos y nombres que hagan clara la relación o función del tipo (Microsoft, 2025; Microsoft, 2026).
+
+  \item \textbf{Cuando una clase represente una especialización claramente reconocible, el nombre deberá expresar tanto el dominio como su responsabilidad.} Por ejemplo, se preferirá \texttt{PlayerMovementController} y \texttt{EnemyMovementController} frente a dos clases genéricas llamadas \texttt{Controller} situadas en diferentes partes del proyecto. .NET permite utilizar nombres que hagan explícita la relación entre tipos, mientras que Unity recomienda utilizar nombres y namespaces que eviten ambigüedades entre clases de diferentes sistemas del juego (Microsoft, 2025; Unity Technologies, s. f.).
+
+  \item \textbf{En motores donde exista asociación entre el archivo de script y la clase, el archivo deberá utilizar el mismo nombre que la clase principal.} Por ejemplo, una clase \texttt{PlayerMovementController} deberá almacenarse como \texttt{PlayerMovementController.cs}. En Unity esta correspondencia es una práctica recomendada y es especialmente importante para tipos derivados de \texttt{MonoBehaviour} o \texttt{ScriptableObject} (Unity Technologies, s. f.).
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerMovementController
+{
+    public float MovementSpeed { get; private set; }
+
+    public void SetMovementSpeed(float movementSpeed)
+    {
+        MovementSpeed = movementSpeed;
+    }
+
+    public void Move()
+    {
+    }
+}
+\end{lstlisting}
+
+El nombre \texttt{PlayerMovementController} utiliza \texttt{PascalCase}, funciona como frase nominal y comunica de forma explícita tanto el dominio (\texttt{PlayerMovement}) como la responsabilidad arquitectónica (\texttt{Controller}). Las propiedades y métodos mantienen igualmente las convenciones idiomáticas de C\#.
+
+\subsubsection{Sin estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class player_move_ctrl
+{
+    public float MovementSpeed { get; private set; }
+
+    public void SetMovementSpeed(float movementSpeed)
+    {
+        MovementSpeed = movementSpeed;
+    }
+
+    public void Move()
+    {
+    }
+}
+\end{lstlisting}
+
+La declaración de la línea 1 incumple el estándar porque \texttt{player\_move\_ctrl} utiliza minúsculas y guiones bajos en lugar de \texttt{PascalCase}, emplea la abreviatura \texttt{ctrl} y reduce \texttt{Movement} a \texttt{move}, haciendo que el nombre sea menos descriptivo. Estas decisiones contradicen las recomendaciones de utilizar \texttt{PascalCase}, nombres significativos y claridad sobre brevedad (Microsoft, 2026).

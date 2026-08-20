@@ -3,24 +3,57 @@
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{csquotes}
-\usepackage{graphicx}
-\usepackage[backend=biber,style=numeric]{biblatex}
-\addbibresource{referencias.bib}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{tocloft}
+\usepackage[hidelinks]{hyperref}
 
-\title{Título del documento}
-\author{Autor/a}
-\date{\today}
+\geometry{margin=2.5cm}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\setlength{\emergencystretch}{3em}
+\setlength{\cftsecnumwidth}{3em}
+\setlength{\cftsubsecnumwidth}{4em}
+\setlength{\cftsubsubsecnumwidth}{5em}
+
+\newcommand{\sectionplaceholder}[1]{\section{#1}\mbox{}\par}
+\newcommand{\subsectionplaceholder}[1]{\subsection{#1}\mbox{}\par}
+
+\lstdefinestyle{csharpstyle}{
+  language=[Sharp]C,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue!60!black},
+  commentstyle=\color{green!40!black},
+  stringstyle=\color{orange!60!black},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible
+}
+
+\title{Estándar de Codificación C\# para Desarrollo de Videojuegos}
+\author{}
+\date{}
 
 \begin{document}
 
 \maketitle
 \tableofcontents
 
-\input{secciones/introduccion}
-\input{secciones/desarrollo}
-\input{secciones/conclusiones}
-
-\printbibliography
+\input{secciones/01-introduccion}
+\input{secciones/02-proposito}
+\input{secciones/03-reglas-nombrado/index}
+\input{secciones/04-organizacion-proyecto/index}
+\input{secciones/05-practicas-programacion/index}
+\input{secciones/06-manejo-conexiones/index}
+\input{secciones/07-pruebas-unitarias/index}
+\input{secciones/08-validacion-seguridad/index}
+\input{secciones/09-dtos-modelos/index}
+\input{secciones/10-manejo-documentos/index}
+\input{secciones/11-gestion-ventanas/index}
+\input{secciones/12-dependencias-externas}
+\input{secciones/13-vulnerabilidades-conocidas}
 
 \end{document}
