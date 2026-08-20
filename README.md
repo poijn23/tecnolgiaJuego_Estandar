@@ -1,0 +1,1 @@
+# tecnolgiaJuego_Estandar
