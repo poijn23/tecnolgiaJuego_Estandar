@@ -1,0 +1,26 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{referencias.bib}
+
+\title{Título del documento}
+\author{Autor/a}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\input{secciones/introduccion}
+\input{secciones/desarrollo}
+\input{secciones/conclusiones}
+
+\printbibliography
+
+\end{document}
