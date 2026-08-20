@@ -1,1 +1,69 @@
-\subsectionplaceholder{Número máximo de operadores en expresiones}
+\subsection{Número máximo de operadores en expresiones}
+
+\subsubsection{Reglas de uso}
+
+\begin{enumerate}
+  \item \textbf{Ninguna expresión deberá contener más de cuatro operadores.} Cuando el cálculo natural del dominio requiera más operaciones, estas deberán distribuirse en variables intermedias con nombre explicativo en lugar de acumularse en una sola línea. Esta restricción se apoya en los límites de la memoria de trabajo humana: Miller documentó que la capacidad de una persona para procesar información simultánea se satura entre cinco y nueve elementos, por lo que expresiones más largas incrementan el riesgo de errores de lectura e interpretación (Miller, 1956). McConnell recomienda de forma consistente mantener las expresiones booleanas y aritméticas simples y dividir las expresiones complejas en pasos intermedios (McConnell, 2004).
+
+  \item \textbf{Para efectos de este límite, se consideran operadores los operadores aritméticos, relacionales, lógicos, bit a bit, de asignación (simple y compuesta) y el operador condicional ternario; no se cuentan las llamadas a miembros, los corchetes de indexación ni los operadores de conversión de tipo.} Esta definición operativa retoma la noción de operador que Halstead utilizó para cuantificar la complejidad de un programa a partir del conteo de los operadores y operandos distintos que contiene (Halstead, 1977).
+
+  \item \textbf{Cuando una subexpresión combine más de un concepto del dominio del videojuego, deberá extraerse en una variable con nombre explicativo antes de utilizarse.} Por ejemplo, en \texttt{DamageCalculator} el daño reducido por la armadura y el multiplicador por golpe crítico deberán calcularse por separado antes de combinarse en el resultado final, en lugar de anidarse en una única expresión de retorno. Fowler describe esta transformación como la extracción de una variable explicativa, que sustituye una subexpresión por un nombre que comunica su propósito (Fowler, 2018). McConnell coincide en que asignar un nombre a una expresión booleana o aritmética compleja mejora su legibilidad (McConnell, 2004).
+
+  \item \textbf{Cuando el mismo cálculo se repita en más de un lugar del código, deberá extraerse a un método con nombre significativo en lugar de repetir la expresión.} Martin sostiene que las funciones deben hacer una sola cosa y que extraer fragmentos de lógica a funciones con nombres descriptivos reduce la carga cognitiva de quien lee el código (Martin, 2008).
+
+  \item \textbf{Al combinar operadores de distinta categoría (aritméticos, relacionales y lógicos) en una misma expresión, se utilizarán paréntesis explícitos en lugar de depender únicamente de la precedencia implícita entre operadores.} La documentación de C\# indica expresamente que los paréntesis pueden emplearse para modificar o hacer explícito el orden de evaluación que impone la precedencia de los operadores (Microsoft, 2026).
+
+  \item \textbf{No se combinarán, en una misma expresión, operadores con efectos secundarios (incremento, decremento o asignación compuesta) junto con operadores relacionales o lógicos.} Evaluar el efecto secundario y la condición en pasos separados evita ambigüedades sobre el valor que efectivamente se está comparando. McConnell advierte que combinar efectos secundarios con otras operaciones en la misma expresión dificulta predecir el comportamiento del programa y facilita la introducción de errores (McConnell, 2004).
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DamageCalculator
+{
+    public int CalculateDamage(int baseDamage, int weaponBonus, float armorReduction, bool isCriticalHit)
+    {
+        int rawDamage = baseDamage + weaponBonus;
+        float damageAfterArmor = rawDamage * (1f - armorReduction);
+        float criticalMultiplier = isCriticalHit ? 2f : 1f;
+        float finalDamage = damageAfterArmor * criticalMultiplier;
+
+        return (int)finalDamage;
+    }
+}
+\end{lstlisting}
+
+El método \texttt{CalculateDamage} distribuye el cálculo en cuatro variables intermedias (\texttt{rawDamage}, \texttt{damageAfterArmor}, \texttt{criticalMultiplier} y \texttt{finalDamage}), cada una de las cuales combina como máximo dos operadores. Los nombres de las variables comunican explícitamente qué concepto del dominio representa cada paso, y ninguna expresión combina operadores con efectos secundarios junto con operadores relacionales o lógicos.
+
+\subsubsection{Sin estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DamageCalculator
+{
+    public int CalculateDamage(int baseDamage, int weaponBonus, float armorReduction, bool isCriticalHit)
+    {
+        return (int)((baseDamage + weaponBonus) * (1f - armorReduction) * (isCriticalHit ? 2f : 1f) + (isCriticalHit && armorReduction < 0.1f ? 5f : 0f));
+    }
+}
+\end{lstlisting}
+
+La expresión de retorno de \texttt{CalculateDamage} combina nueve operadores (\texttt{+}, \texttt{*}, \texttt{-}, \texttt{*}, \texttt{?:}, \texttt{+}, \texttt{\&\&}, \texttt{<} y \texttt{?:}) en una sola línea, muy por encima del límite de cuatro operadores por expresión. McConnell recomienda dividir expresiones de esta complejidad en pasos intermedios (McConnell, 2004), recomendación motivada por los límites de la memoria de trabajo humana descritos por Miller (1956). Ni el cálculo del daño reducido por armadura, ni el multiplicador crítico, ni el bono por baja armadura se extraen a variables con nombre explicativo, contradiciendo la extracción de variables explicativas descrita por Fowler (2018) y la recomendación de Martin de mantener la lógica en unidades pequeñas y nombradas (Martin, 2008).
+
+\subsubsection{Referencias}
+
+\noindent\hangindent=1.25em\hangafter=1 Fowler, M. (2018). \textit{Refactoring: Improving the design of existing code} (2.\textsuperscript{a} ed.). Addison-Wesley.
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 Halstead, M. H. (1977). \textit{Elements of software science}. Elsevier North-Holland.
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 Martin, R.~C. (2008). \textit{Clean code: A handbook of agile software craftsmanship}. Prentice Hall.
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 McConnell, S. (2004). \textit{Code complete: A practical handbook of software construction} (2.\textsuperscript{a} ed.). Microsoft Press.
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 Microsoft. (2026, 20 de enero). \textit{Operators and expressions}. Microsoft Learn. \url{https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/}
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 Miller, G.~A. (1956). The magical number seven, plus or minus two: Some limits on our capacity for processing information. \textit{Psychological Review, 63}(2), 81--97. \url{https://doi.org/10.1037/h0043158}
