@@ -1,1 +1,117 @@
 \subsectionplaceholder{Manejadores de eventos}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+
+\item \textbf{Los nombres de los manejadores de eventos deberán escribirse utilizando \texttt{PascalCase}.} Cada palabra significativa comenzará con mayúscula y no se utilizarán guiones bajos, guiones u otros separadores entre palabras. Esta regla mantiene la coherencia con el criterio utilizado para las clases del estándar, donde se establece \texttt{PascalCase} como convención para los identificadores de tipos. En C\#, las convenciones de nomenclatura buscan que los identificadores sean consistentes y fácilmente comprensibles (Microsoft, 2025; Estándar de Codificación C\# para Desarrollo de Videojuegos, s. f.).
+
+\item \textbf{El nombre de un manejador de eventos deberá expresar mediante una frase verbal la acción que realiza al responder al evento.} Se preferirán nombres como \texttt{HandlePlayerDamaged}, \texttt{HandleEnemyDefeated} o \texttt{HandleGamePaused} frente a nombres genéricos como \texttt{HandleEvent} o \texttt{EventHandler}. Las directrices de diseño de .NET establecen que los métodos deben utilizar nombres formados por verbos o frases verbales, mientras que los eventos deben nombrarse mediante verbos o frases verbales que describan la acción correspondiente (Microsoft, 2023).
+
+\item \textbf{El nombre deberá identificar de forma clara el dominio y la acción atendida por el manejador.} Se preferirán nombres descriptivos y específicos sobre nombres excesivamente cortos o genéricos. Por ejemplo, \texttt{HandlePlayerDamaged} comunica tanto el dominio (\texttt{Player}) como la acción (\texttt{Damaged}), mientras que \texttt{Handle} o \texttt{OnEvent} no permiten determinar qué evento se está procesando. Esta regla sigue el principio de priorizar identificadores significativos y descriptivos sobre nombres genéricos o excesivamente breves establecido en el estándar para el nombrado de clases (Estándar de Codificación C\# para Desarrollo de Videojuegos, s. f.).
+
+\item \textbf{No se utilizarán guiones bajos, prefijos innecesarios ni abreviaturas poco claras en los nombres de los manejadores.} Por ejemplo, deberán evitarse nombres como \texttt{player\_dmg}, \texttt{OnPlyrDmg} o \texttt{HandleEvt}. La prohibición de separadores y abreviaturas poco claras mantiene el criterio establecido para las clases, donde se priorizan nombres completos y fácilmente legibles sobre contracciones o abreviaciones que reduzcan la comprensión (Estándar de Codificación C\# para Desarrollo de Videojuegos, s. f.).
+
+\item \textbf{Cuando el nombre del evento indique una acción concreta, el manejador deberá conservar la referencia semántica a dicha acción.} Por ejemplo, para un evento denominado \texttt{PlayerDamaged}, el manejador podrá denominarse \texttt{HandlePlayerDamaged}. No deberán utilizarse nombres que oculten la relación entre el evento y el método que lo atiende. Las directrices de .NET establecen que los eventos deben nombrarse mediante verbos o frases verbales y que los nombres deben comunicar claramente la función del elemento (Microsoft, 2023).
+
+\item \textbf{No se utilizarán los prefijos \texttt{Before} o \texttt{After} para diferenciar eventos previos y posteriores.} Cuando sea necesario distinguir el momento en que ocurre un evento, se utilizará el tiempo verbal apropiado, como \texttt{Closing} para una acción que está ocurriendo y \texttt{Closed} para una acción que ya ocurrió. Esta convención forma parte de las directrices de nomenclatura de eventos de .NET y evita nombres como \texttt{BeforeClose} o \texttt{AfterClose} (Microsoft, 2026).
+
+\item \textbf{Los delegados destinados a representar tipos de manejadores de eventos deberán utilizar el sufijo \texttt{EventHandler}.} Cuando se defina explícitamente un delegado para un evento, su nombre deberá seguir el patrón \texttt{<NombreDelEvento>EventHandler}, por ejemplo, \texttt{PlayerDamagedEventHandler}. Microsoft recomienda el sufijo \texttt{EventHandler} para los delegados utilizados como manejadores de eventos y establece que estos deben recibir los parámetros \texttt{sender} y \texttt{e} (Microsoft, 2023).
+
+\item \textbf{Los manejadores de eventos deberán conservar la firma correspondiente al evento que atienden.} En el patrón convencional de .NET, el manejador devuelve \texttt{void} y recibe dos parámetros: \texttt{sender}, que representa el objeto que originó el evento, y \texttt{e}, que contiene los argumentos del evento. No deberán agregarse parámetros adicionales a la firma convencional del manejador (Microsoft, 2023).
+
+\item \textbf{Cuando se utilicen clases personalizadas para los argumentos de un evento, sus nombres deberán terminar en \texttt{EventArgs}.} Por ejemplo, los argumentos asociados con \texttt{PlayerDamaged} podrán denominarse \texttt{PlayerDamagedEventArgs}. Esta convención coincide con el patrón de nomenclatura utilizado por .NET para las clases que transportan información asociada a eventos (Microsoft, 2026).
+
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+
+using System;
+
+public sealed class PlayerHealthController
+{
+public event EventHandler<PlayerDamagedEventArgs>? PlayerDamaged;
+
+```
+public void ReceiveDamage(int damageAmount)
+{
+    PlayerDamaged?.Invoke(
+        this,
+        new PlayerDamagedEventArgs(damageAmount));
+}
+
+public void HandlePlayerDamaged(
+    object? sender,
+    PlayerDamagedEventArgs e)
+{
+    Console.WriteLine($"Player damaged: {e.DamageAmount}");
+}
+```
+
+}
+
+public sealed class PlayerDamagedEventArgs : EventArgs
+{
+public PlayerDamagedEventArgs(int damageAmount)
+{
+DamageAmount = damageAmount;
+}
+
+```
+public int DamageAmount { get; }
+```
+
+}
+
+\end{lstlisting}
+
+El manejador \texttt{HandlePlayerDamaged} utiliza \texttt{PascalCase}, está compuesto por una frase verbal y comunica explícitamente tanto la acción (\texttt{Handle}) como el dominio y evento atendido (\texttt{PlayerDamaged}). El nombre evita guiones bajos, abreviaturas y términos genéricos, manteniendo la prioridad de claridad y especificidad establecida en el estándar para las clases.
+
+Además, el evento \texttt{PlayerDamaged} utiliza un nombre verbal y la clase de argumentos \texttt{PlayerDamagedEventArgs} conserva el sufijo establecido por las convenciones de .NET. La firma del manejador utiliza \texttt{sender} y \texttt{e}, siguiendo las directrices de Microsoft para manejadores de eventos (Microsoft, 2023).
+
+\subsubsection{Sin estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+
+using System;
+
+public sealed class PlayerHealthController
+{
+public event EventHandler<PlayerDamagedEventArgs>? PlayerDamaged;
+
+```
+public void ReceiveDamage(int damageAmount)
+{
+    PlayerDamaged?.Invoke(
+        this,
+        new PlayerDamagedEventArgs(damageAmount));
+}
+
+public void player\_dmg(
+    object? sender,
+    PlayerDamagedEventArgs e)
+{
+    Console.WriteLine(\tect$"Player damaged: {e.DamageAmount}");
+}
+```
+
+}
+
+public sealed class PlayerDamagedEventArgs : EventArgs
+{
+public PlayerDamagedEventArgs(int damageAmount)
+{
+DamageAmount = damageAmount;
+}
+
+```
+public int DamageAmount { get; }
+```
+
+}
+
+\end{lstlisting}
+
+La declaración del manejador incumple el estándar porque \texttt{player\_dmg} utiliza minúsculas y un guion bajo en lugar de \texttt{PascalCase}, además de utilizar la abreviatura \texttt{dmg}. El nombre tampoco está formulado como una frase verbal clara que identifique explícitamente que el método maneja el evento \texttt{PlayerDamaged}. Estas decisiones reducen la legibilidad y contradicen las reglas de utilizar nombres descriptivos, específicos y sin abreviaturas poco claras.

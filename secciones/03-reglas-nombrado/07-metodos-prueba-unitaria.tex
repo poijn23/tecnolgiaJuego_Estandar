@@ -1,1 +1,97 @@
-\subsectionplaceholder{Métodos de prueba unitaria}
+\subsectionplaceholder{Nombrado de métodos de prueba unitaria}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+
+\item \textbf{Los nombres de los métodos de prueba unitaria deberán escribirse utilizando \texttt{PascalCase}.} Cada palabra significativa comenzará con mayúscula y no se utilizarán guiones bajos, guiones u otros separadores entre palabras. Esta regla mantiene la coherencia con el criterio establecido para el nombrado de clases del estándar, donde se determina que los identificadores deben utilizar \texttt{PascalCase} y evitar separadores entre palabras. Microsoft también establece \texttt{PascalCase} como convención para los nombres de métodos de C\# (Microsoft, 2026).
+
+\item \textbf{El nombre del método de prueba deberá identificar claramente el método que está siendo probado.} El nombre deberá comenzar o incluir de manera reconocible el nombre de la operación o método bajo prueba. Esto permite determinar qué comportamiento del sistema está siendo verificado sin necesidad de revisar primero la implementación de la prueba. Microsoft recomienda que el nombre de una prueba contenga el nombre del método que se está probando (Microsoft, 2025).
+
+\item \textbf{El nombre deberá describir el escenario que se está verificando.} Además del método bajo prueba, deberá indicarse la condición, entrada o situación relevante que caracteriza el caso de prueba. De esta forma, cada prueba comunica el contexto en el que se espera determinado comportamiento. Microsoft establece como segunda parte del nombre de una prueba el escenario bajo el cual se prueba el método (Microsoft, 2025).
+
+\item \textbf{El nombre deberá expresar el comportamiento esperado o resultado de la prueba.} El nombre deberá permitir identificar qué resultado se considera correcto cuando se presenta el escenario especificado. Microsoft recomienda que la tercera parte del nombre indique el comportamiento esperado cuando se invoca el escenario (Microsoft, 2025).
+
+\item \textbf{Los nombres deberán ser descriptivos y específicos, evitando nombres genéricos o excesivamente cortos.} No deberán utilizarse nombres como \texttt{Test}, \texttt{TestMethod}, \texttt{Check} o \texttt{Verify} cuando no permitan determinar qué comportamiento se está verificando. Esta regla sigue el principio general del estándar de priorizar nombres significativos y descriptivos sobre identificadores genéricos o excesivamente breves. Microsoft igualmente recomienda utilizar nombres significativos y descriptivos y priorizar la claridad sobre la brevedad (Microsoft, 2026).
+
+\item \textbf{No se utilizarán abreviaturas poco claras ni contracciones en los nombres de las pruebas.} Deberán preferirse nombres completos que permitan comprender inmediatamente el comportamiento evaluado. Esta regla mantiene la correspondencia con el estándar para el nombrado de clases, donde se establece evitar abreviaturas poco claras y priorizar nombres fácilmente legibles. Microsoft también recomienda evitar abreviaturas o acrónimos salvo aquellos ampliamente conocidos y aceptados (Microsoft, 2026).
+
+\item \textbf{El nombre de la prueba deberá ser suficiente para comunicar su propósito sin depender de los detalles de implementación.} El lector deberá poder determinar qué comportamiento se pretende comprobar a partir del nombre del método. Las recomendaciones de Microsoft señalan que las pruebas funcionan también como documentación y que, al examinar el conjunto de pruebas, debería poder deducirse el comportamiento del código sin necesidad de examinar la implementación (Microsoft, 2025).
+
+\item \textbf{Los nombres deberán diferenciar claramente escenarios distintos del mismo método.} Cuando una misma operación tenga diferentes comportamientos verificables, cada prueba deberá incorporar en su nombre el escenario correspondiente. Esto evita nombres duplicados o ambiguos y permite identificar inmediatamente qué caso falló cuando una prueba no supera la ejecución. Microsoft señala que una convención de nombres adecuada permite identificar exactamente qué escenarios no cumplen las expectativas cuando una prueba falla (Microsoft, 2025).
+
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public sealed class Calculator
+{
+public int Add(int firstNumber, int secondNumber)
+{
+return firstNumber + secondNumber;
+}
+}
+
+[TestClass]
+public sealed class CalculatorTests
+{
+[TestMethod]
+public void AddTwoNumbersReturnsSum()
+{
+var calculator = new Calculator();
+
+```
+    var result = calculator.Add(2, 3);
+
+    Assert.AreEqual(5, result);
+}
+```
+
+}
+
+\end{lstlisting}
+
+El método \texttt{AddTwoNumbersReturnsSum} cumple las reglas establecidas porque utiliza \texttt{PascalCase}, no contiene guiones bajos ni abreviaturas y comunica las tres partes fundamentales de la prueba: el método probado (\texttt{Add}), el escenario (\texttt{TwoNumbers}) y el comportamiento esperado (\texttt{ReturnsSum}). Esta estructura corresponde directamente a la recomendación de Microsoft de identificar método, escenario y resultado esperado en el nombre de una prueba (Microsoft, 2025).
+
+Asimismo, el resto de los identificadores del ejemplo conserva una nomenclatura coherente: \texttt{Calculator} y \texttt{CalculatorTests} utilizan \texttt{PascalCase}, mientras que \texttt{firstNumber}, \texttt{secondNumber}, \texttt{calculator} y \texttt{result} utilizan \texttt{camelCase}. Esta combinación coincide con las convenciones de nomenclatura de C\# documentadas por Microsoft (Microsoft, 2026).
+
+El atributo \texttt{[TestMethod]} identifica el método como prueba unitaria en MSTest y la clase utiliza \texttt{[TestClass]}, de acuerdo con la estructura oficial de pruebas de MSTest (Microsoft, 2026).
+
+\subsubsection{Sin estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public sealed class Calculator
+{
+public int Add(int firstNumber, int secondNumber)
+{
+return firstNumber + secondNumber;
+}
+}
+
+[TestClass]
+public sealed class CalculatorTests
+{
+[TestMethod]
+public void add\_two\_numbers\_returns\_sum()
+{
+var calculator = new Calculator();
+
+```
+    var result = calculator.Add(2, 3);
+
+    Assert.AreEqual(5, result);
+}
+```
+
+}
+
+\end{lstlisting}
+
+La declaración del método \texttt{add\_two\_numbers\_returns\_sum} incumple la regla de nombrado porque utiliza minúsculas y guiones bajos en lugar de \texttt{PascalCase}. El nombre conserva deliberadamente la información del método probado, el escenario y el resultado esperado, por lo que la única infracción introducida en este ejemplo corresponde a la convención de formato del identificador.
