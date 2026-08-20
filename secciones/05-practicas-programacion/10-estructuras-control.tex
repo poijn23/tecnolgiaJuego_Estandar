@@ -152,3 +152,22 @@ public enum EnemyState
 \end{lstlisting}
 
 El método \texttt{UpdateState} incumple el estándar porque envuelve toda la lógica dentro de un \texttt{if (currentState != EnemyState.Dead)} negado en lugar de utilizar una cláusula de guarda con retorno anticipado, y resuelve tres ramas mutuamente excluyentes con una cadena \texttt{if-else if} sin rama por defecto en lugar de un \texttt{switch}, dejando además cualquier estado no contemplado sin manejo explícito. Las ramas del condicional omiten las llaves pese a contener una instrucción, contradiciendo la preferencia por delimitar siempre el cuerpo de las estructuras de control establecida en la regla \texttt{IDE0011} (Microsoft, 2023). En \texttt{ApplyDamageToTargets}, el uso de \texttt{goto SkipTarget} para omitir un objetivo reintroduce el salto incondicional que Dijkstra identificó como perjudicial para razonar sobre el flujo de un programa, en lugar de emplear directamente \texttt{continue} (Dijkstra, 1968). Estas decisiones contradicen las recomendaciones de preferir cláusulas de guarda, condiciones afirmativas y estructuras de selección explícitas (McConnell, 2004; Martin, 2008).
+
+\subsubsection{Referencias}
+
+\noindent\hangindent=1.25em\hangafter=1 Dijkstra, E.~W. (1968). Go to statement considered harmful. \textit{Communications of the ACM, 11}(3), 147--148. \url{https://doi.org/10.1145/362929.362947}
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 Martin, R.~C. (2008). \textit{Clean code: A handbook of agile software craftsmanship}. Prentice Hall.
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 McConnell, S. (2004). \textit{Code complete: A practical handbook of software construction} (2.\textsuperscript{a} ed.). Microsoft Press.
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 Microsoft. (2023, 29 de septiembre). \textit{IDE0011: Add braces}. Microsoft Learn. \url{https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0011}
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 Microsoft. (2026a, 16 de enero). \textit{If and switch statements: Select a code path to execute}. Microsoft Learn. \url{https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/selection-statements}
+
+\smallskip
+\noindent\hangindent=1.25em\hangafter=1 Microsoft. (2026b, 16 de enero). \textit{Iteration statements: for, foreach, do, and while}. Microsoft Learn. \url{https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/iteration-statements}
