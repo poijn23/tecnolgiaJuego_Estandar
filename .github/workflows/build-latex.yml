@@ -1,0 +1,26 @@
+name: Compilar documento LaTeX
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compilar LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          latexmk_use_lualatex: false
+
+      - name: Subir PDF como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: documento-pdf
+          path: main.pdf
