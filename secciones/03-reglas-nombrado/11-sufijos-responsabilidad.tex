@@ -1,1 +1,98 @@
-\subsectionplaceholder{Sufijos por responsabilidad}
+\subsectionplaceholder{Nombrado de sufijos por responsabilidad}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+
+\item \textbf{Los sufijos deberán utilizarse únicamente cuando describan realmente la responsabilidad de la clase.} Un sufijo arquitectónico deberá comunicar una responsabilidad real de la clase y no utilizarse únicamente para hacer que el nombre parezca más descriptivo. Por ejemplo, son apropiados \texttt{PlayerMovementController}, \texttt{GameStateManager}, \texttt{DamageHandler}, \texttt{SaveService} y \texttt{CombatSystem}, siempre que las clases desempeñen efectivamente esas responsabilidades. Esta regla se encuentra directamente respaldada por la sección 3.8 del estándar, que indica que los sufijos arquitectónicos deben utilizarse únicamente cuando describan realmente el rol de la clase. Microsoft establece como principio general que los nombres deben ser fácilmente comprensibles y transmitir la función de cada elemento (Microsoft, 2022).
+
+\item \textbf{El sufijo deberá corresponder con la función arquitectónica que representa.} Los sufijos no deberán considerarse intercambiables. Cada uno deberá utilizarse cuando la responsabilidad de la clase corresponda con su significado:
+
+\begin{itemize}
+
+\item \texttt{Controller}: controlar o coordinar una interacción o flujo determinado.
+
+\item \texttt{Manager}: administrar un conjunto de recursos, estados o elementos relacionados.
+
+\item \texttt{Handler}: procesar o responder a una acción, solicitud, evento o condición.
+
+\item \texttt{Service}: proporcionar una operación o conjunto de servicios a otros componentes.
+
+\item \texttt{System}: representar un subsistema funcional claramente delimitado.
+
+\item \texttt{Repository}: abstraer el acceso y recuperación de una colección de entidades o datos.
+
+\end{itemize}
+
+El propósito de esta distinción es evitar que un sufijo se utilice como decoración nominal. La sección 3.8 establece precisamente que el sufijo debe corresponder con una responsabilidad real. Además, las guías de .NET establecen que los nombres deben comunicar inmediatamente la función del elemento y utilizan convenciones específicas para determinados tipos y responsabilidades (Microsoft, 2022, 2025).
+
+\item \textbf{El sufijo no deberá sustituir la descripción del dominio.} No deberá utilizarse únicamente \texttt{Controller}, \texttt{Manager}, \texttt{Handler}, \texttt{Service} o \texttt{System} cuando sea posible identificar el dominio concreto. Por ejemplo, deberá preferirse \texttt{PlayerMovementController}, \texttt{GameStateManager}, \texttt{DamageHandler}, \texttt{SaveService} y \texttt{CombatSystem} sobre \texttt{Controller}, \texttt{Manager}, \texttt{Handler}, \texttt{Service} o \texttt{System}. La sección 3.8 establece explícitamente que una clase no debe denominarse únicamente \texttt{Controller}, \texttt{Manager}, \texttt{Handler} o \texttt{System} cuando su responsabilidad pueda expresarse con mayor precisión. Esta regla también sigue el principio de Microsoft de utilizar nombres significativos y descriptivos en lugar de nombres excesivamente genéricos (Microsoft, 2026).
+
+\item \textbf{El nombre deberá expresar el dominio antes del sufijo de responsabilidad.} Cuando una clase tenga una responsabilidad arquitectónica específica, el nombre deberá expresar primero el dominio y posteriormente el sufijo. Por ejemplo, se utilizarán \texttt{PlayerMovementController}, \texttt{EnemySpawnManager}, \texttt{DamageHandler}, \texttt{GameSaveService} y \texttt{CombatSystem}. De esta manera, \texttt{PlayerMovement} identifica el dominio y \texttt{Controller} identifica la responsabilidad. Esta regla corresponde directamente con la sección 3.8, que establece que una especialización deberá expresar tanto el dominio como su responsabilidad y proporciona como ejemplo \texttt{PlayerMovementController} frente a una clase genérica denominada \texttt{Controller}.
+
+\item \textbf{Los sufijos deberán conservar \texttt{PascalCase}.} Los sufijos formarán parte del identificador y deberán escribirse mediante \texttt{PascalCase}. Son correctos \texttt{PlayerMovementController}, \texttt{GameStateManager}, \texttt{DamageHandler}, \texttt{SaveService} y \texttt{CombatSystem}. No deberán utilizarse formas como \texttt{PlayerMovementcontroller}, \texttt{GameStatemanager}, \texttt{Damagehandler}, \texttt{Save\_Service} o \texttt{Combat\_system}. Esta regla deriva de la sección 3.8, que exige \texttt{PascalCase} para los nombres de clases y prohíbe guiones bajos, guiones y otros separadores. Microsoft también establece \texttt{PascalCase} para nombres de tipos y permite configurar reglas de nomenclatura mediante las herramientas de análisis de código de .NET (Microsoft, 2026).
+
+\item \textbf{No se utilizarán abreviaturas en los sufijos de responsabilidad.} Los sufijos deberán escribirse de forma completa. No deberán utilizarse abreviaturas como \texttt{Ctrl} en lugar de \texttt{Controller}, \texttt{Mgr} en lugar de \texttt{Manager}, \texttt{Svc} en lugar de \texttt{Service}, \texttt{Sys} en lugar de \texttt{System}, \texttt{Hdlr} en lugar de \texttt{Handler} o \texttt{Repo} en lugar de \texttt{Repository}. Por ejemplo, deberá utilizarse \texttt{PlayerMovementController} y no \texttt{PlayerMovementCtrl}. Esta regla mantiene la correspondencia con la sección 3.8, que prohíbe abreviaturas poco claras y establece como preferencia los nombres completos y fácilmente legibles. Microsoft también recomienda evitar abreviaturas y acrónimos salvo aquellos ampliamente conocidos y aceptados (Microsoft, 2026).
+
+\item \textbf{No deberá utilizarse un sufijo de responsabilidad incorrecto para la función real de la clase.} Una clase no deberá recibir un sufijo únicamente porque el término sea común en proyectos de software. Por ejemplo, si una clase únicamente representa los datos de un jugador, no deberá llamarse \texttt{PlayerDataManager} si no administra estados, recursos u operaciones relacionados con dichos datos. En ese caso, un nombre que represente el concepto de dominio sería más apropiado. El principio es particularmente importante porque Microsoft dispone de reglas de análisis para evitar sufijos incorrectos: \textbf{CA1711} indica que determinados sufijos deben reservarse para tipos cuya responsabilidad los justifique, mientras que \textbf{CA1710} comprueba el uso de sufijos apropiados en determinados tipos derivados o implementaciones (Microsoft, 2026).
+
+\item \textbf{No se combinarán varios sufijos de responsabilidad sin una justificación arquitectónica clara.} No deberán crearse nombres como \texttt{PlayerMovementControllerManager}, \texttt{GameSaveServiceManager} o \texttt{DamageHandlerService} si la combinación de responsabilidades no corresponde realmente a una única clase. Una clase deberá representar una responsabilidad identificable y su nombre deberá comunicarla sin introducir complejidad nominal innecesaria. Esta regla es una aplicación del principio de la sección 3.8 de utilizar nombres específicos y evitar nombres que reduzcan la claridad.
+
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+Para la evidencia se utilizará una clase cuya responsabilidad sea \textbf{administrar el estado del juego}. Por tanto, \texttt{Manager} es un sufijo semánticamente justificado.
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameStateManager
+{
+public string CurrentState { get; private set; }
+
+```
+public GameStateManager()
+{
+    CurrentState = "Menu";
+}
+
+public void ChangeState(string newState)
+{
+    CurrentState = newState;
+}
+```
+
+}
+\end{lstlisting}
+
+El nombre \texttt{GameStateManager} cumple las reglas porque utiliza \texttt{PascalCase}, \texttt{GameState} identifica el dominio y \texttt{Manager} identifica la responsabilidad. El sufijo \texttt{Manager} corresponde con la función real de la clase, ya que administra el estado actual y permite cambiarlo. Además, no utiliza abreviaturas, guiones bajos ni separadores, no emplea un sufijo genérico sin dominio y no combina innecesariamente varios sufijos.
+
+La relación entre dominio y responsabilidad es consistente con la regla de la sección 3.8 que utiliza \texttt{GameStateManager} como ejemplo de nombre válido. Además, el estándar señala explícitamente \texttt{GameStateManager} entre los ejemplos de sufijos arquitectónicos válidos.
+
+Los nombres de los miembros también respetan las convenciones de C\#: \texttt{CurrentState} utiliza \texttt{PascalCase} como propiedad pública, \texttt{ChangeState} utiliza \texttt{PascalCase} como método y \texttt{newState} utiliza \texttt{camelCase} como parámetro. Las guías de nomenclatura de miembros de Microsoft establecen \texttt{PascalCase} para propiedades y métodos (Microsoft, 2023).
+
+\subsubsection{Sin estándar}
+
+Para generar una evidencia \textbf{controlada}, no se cambiará \texttt{PascalCase}, no se introducirán guiones bajos, no se agregarán abreviaturas y no se modificará ninguna de las convenciones de los miembros.
+
+La única infracción será utilizar el sufijo \texttt{Manager} en una clase cuya responsabilidad \textbf{no es administrar el estado}, sino representar exclusivamente un valor de configuración.
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameStateManager
+{
+public string Name { get; }
+
+```
+public GameStateManager(string name)
+{
+    Name = name;
+}
+```
+
+}
+\end{lstlisting}
+
+El nombre \texttt{GameStateManager} sugiere que la clase administra el estado del juego. Sin embargo, la implementación mostrada únicamente representa un nombre de estado y no administra estados, transiciones, recursos ni operaciones de gestión.
+
+Por tanto, el problema no está en \texttt{GameStateManager} como \texttt{PascalCase}, en el uso de \texttt{GameState}, en la ausencia de abreviaturas, en la ausencia de separadores, en \texttt{Name}, en \texttt{GameStateManager(string name)} ni en \texttt{name}. La infracción se encuentra \textbf{exclusivamente en el uso injustificado del sufijo \texttt{Manager}}.
+
+Esto permite demostrar la regla 3.11.1: un sufijo de responsabilidad solamente debe emplearse cuando realmente describa el rol de la clase. Esa regla está explícitamente establecida en la sección 3.8 del estándar proporcionado.

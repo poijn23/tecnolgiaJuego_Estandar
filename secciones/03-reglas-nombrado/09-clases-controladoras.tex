@@ -1,1 +1,78 @@
-\subsectionplaceholder{Clases controladoras}
+\subsectionplaceholder{Nombrado de clases controladoras}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+
+\item \textbf{Las clases controladoras deberán utilizar \texttt{PascalCase}.} Cada palabra significativa comenzará con mayúscula y no se utilizarán guiones bajos, guiones u otros separadores entre palabras. Esta regla mantiene directamente la convención establecida en la sección 3.8 para las clases y coincide con las convenciones oficiales de C\#, que utilizan \texttt{PascalCase} para los nombres de clases y otros tipos (Microsoft, 2026).
+
+\item \textbf{El nombre de una clase controladora deberá expresar mediante una frase nominal el dominio que controla y utilizar \texttt{Controller} únicamente cuando la clase desempeñe realmente una función de control.} Por ejemplo, \texttt{PlayerMovementController} identifica una clase relacionada con el control del movimiento del jugador. No deberán utilizarse nombres como \texttt{Controller} cuando el dominio pueda especificarse con mayor precisión. Esta regla deriva directamente de la sección 3.8, que establece que los nombres deben expresar claramente el concepto o responsabilidad de la clase y que no deben utilizarse nombres genéricos cuando sea posible describir con mayor precisión su responsabilidad.
+
+\item \textbf{El nombre de una clase controladora deberá identificar tanto el dominio como la responsabilidad de control.} Se preferirán nombres como \texttt{PlayerMovementController}, \texttt{PlayerInputController} o \texttt{GameStateController} frente a un nombre genérico como \texttt{Controller}. Esta regla permite diferenciar controladores pertenecientes a distintos subsistemas y conserva el principio del estándar de expresar explícitamente la especialización de una clase. Microsoft recomienda que los nombres sean significativos y descriptivos y que se priorice la claridad sobre la brevedad (Microsoft, 2026).
+
+\item \textbf{No se utilizarán abreviaturas o contracciones poco claras en el nombre de las clases controladoras.} Deberá preferirse \texttt{PlayerMovementController} sobre \texttt{PlayerMoveCtrl}, \texttt{PlayerInputController} sobre \texttt{PlyrInputCtrl} y \texttt{CharacterMovementController} sobre \texttt{CharMoveCtrl}. Esta regla es consistente con la sección 3.8, que explícitamente prohíbe abreviaturas poco claras y establece como prioridad la comprensión del nombre. Microsoft también recomienda evitar abreviaturas y acrónimos salvo aquellos ampliamente conocidos y aceptados (Microsoft, 2026).
+
+\item \textbf{No se utilizarán prefijos para indicar que una clase controladora es una clase.} Quedan prohibidos nombres como \texttt{CPlayerMovementController}, \texttt{ClsPlayerController} o equivalentes. La palabra \texttt{class} en la declaración ya identifica el tipo del elemento y añadir información redundante al nombre disminuye su claridad. Esta regla se encuentra expresamente establecida para las clases en las directrices de diseño de .NET (Microsoft, 2025).
+
+\item \textbf{El sufijo \texttt{Controller} no deberá utilizarse como sustituto del dominio de la clase.} Una clase no deberá denominarse simplemente \texttt{Controller}, \texttt{GameController} o \texttt{MainController} cuando su responsabilidad pueda expresarse de manera más específica. El sufijo debe aportar información arquitectónica y no convertirse en un nombre genérico. Esto adapta la regla 6 de la sección 3.8, que establece que los sufijos que expresan una responsabilidad arquitectónica solo deben utilizarse cuando realmente describan el rol de la clase.
+
+\item \textbf{Cuando una clase controle una especialización concreta, el nombre deberá conservar el dominio de dicha especialización.} Por ejemplo, cuando el controlador administre exclusivamente el movimiento del jugador, deberá utilizarse \texttt{PlayerMovementController} y no \texttt{MovementController}. De esta manera, el nombre permite distinguir la responsabilidad del controlador frente a otros controladores del mismo proyecto. La sección 3.8 establece este mismo principio al recomendar que una especialización exprese tanto el dominio como su responsabilidad.
+
+\item \textbf{El nombre del archivo deberá coincidir con el nombre de la clase controladora principal cuando el entorno de desarrollo establezca una correspondencia entre archivo y clase.} Por ejemplo, \texttt{PlayerMovementController} deberá encontrarse en \texttt{PlayerMovementController.cs}. Esta regla ya está contemplada en la sección 3.8 para los motores donde existe una asociación entre el archivo de script y la clase principal.
+
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+
+public sealed class PlayerMovementController
+{
+public float MovementSpeed { get; private set; }
+
+```
+public void SetMovementSpeed(float movementSpeed)
+{
+    MovementSpeed = movementSpeed;
+}
+
+public void Move()
+{
+}
+```
+
+}
+
+\end{lstlisting}
+
+El nombre \texttt{PlayerMovementController} cumple las reglas porque utiliza \texttt{PascalCase}, no contiene separadores, no utiliza abreviaturas y expresa tanto el \textbf{dominio} (\texttt{PlayerMovement}) como la \textbf{responsabilidad arquitectónica} (\texttt{Controller}). Esta misma estructura semántica ya se utiliza como ejemplo válido en la sección 3.8 del estándar proporcionado.
+
+La utilización del sufijo \texttt{Controller} es apropiada porque la clase representa efectivamente un componente responsable de controlar el movimiento del jugador. No se trata, por tanto, de añadir \texttt{Controller} de forma arbitraria, sino de utilizarlo para expresar una responsabilidad concreta. Esto coincide con la regla del estándar que indica que los sufijos arquitectónicos deben utilizarse únicamente cuando describan realmente el rol de la clase.
+
+\subsubsection{Sin estándar}
+
+Para que la evidencia sea \textbf{controlada y auditable}, el siguiente ejemplo modifica únicamente el nombre de la clase controladora. No se introducen errores adicionales en propiedades, métodos, parámetros, modificadores ni estructura.
+
+\begin{lstlisting}[style=csharpstyle]
+
+public sealed class PlayerMovementCtrl
+{
+public float MovementSpeed { get; private set; }
+
+```
+public void SetMovementSpeed(float movementSpeed)
+{
+    MovementSpeed = movementSpeed;
+}
+
+public void Move()
+{
+}
+```
+
+}
+
+\end{lstlisting}
+
+La clase \texttt{PlayerMovementCtrl} incumple la sección 3.9 porque utiliza la abreviatura \texttt{Ctrl} en lugar de \texttt{Controller}. La abreviatura reduce la claridad del identificador y contradice la regla de evitar abreviaturas poco claras. El estándar de la sección 3.8 utiliza precisamente el contraste \texttt{PlayerMovementController} frente a nombres abreviados como \texttt{PlayerMoveCtrl}.
+

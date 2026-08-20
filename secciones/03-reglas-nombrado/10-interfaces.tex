@@ -1,1 +1,86 @@
-\subsectionplaceholder{Interfaces}
+\subsectionplaceholder{Nombrado de interfaces}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+
+\item \textbf{Los nombres de las interfaces deberán escribirse utilizando \texttt{PascalCase} y deberán comenzar con la letra \texttt{I}.} Cada palabra significativa posterior al prefijo comenzará con mayúscula y no se utilizarán guiones bajos, guiones u otros separadores. Por ejemplo, \texttt{IMovementController}, \texttt{IPlayerInput} e \texttt{IDamageHandler}. Microsoft establece específicamente \texttt{PascalCase} para las interfaces y el prefijo \texttt{I} para indicar que el tipo es una interfaz (Microsoft, 2025, 2026).
+
+\item \textbf{El nombre de una interfaz deberá utilizar un sustantivo, una frase nominal o un adjetivo que represente claramente el contrato o comportamiento que proporciona.} Se preferirán nombres como \texttt{IMovementController}, \texttt{IDamageHandler} o \texttt{ISaveable} frente a nombres genéricos o ambiguos. Las guías de diseño de .NET recomiendan utilizar frases adjetivales o, ocasionalmente, sustantivos o frases nominales para las interfaces (Microsoft, 2025).
+
+\item \textbf{El prefijo \texttt{I} será obligatorio para distinguir una interfaz de otros tipos.} No deberán utilizarse nombres como \texttt{MovementController} o \texttt{DamageHandler} cuando el tipo sea una interfaz. El prefijo constituye una excepción específica a la regla general de evitar prefijos redundantes en nombres de clases: en interfaces, Microsoft lo recomienda expresamente para comunicar inmediatamente la naturaleza del tipo (Microsoft, 2025).
+
+\item \textbf{No se utilizarán abreviaturas poco claras en los nombres de las interfaces.} Deberá preferirse \texttt{IMovementController} sobre \texttt{IMoveCtrl}, \texttt{IPlayerInput} sobre \texttt{IPlyrInput} e \texttt{IDamageHandler} sobre \texttt{IDmgHandler}. Esta regla mantiene la correspondencia con la sección 3.8, donde se establece que deben evitarse abreviaturas poco claras y priorizarse nombres fácilmente legibles. Microsoft también establece que, al nombrar interfaces, deben evitarse las abreviaturas (Microsoft, 2025).
+
+\item \textbf{No se utilizarán guiones bajos, guiones ni separadores para dividir palabras en los nombres de interfaces.} Deberá utilizarse \texttt{PascalCase}, por ejemplo \texttt{IPlayerMovement}, y no \texttt{I\_Player\_Movement} o \texttt{I\_PlayerMovement}. Esta regla conserva directamente el criterio establecido en la sección 3.8 para las clases.
+
+\item \textbf{El nombre de una interfaz deberá describir el contrato o comportamiento que representa y no una implementación concreta.} Por ejemplo, \texttt{IMovementController} comunica un contrato relacionado con el control del movimiento, mientras que un nombre como \texttt{IPlayerMovementControllerImplementation} introduce detalles innecesarios de implementación. La finalidad de las convenciones de nomenclatura de .NET es que los nombres sean comprensibles y comuniquen claramente la función del elemento (Microsoft, 2022, 2025).
+
+\item \textbf{Cuando exista una relación directa entre una interfaz y su implementación principal, sus nombres deberán diferir únicamente por el prefijo \texttt{I}.} Por ejemplo:
+
+\begin{lstlisting}[style=csharpstyle]
+
+IMovementController
+MovementController
+
+\end{lstlisting}
+
+Esta convención permite identificar inmediatamente el contrato y su implementación estándar. Microsoft recomienda específicamente que, cuando exista una pareja interfaz-clase de implementación estándar, sus nombres difieran únicamente por el prefijo \texttt{I} (Microsoft, 2025).
+
+\item \textbf{No se agregarán sufijos o prefijos redundantes para indicar que un tipo es una interfaz.} El prefijo \texttt{I} es suficiente para comunicar la naturaleza del tipo. No deberán utilizarse nombres como \texttt{IPlayerMovementInterface}, \texttt{InterfacePlayerMovement} o \texttt{IPlayerMovementContractInterface} cuando la información adicional no represente una responsabilidad real. Esta regla sigue el principio de la sección 3.8 de evitar información redundante en los nombres y priorizar claridad sobre brevedad.
+
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+El siguiente ejemplo utiliza una interfaz relacionada con el movimiento del jugador y una implementación estándar. La relación entre ambos nombres es intencional: \texttt{IMovementController} representa el contrato y \texttt{MovementController} su implementación.
+
+\begin{lstlisting}[style=csharpstyle]
+
+public interface IMovementController
+{
+void Move();
+}
+
+public sealed class MovementController : IMovementController
+{
+public void Move()
+{
+}
+}
+
+\end{lstlisting}
+
+La interfaz \texttt{IMovementController} cumple las reglas porque utiliza \texttt{PascalCase}, comienza con el prefijo obligatorio \texttt{I}, utiliza palabras completas y descriptivas, no contiene guiones bajos ni otros separadores, representa mediante una frase nominal el contrato que proporciona, no contiene abreviaturas y tiene una relación clara con su implementación \texttt{MovementController}.
+
+Microsoft establece que los nombres de interfaces deben utilizar \texttt{PascalCase}, comenzar con \texttt{I} y utilizar nombres descriptivos, además de recomendar que una interfaz y su implementación estándar difieran únicamente por ese prefijo (Microsoft, 2025, 2026).
+
+El resto del código también mantiene las convenciones correspondientes: \texttt{MovementController} utiliza \texttt{PascalCase} y \texttt{Move} utiliza \texttt{PascalCase} por tratarse de un método público.
+
+\subsubsection{Sin estándar}
+
+Para que la evidencia sea \textbf{auditable y controlada}, el siguiente ejemplo modifica únicamente el nombre de la interfaz. No se modifican la clase de implementación, el método, los modificadores ni la estructura del código.
+
+\begin{lstlisting}[style=csharpstyle]
+
+public interface MovementContract
+{
+void Move();
+}
+
+public sealed class MovementController : MovementContract
+{
+public void Move()
+{
+}
+}
+
+\end{lstlisting}
+
+La interfaz \texttt{MovementContract} incumple la regla del prefijo obligatorio \texttt{I}. El nombre continúa utilizando \texttt{PascalCase}, emplea palabras completas, no contiene guiones bajos ni abreviaturas y representa un contrato claramente identificable. Por tanto, la única infracción deliberada corresponde a la ausencia del prefijo \texttt{I}.
+
+Es importante señalar que este ejemplo evita la colisión de nombres que se produciría si la interfaz se denominara \texttt{MovementController}, ya que la implementación también utiliza ese nombre. De esta manera, la evidencia permanece compilable y permite aislar correctamente la regla que se pretende auditar.
+
+Microsoft establece explícitamente que los nombres de interfaces deben comenzar con \texttt{I} para indicar a los consumidores que el tipo es una interfaz (Microsoft, 2025, 2026).
+
+El ejemplo sin estándar conserva deliberadamente las demás características válidas: \texttt{PascalCase}, ausencia de separadores, ausencia de abreviaturas, nombre descriptivo y estructura válida de la interfaz. Esto permite que la infracción sea \textbf{aislada y auditable}, sin introducir simultáneamente errores de capitalización, separación de palabras, abreviación o implementación.
