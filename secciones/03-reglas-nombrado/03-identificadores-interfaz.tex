@@ -1,1 +1,73 @@
-\subsectionplaceholder{Identificadores de interfaz}
+\subsection{Identificadores de interfaz}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+    \item El atributo \texttt{name} de un elemento UXML debe ser único dentro del panel y describir la función del elemento que identifica (Unity Technologies, 2026b).
+
+    \item Los identificadores de UI Toolkit deben seguir la convención BEM y escribirse en \textit{kebab-case}: \texttt{block-name\_\_element-name--modifier-name}. Por ejemplo, \texttt{main-menu\_\_start-button}, \texttt{hud\_\_health-bar} e \texttt{inventory\_\_slot--equipped} (Unity Technologies, 2026c).
+
+    \item El identificador debe comunicar la función y la relación del elemento dentro de la interfaz, no su apariencia actual. Debe utilizarse \texttt{main-menu\_\_quit-button} en lugar de \texttt{red-button} (Unity Technologies, 2026c).
+
+    \item No deben utilizarse abreviaturas, nombres genéricos o numeración sin significado, como \texttt{btn1}, \texttt{txtScore} o \texttt{element3} (Microsoft, 2023; Unity Technologies, 2026c).
+
+    \item Debe asignarse un identificador únicamente cuando el elemento necesite consultarse, modificarse o recibir un estilo individual. Los elementos que no se referencien de forma individual no requieren un nombre (Unity Technologies, 2026a; Unity Technologies, 2026b).
+
+    \item La cadena utilizada en \texttt{Q} o \texttt{Query} debe coincidir exactamente con el atributo \texttt{name} del elemento UXML. La referencia obtenida debe almacenarse al inicializar la interfaz en un campo privado con nombre descriptivo (Microsoft, 2026; Unity Technologies, 2026a).
+
+    \item El carácter \texttt{\#} debe utilizarse únicamente al escribir un selector por nombre en USS. No debe formar parte del atributo \texttt{name} en UXML ni de la cadena usada para consultar el elemento desde C\# (Unity Technologies, 2026b).
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Con estándar}
+
+El siguiente código consulta elementos mediante identificadores semánticos escritos con la convención establecida y conserva las referencias obtenidas:
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MainMenuPresenter
+{
+    private const string StartGameButtonName =
+        "main-menu__start-button";
+    private const string PlayerNameFieldName =
+        "main-menu__player-name-field";
+
+    private readonly Button _startGameButton;
+    private readonly TextField _playerNameField;
+
+    public MainMenuPresenter(VisualElement rootElement)
+    {
+        _startGameButton =
+            rootElement.Q<Button>(StartGameButtonName);
+        _playerNameField =
+            rootElement.Q<TextField>(PlayerNameFieldName);
+    }
+}
+\end{lstlisting}
+
+Los identificadores expresan el bloque y la función de cada elemento. Las cadenas usadas en las consultas corresponden al valor de \texttt{name} definido en UXML, sin incluir el carácter \texttt{\#}.
+
+\newpage
+
+\subsubsection{Sin estándar}
+
+El siguiente código utiliza identificadores abreviados, genéricos y dependientes de la apariencia:
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MainMenuPresenter
+{
+    private const string BtnId = "#redBtn1";
+    private const string Txt = "txt";
+
+    private readonly Button _button;
+    private readonly TextField _field;
+
+    public MainMenuPresenter(VisualElement rootElement)
+    {
+        _button = rootElement.Q<Button>(BtnId);
+        _field = rootElement.Q<TextField>(Txt);
+    }
+}
+\end{lstlisting}
+
+\texttt{\#redBtn1} incluye un carácter que solo corresponde al selector USS, describe una apariencia, abrevia el tipo y agrega numeración sin significado. \texttt{txt}, \texttt{\_button} y \texttt{\_field} tampoco expresan la función de los elementos dentro del menú.

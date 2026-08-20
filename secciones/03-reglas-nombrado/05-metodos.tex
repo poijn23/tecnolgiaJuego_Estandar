@@ -1,1 +1,90 @@
-\subsectionplaceholder{Métodos}
+\subsection{Métodos}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+  \item \textbf{Los nombres de los métodos deberán escribirse utilizando \texttt{PascalCase}, independientemente de su nivel de acceso.} Cada palabra significativa comenzará con mayúscula y no se utilizarán guiones bajos ni otros separadores. Ejemplos válidos para el videojuego son \texttt{CalculateDamage}, \texttt{SpawnEnemy} y \texttt{SavePlayerProgress}. Microsoft establece \texttt{PascalCase} para los métodos y las funciones locales de C\# (Microsoft, 2026a).
+
+  \item \textbf{El nombre de un método deberá comenzar con un verbo o una frase verbal que describa la acción que realiza.} Se utilizarán nombres como \texttt{ApplyDamage}, \texttt{FindNearestTarget}, \texttt{LoadSavedGame} y \texttt{UpdatePlayerPosition}. Las guías de diseño de .NET establecen que los métodos representan acciones y, por ello, deben nombrarse mediante verbos o frases verbales (Microsoft, 2023b).
+
+  \item \textbf{El nombre deberá expresar una acción específica y evitar verbos genéricos cuando puedan sustituirse por una intención más precisa.} No se utilizarán nombres aislados como \texttt{Do}, \texttt{Execute}, \texttt{Process} o \texttt{Handle} si la operación puede nombrarse como \texttt{CalculateReward}, \texttt{ProcessPlayerInput}, \texttt{HandleEnemyDefeat} o \texttt{ExecuteSpecialAttack}. Microsoft recomienda utilizar identificadores significativos y descriptivos y priorizar la claridad sobre la brevedad (Microsoft, 2026a).
+
+  \item \textbf{Los métodos que devuelvan un valor booleano deberán formular su nombre como una pregunta o condición afirmativa.} Se utilizarán prefijos como \texttt{Is}, \texttt{Has}, \texttt{Can} o \texttt{Should}, por ejemplo, \texttt{IsGameOver}, \texttt{HasAvailableTargets}, \texttt{CanAttack} y \texttt{ShouldRespawn}. No se utilizarán nombres ambiguos como \texttt{Check}, \texttt{Status} o \texttt{AttackOk}. Unity recomienda que los métodos booleanos expresen una pregunta mediante un verbo que comunique la condición evaluada (Unity Technologies, s. f.).
+
+  \item \textbf{Los métodos asíncronos que devuelvan un tipo esperable deberán terminar con el sufijo \texttt{Async}.} Por ejemplo, se utilizarán \texttt{LoadMatchDataAsync}, \texttt{SavePlayerProgressAsync} y \texttt{ConnectToServerAsync}. El sufijo permite diferenciar la operación asíncrona de su equivalente síncrono y forma parte de la convención de estilo de .NET para métodos asíncronos (Microsoft, 2025).
+
+  \item \textbf{Las sobrecargas que realicen la misma operación deberán conservar el mismo nombre y utilizar nombres y posiciones consistentes para los parámetros equivalentes.} Por ejemplo, las variantes de \texttt{CalculateDamage} podrán recibir únicamente el daño base o el daño base junto con un multiplicador, sin cambiar arbitrariamente el nombre del método o de los parámetros compartidos. Las guías de .NET recomiendan las sobrecargas para operaciones idénticas sobre distintos conjuntos de parámetros y desaconsejan variar sus nombres u orden sin motivo (Microsoft, 2023a).
+
+  \item \textbf{No se utilizarán abreviaturas poco claras, contracciones ni letras aisladas en los nombres de los métodos.} Deberá preferirse \texttt{CalculateDamage} sobre \texttt{CalcDmg}, \texttt{InitializePlayer} sobre \texttt{InitPlyr} y \texttt{FindNearestEnemy} sobre \texttt{FindNme}. Microsoft recomienda evitar abreviaturas y acrónimos que no sean ampliamente reconocidos y utilizar identificadores legibles y descriptivos (Microsoft, 2026a).
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class CombatService
+{
+    public int CalculateDamage(int baseDamage)
+    {
+        return CalculateDamage(baseDamage, 1.0f);
+    }
+
+    public int CalculateDamage(
+        int baseDamage,
+        float damageMultiplier)
+    {
+        return (int)(baseDamage * damageMultiplier);
+    }
+
+    public bool CanAttack(
+        int currentHealth,
+        float distanceToTarget,
+        float attackRange)
+    {
+        return currentHealth > 0 && distanceToTarget <= attackRange;
+    }
+
+    public async Task SaveBattleResultAsync(
+        string savePath,
+        string battleResult)
+    {
+        await File.WriteAllTextAsync(savePath, battleResult);
+    }
+}
+\end{lstlisting}
+
+Las dos sobrecargas de \texttt{CalculateDamage} utilizan \texttt{PascalCase}, expresan una acción concreta y conservan el parámetro \texttt{baseDamage} en la misma posición. \texttt{CanAttack} formula una condición booleana afirmativa, mientras que \texttt{SaveBattleResultAsync} utiliza una frase verbal y el sufijo \texttt{Async} correspondiente a una operación esperable.
+
+\newpage
+\subsubsection{Sin estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class CombatService
+{
+    public int calc_dmg(int baseDamage)
+    {
+        return baseDamage;
+    }
+
+    public int calculateDamage(float multiplier, int baseValue)
+    {
+        return (int)(baseValue * multiplier);
+    }
+
+    public bool AttackOK(
+        int currentHealth,
+        float distanceToTarget,
+        float attackRange)
+    {
+        return currentHealth > 0 && distanceToTarget <= attackRange;
+    }
+
+    public async Task SaveBattleResult(
+        string savePath,
+        string battleResult)
+    {
+        await File.WriteAllTextAsync(savePath, battleResult);
+    }
+}
+\end{lstlisting}
+
+\texttt{calc\_dmg} utiliza minúsculas, un guion bajo y abreviaturas; \texttt{calculateDamage} comienza con minúscula y cambia tanto el nombre como el orden y significado de los parámetros de una operación equivalente. \texttt{AttackOK} no formula claramente una condición afirmativa y utiliza la abreviatura \texttt{OK}. Por último, \texttt{SaveBattleResult} representa una operación asíncrona esperable, pero omite el sufijo \texttt{Async} (Microsoft, 2023a; Microsoft, 2025; Microsoft, 2026a; Unity Technologies, s. f.).

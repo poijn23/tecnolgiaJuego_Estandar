@@ -1,1 +1,52 @@
-\subsectionplaceholder{Constantes}
+\subsection{Constantes}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+  \item \textbf{Los nombres de los campos y variables locales declarados con \texttt{const} deberán escribirse utilizando \texttt{PascalCase}, independientemente de su nivel de acceso.} Cada palabra significativa comenzará con mayúscula y no se utilizarán separadores. Ejemplos válidos para el videojuego son \texttt{MaximumComboHits}, \texttt{DefaultCriticalDamageMultiplier} y \texttt{RespawnDelaySeconds}. Microsoft establece \texttt{PascalCase} para los nombres de las constantes públicas, privadas, internas y locales en C\# (Microsoft, 2026a).
+
+  \item \textbf{No se trasladará a C\# la convención \texttt{UPPER\_SNAKE\_CASE} utilizada habitualmente para constantes en Java.} Quedan prohibidos nombres como \texttt{MAXIMUM\_COMBO\_HITS}, \texttt{DEFAULT\_DAMAGE} o \texttt{RESPAWN\_TIME}. La convención idiomática de C\# utiliza \texttt{PascalCase} para las constantes y evita separar sus palabras mediante guiones bajos (Microsoft, 2026a).
+
+  \item \textbf{Los campos \texttt{static readonly} deberán nombrarse como campos y no como constantes de tiempo de compilación.} Un campo privado o interno utilizará el prefijo \texttt{s\_} seguido de \texttt{camelCase}, por ejemplo, \texttt{s\_matchTimeLimit}; un campo público o protegido utilizará \texttt{PascalCase}. Microsoft distingue los campos \texttt{readonly}, cuyo valor puede establecerse durante la inicialización o en un constructor, de las constantes \texttt{const}, evaluadas en tiempo de compilación; además, su convención para campos estáticos privados o internos utiliza el prefijo \texttt{s\_} (Microsoft, 2026a; Microsoft, 2026b; Microsoft, 2026c).
+
+  \item \textbf{El nombre de una constante deberá ser un sustantivo o una frase nominal que describa el valor invariable que representa.} Se preferirán nombres como \texttt{MaximumInventorySlots}, \texttt{DefaultTeamSize} y \texttt{MinimumSpawnDistance}. No se utilizarán nombres genéricos como \texttt{Value}, \texttt{Number} o \texttt{Constant}. Microsoft recomienda nombres significativos y descriptivos y establece que los campos deben nombrarse mediante sustantivos, frases nominales o adjetivos (Microsoft, 2023b; Microsoft, 2026a).
+
+  \item \textbf{Cuando la unidad de medida no resulte evidente por el contexto o por el tipo, deberá expresarse en el nombre.} Por ejemplo, se utilizarán \texttt{RespawnDelaySeconds}, \texttt{RotationSpeedDegreesPerSecond} y \texttt{NetworkTimeoutMilliseconds}. Esta precisión evita que un valor de configuración se interprete con una unidad incorrecta y aplica la recomendación de priorizar nombres legibles y descriptivos sobre nombres breves (Microsoft, 2026a).
+
+  \item \textbf{Las constantes relacionadas deberán utilizar calificadores consistentes que expresen su función.} Para límites se utilizarán pares como \texttt{MinimumPlayerCount} y \texttt{MaximumPlayerCount}; para valores iniciales o predeterminados se utilizarán nombres como \texttt{InitialPlayerLives} y \texttt{DefaultDifficultyLevel}. Los calificadores deberán comunicar el significado del valor y no su tipo de dato (Microsoft, 2026a).
+
+  \item \textbf{No se utilizarán abreviaturas poco claras, letras aisladas ni prefijos que codifiquen el tipo.} Deberá preferirse \texttt{DefaultCriticalDamageMultiplier} sobre \texttt{dCritMult}, \texttt{MaximumEnemyCount} sobre \texttt{intMaxEnemies} y \texttt{PlayerSpawnDistance} sobre \texttt{PSD}. Microsoft recomienda evitar abreviaturas y acrónimos que no sean ampliamente reconocidos y priorizar la claridad sobre la brevedad (Microsoft, 2026a).
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class CombatConfiguration
+{
+    public const int MaximumComboHits = 10;
+    private const float DefaultCriticalDamageMultiplier = 2.0f;
+    private const float RespawnDelaySeconds = 3.0f;
+
+    private static readonly TimeSpan s_matchTimeLimit =
+        TimeSpan.FromMinutes(15);
+}
+\end{lstlisting}
+
+\texttt{MaximumComboHits} utiliza \texttt{PascalCase} y expresa un límite. La segunda constante describe el multiplicador predeterminado que representa. \texttt{RespawnDelaySeconds} indica además su unidad de medida. El campo \texttt{static readonly} utiliza \texttt{s\_matchTimeLimit} porque es un campo estático privado y no una constante de tiempo de compilación.
+
+\newpage
+\subsubsection{Sin estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class CombatConfiguration
+{
+    public const int MAX_COMBO_HITS = 10;
+    private const float dCritMult = 2.0f;
+    private const float TIME = 3.0f;
+
+    private static readonly TimeSpan MatchTimeLimit =
+        TimeSpan.FromMinutes(15);
+}
+\end{lstlisting}
+
+\texttt{MAX\_COMBO\_HITS} y \texttt{TIME} trasladan la capitalización y los separadores de otras convenciones en lugar de utilizar \texttt{PascalCase}; además, \texttt{TIME} no indica qué duración representa ni su unidad. \texttt{dCritMult} contiene abreviaturas y no comunica con claridad su propósito. Finalmente, \texttt{MatchTimeLimit} omite el prefijo \texttt{s\_} requerido para un campo \texttt{static readonly} privado (Microsoft, 2026a).

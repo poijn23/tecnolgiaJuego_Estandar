@@ -1,1 +1,85 @@
-\subsectionplaceholder{Variables}
+\subsection{Variables}
+
+\subsubsection{Reglas de nombrado}
+
+\begin{enumerate}
+  \item \textbf{Los nombres de las variables locales y de los parámetros deberán escribirse utilizando \texttt{camelCase}.} La primera palabra comenzará con minúscula y cada palabra posterior comenzará con mayúscula, sin utilizar guiones bajos ni otros separadores. Ejemplos válidos para el videojuego son \texttt{movementSpeed}, \texttt{targetPosition} y \texttt{remainingLives}. Microsoft y Unity establecen \texttt{camelCase} para variables locales y parámetros en C\# (Microsoft, 2026; Unity Technologies, s. f.).
+
+  \item \textbf{Los campos de instancia privados e internos no constantes deberán escribirse en \texttt{camelCase} y comenzar con un guion bajo.} Por ejemplo, se utilizarán \texttt{\_currentHealth}, \texttt{\_targetEnemy} y \texttt{\_isInvincible}. Esta convención permite distinguir los campos de instancia de las variables locales y los parámetros sin perder claridad semántica (Microsoft, 2026).
+
+  \item \textbf{Los campos públicos, cuando sean necesarios, deberán escribirse utilizando \texttt{PascalCase}.} Cada palabra significativa comenzará con mayúscula y no se utilizarán separadores. Ejemplos válidos son \texttt{SpawnRadius} y \texttt{MaximumEnemies}. Microsoft utiliza \texttt{PascalCase} para los miembros públicos, y Unity aplica esta convención a los campos públicos de sus scripts de C\# (Microsoft, 2026; Unity Technologies, s. f.).
+
+  \item \textbf{El nombre de una variable deberá expresar con claridad el dato o estado que representa.} Se preferirán sustantivos o frases nominales como \texttt{currentHealth}, \texttt{spawnPosition} y \texttt{damageMultiplier}. No se utilizarán nombres genéricos como \texttt{data}, \texttt{value} o \texttt{temp} cuando sea posible expresar una intención más precisa. Microsoft recomienda identificadores significativos y descriptivos, y Unity indica que los nombres de las variables deben ser claros y no ambiguos (Microsoft, 2026; Unity Technologies, s. f.).
+
+  \item \textbf{Los nombres de las variables booleanas deberán formularse como estados o preguntas afirmativas.} Se utilizarán prefijos como \texttt{is}, \texttt{has}, \texttt{can} o \texttt{should}, por ejemplo, \texttt{isGrounded}, \texttt{hasTarget}, \texttt{canAttack} y \texttt{shouldRespawn}. No se utilizarán nombres vagos como \texttt{flag} o \texttt{status}. Unity recomienda nombres booleanos que puedan interpretarse como una condición afirmativa y muestra este patrón en su guía de estilo para C\# (Unity Technologies, s. f.).
+
+  \item \textbf{Las variables que representen colecciones deberán utilizar nombres plurales.} Por ejemplo, se utilizarán \texttt{activeEnemies}, \texttt{spawnPoints} y \texttt{collectedItems}. El nombre deberá permitir distinguir una colección de una sola entidad y conservar el contexto del elemento almacenado. Esta regla aplica la recomendación de utilizar nombres legibles, descriptivos y semánticamente claros (Microsoft, 2026; Unity Technologies, s. f.).
+
+  \item \textbf{No se utilizarán abreviaturas poco claras, letras aisladas ni contracciones innecesarias.} Deberá preferirse \texttt{horizontalInput} sobre \texttt{hInput}, \texttt{enemyCount} sobre \texttt{ec} y \texttt{movementDistance} sobre \texttt{md}. Las letras individuales solo podrán utilizarse en contextos breves y convencionales, como índices de ciclos o expresiones matemáticas. Microsoft y Unity recomiendan evitar abreviaturas que reduzcan la legibilidad y restringir los nombres de una sola letra a usos sencillos y reconocibles (Microsoft, 2026; Unity Technologies, s. f.).
+
+  \item \textbf{El nombre de una variable no deberá codificar su tipo ni repetir información evidente por el contexto.} No se utilizarán nombres como \texttt{intEnemyCount}, \texttt{strPlayerName} o \texttt{playerCurrentHealth} dentro de una clase que ya representa al jugador cuando \texttt{currentHealth} sea suficiente. Los identificadores deben comunicar el propósito del dato, no su representación técnica, y deben evitar información redundante (Microsoft, 2026; Unity Technologies, s. f.).
+\end{enumerate}
+
+\subsubsection{Con estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerMovementController
+{
+    private float _movementSpeed;
+    private bool _isGrounded;
+
+    public void UpdateMovement(
+        float horizontalInput,
+        IReadOnlyList<EnemyController> nearbyEnemies)
+    {
+        float movementDistance = horizontalInput * _movementSpeed;
+        bool hasNearbyEnemies = nearbyEnemies.Count > 0;
+
+        if (_isGrounded && hasNearbyEnemies)
+        {
+            EnemyController currentTarget = nearbyEnemies[0];
+            MoveToward(currentTarget, movementDistance);
+        }
+    }
+
+    private void MoveToward(
+        EnemyController currentTarget,
+        float movementDistance)
+    {
+    }
+}
+\end{lstlisting}
+
+Los campos privados \texttt{\_movementSpeed} y \texttt{\_isGrounded} utilizan el prefijo y la capitalización establecidos. Los parámetros y las variables locales utilizan \texttt{camelCase}; \texttt{nearbyEnemies} es plural porque representa una colección; y \texttt{hasNearbyEnemies} e \texttt{\_isGrounded} expresan condiciones booleanas afirmativas. Los nombres describen su función dentro del movimiento del jugador sin codificar tipos ni utilizar abreviaturas.
+
+\newpage
+\subsubsection{Sin estándar}
+
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerMovementController
+{
+    private float Movement_speed;
+    private bool ground;
+    private int intEnemyCount;
+
+    public void UpdateMovement(
+        float HI,
+        IReadOnlyList<EnemyController> enemy)
+    {
+        float x = HI * Movement_speed;
+        bool flag = enemy.Count > 0;
+
+        if (ground && flag)
+        {
+            EnemyController e = enemy[0];
+            MoveToward(e, x);
+        }
+    }
+
+    private void MoveToward(EnemyController E, float D)
+    {
+    }
+}
+\end{lstlisting}
+
+Los campos \texttt{Movement\_speed} y \texttt{ground} no siguen la convención para campos privados, mientras que \texttt{intEnemyCount} codifica innecesariamente el tipo. El parámetro \texttt{enemy} representa una colección, pero está escrito en singular. Los nombres \texttt{HI}, \texttt{x}, \texttt{flag}, \texttt{e}, \texttt{E} y \texttt{D} son ambiguos, utilizan abreviaturas o letras aisladas y no comunican con claridad su propósito. Además, \texttt{ground} y \texttt{flag} no formulan estados booleanos afirmativos (Microsoft, 2026; Unity Technologies, s. f.).
