@@ -1,0 +1,45 @@
+\subsection{Niveles de Registro}
+
+\subsubsection{Regla: elección del nivel según la severidad del evento}
+
+\textbf{Regla:} Cada mensaje se registra con la severidad que corresponda, de menor a mayor (Microsoft, 2025d):
+
+\begin{itemize}
+  \item \textbf{Trace}: detalle de depuración profunda; nunca en producción.
+  \item \textbf{Debug}: información útil en desarrollo (resultado intermedio de un cálculo).
+  \item \textbf{Information}: flujo normal del juego (inicio de partida, cambio de turno).
+  \item \textbf{Warning}: anomalía que no impide continuar (movimiento inválido).
+  \item \textbf{Error}: fallo que impide completar la operación (no se pudo guardar la partida).
+\end{itemize}
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    public void StartTurn(Player player)
+    {
+        _logger.Information($"Turn started for {player.Name}");
+    }
+
+    public void RejectMove(Player player, Tile destination)
+    {
+        _logger.Warning($"Rejected move for {player.Name} to {destination}");
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    public void StartTurn(Player player)
+    {
+        _logger.Error($"Turn started for {player.Name}");
+    }
+
+    public void RejectMove(Player player, Tile destination)
+    {
+        _logger.Error($"Rejected move for {player.Name} to {destination}");
+    }
+}
+\end{lstlisting}

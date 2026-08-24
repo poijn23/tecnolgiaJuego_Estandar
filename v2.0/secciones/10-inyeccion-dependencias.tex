@@ -1,0 +1,43 @@
+\section{Inyección de Dependencias}
+
+\subsection{Regla: inyección por constructor y dependencia de abstracciones}
+
+\textbf{Regla:} Toda clase que dependa de un servicio externo recibe esa dependencia por constructor, declarada mediante una interfaz, en lugar de instanciarla dentro de la propia clase.
+
+\textbf{Descripción:} Principio de inversión de dependencias de Martin: los módulos de alto nivel dependen de abstracciones, no de módulos de bajo nivel (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private readonly IDiceRoller _diceRoller;
+
+    public TurnManager(IDiceRoller diceRoller)
+    {
+        _diceRoller = diceRoller;
+    }
+
+    public int PlayTurn()
+    {
+        return _diceRoller.Roll();
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private readonly DiceRoller _diceRoller;
+
+    public TurnManager()
+    {
+        _diceRoller = new DiceRoller();
+    }
+
+    public int PlayTurn()
+    {
+        return _diceRoller.Roll();
+    }
+}
+\end{lstlisting}

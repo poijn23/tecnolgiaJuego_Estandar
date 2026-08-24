@@ -1,0 +1,59 @@
+\subsection{Estructuras de Control}
+
+\subsubsection{Regla: llaves obligatorias en todo bloque}
+
+\textbf{Regla:} Llaves \texttt{\{\}} obligatorias en toda estructura de control, incluso con una única instrucción; regla \texttt{IDE0011} (Microsoft, 2023).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+if (diceRoll == MaximumFaceValue)
+{
+    GrantExtraTurn();
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+if (diceRoll == MaximumFaceValue)
+    GrantExtraTurn();
+\end{lstlisting}
+
+\subsubsection{Regla: rama \texttt{default} obligatoria en \texttt{switch}}
+
+\textbf{Regla:} Todo \texttt{switch} incluye una rama \texttt{default} explícita para los valores no contemplados (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public string DescribeTurnState(TurnState state)
+{
+    switch (state)
+    {
+        case TurnState.WaitingForRoll:
+            return "Waiting for roll";
+        case TurnState.Moving:
+            return "Moving";
+        case TurnState.Finished:
+            return "Finished";
+        default:
+            throw new ArgumentOutOfRangeException(nameof(state), state, "Unsupported turn state.");
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public string DescribeTurnState(TurnState state)
+{
+    switch (state)
+    {
+        case TurnState.WaitingForRoll:
+            return "Waiting for roll";
+        case TurnState.Moving:
+            return "Moving";
+        case TurnState.Finished:
+            return "Finished";
+    }
+
+    return string.Empty;
+}
+\end{lstlisting}

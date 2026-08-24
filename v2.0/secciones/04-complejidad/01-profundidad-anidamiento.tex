@@ -1,0 +1,52 @@
+\subsection{Profundidad de Anidamiento}
+
+\subsubsection{Regla: máximo tres niveles de anidamiento}
+
+\textbf{Regla:} No se anidan más de tres niveles de estructuras de control (\texttt{if}, \texttt{for}, \texttt{try}) por método. Combinar condiciones o extraer a un método privado cuando se supere (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void ProcessTurn(Player player)
+{
+    if (player is not null && player.IsActive)
+    {
+        ExecuteTurn(player);
+    }
+}
+
+private void ExecuteTurn(Player player)
+{
+    try
+    {
+        _board.MovePlayer(player);
+    }
+    catch (InvalidMoveException ex)
+    {
+        _logger.Warning($"Invalid move for {player.Name}: {ex.Message}");
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void ProcessTurn(Player player)
+{
+    if (player is not null)
+    {
+        if (player.IsActive)
+        {
+            try
+            {
+                if (_board.HasSpaceFor(player))
+                {
+                    _board.MovePlayer(player);
+                }
+            }
+            catch (InvalidMoveException ex)
+            {
+                _logger.Warning($"Invalid move for {player.Name}: {ex.Message}");
+            }
+        }
+    }
+}
+\end{lstlisting}

@@ -1,0 +1,51 @@
+\subsection{Variables No Utilizadas}
+
+\subsubsection{Regla: excepción sin nombre en \texttt{catch}}
+
+\textbf{Regla:} Prohibido asignar un nombre genérico (\texttt{ex}, \texttt{ignored}) a una variable de excepción no usada; se omite el identificador y se deja solo el tipo (Microsoft, 2026a).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public bool TryParseMove(string rawInput)
+{
+    try
+    {
+        ParseMove(rawInput);
+        return true;
+    }
+    catch (FormatException)
+    {
+        return false;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public bool TryParseMove(string rawInput)
+{
+    try
+    {
+        ParseMove(rawInput);
+        return true;
+    }
+    catch (FormatException ignored)
+    {
+        return false;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: descarte \texttt{\_} en expresiones lambda}
+
+\textbf{Regla:} Un parámetro de lambda no utilizado en el cuerpo se nombra con el descarte \texttt{\_} (Microsoft, 2025b).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+_players.RemoveAll(_ => _players.Count > MaximumPlayers);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+_players.RemoveAll(p => _players.Count > MaximumPlayers);
+\end{lstlisting}

@@ -1,0 +1,45 @@
+\subsection{Espaciado}
+
+\subsubsection{Regla: espacio entre palabra reservada y paréntesis, y línea en blanco entre miembros}
+
+\textbf{Regla:} Un espacio entre palabra reservada (\texttt{if}, \texttt{for}, \texttt{while}, \texttt{switch}) y su paréntesis, y alrededor de cada operador binario. Una línea en blanco entre métodos o propiedades consecutivos (Microsoft, 2025e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class ScoreBoard
+{
+    private int totalScore;
+
+    public void AddPoints(int points)
+    {
+        if (points > 0)
+        {
+            totalScore = totalScore + points;
+        }
+    }
+
+    public int GetTotalScore()
+    {
+        return totalScore;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class ScoreBoard
+{
+    private int totalScore;
+    public void AddPoints(int points)
+    {
+        if(points>0)
+        {
+            totalScore=totalScore+points;
+        }
+    }
+    public int GetTotalScore()
+    {
+        return totalScore;
+    }
+}
+\end{lstlisting}

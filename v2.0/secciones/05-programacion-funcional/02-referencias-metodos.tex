@@ -1,0 +1,15 @@
+\subsection{Referencias a Métodos}
+
+\subsubsection{Regla: grupo de método sobre lambda de reenvío}
+
+\textbf{Regla:} Si una lambda solo reenvía sus argumentos a otro método, se usa el grupo de método (el nombre directamente) en vez de la lambda (Microsoft, 2024).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+_players.ForEach(RegisterPlayerScore);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+_players.ForEach(player => RegisterPlayerScore(player));
+\end{lstlisting}

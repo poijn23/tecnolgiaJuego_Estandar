@@ -1,0 +1,71 @@
+\subsection{Métodos}
+
+\subsubsection{Regla: PascalCase y verbo descriptivo}
+
+\textbf{Regla:} El nombre de un método se escribe en \texttt{PascalCase} y comienza con un verbo o frase verbal (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public int CalculateTotalScore(int basePoints, int bonusPoints)
+{
+    return basePoints + bonusPoints;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public int totalScore(int basePoints, int bonusPoints)
+{
+    return basePoints + bonusPoints;
+}
+\end{lstlisting}
+
+\subsubsection{Regla: máximo de parámetros}
+
+\textbf{Regla:} Un método no recibe más de tres parámetros; con más datos de entrada, se encapsulan en un DTO.
+
+\textbf{Descripción:} McConnell señala que una lista larga de parámetros incrementa la probabilidad de invocar el método con el orden o el valor incorrecto (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public readonly record struct MoveRequest(Player Player, Tile Origin, Tile Destination);
+
+public sealed class MoveExecutor
+{
+    public MoveResult ExecuteMove(MoveRequest moveRequest)
+    {
+        return new MoveResult(moveRequest.Player, moveRequest.Destination);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MoveExecutor
+{
+    public MoveResult ExecuteMove(Player player, Tile origin, Tile destination, int diceRoll, bool isDoubleTurn)
+    {
+        return new MoveResult(player, destination);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: métodos booleanos como pregunta}
+
+\textbf{Regla:} Un método que devuelve \texttt{bool} se nombra con prefijo interrogativo (\texttt{Is}, \texttt{Has}, \texttt{Can}) (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public bool IsMoveValid(Tile origin, Tile destination)
+{
+    return destination.IsWithinBoard && !destination.IsOccupied;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public bool CheckMove(Tile origin, Tile destination)
+{
+    return destination.IsWithinBoard && !destination.IsOccupied;
+}
+\end{lstlisting}

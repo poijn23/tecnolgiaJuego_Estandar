@@ -1,0 +1,22 @@
+\subsection{A Nivel de Clase}
+
+\subsubsection{Regla: etiqueta \texttt{summary} obligatoria en tipos públicos relevantes}
+
+\textbf{Regla:} Toda clase o interfaz pública que forme parte de un contrato arquitectónico se documenta con \texttt{<summary>} (Microsoft, 2026c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+/// <summary>
+/// Coordina el orden de los turnos y determina que jugador debe actuar a continuacion.
+/// </summary>
+public sealed class TurnManager
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+}
+\end{lstlisting}

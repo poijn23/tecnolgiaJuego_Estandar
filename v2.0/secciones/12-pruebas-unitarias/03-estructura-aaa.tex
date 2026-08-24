@@ -1,0 +1,29 @@
+\subsection{Estructura Interna (Patrón AAA)}
+
+\subsubsection{Regla: separar Arrange, Act y Assert con líneas en blanco}
+
+\textbf{Regla:} Tres bloques consecutivos --- preparación, ejecución, verificación --- separados solo por una línea en blanco, sin comentarios que los etiqueten (Osherove, 2013).
+
+\textbf{Descripción:} \texttt{ExpectEqual} representa la llamada de aserción del bloque de verificación.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void Roll_FaceValueSix_GrantsExtraTurn()
+{
+    DiceRoller diceRoller = new(new FixedRandomProvider(6));
+
+    int faceValue = diceRoller.Roll();
+
+    ExpectEqual(6, faceValue);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void Roll_FaceValueSix_GrantsExtraTurn()
+{
+    DiceRoller diceRoller = new(new FixedRandomProvider(6));
+    int faceValue = diceRoller.Roll();
+    ExpectEqual(6, faceValue);
+}
+\end{lstlisting}

@@ -1,0 +1,26 @@
+\section{Comentarios Internos}
+
+\subsection{Regla: comentar el ``por qué'', nunca el ``qué''}
+
+\textbf{Regla:} El código es autoexplicativo por nombrado; prohibido un comentario (\texttt{//}) que repita lo que la instrucción ya dice. Solo se permite en casos complejos, explicando la razón de negocio o técnica, nunca el ``qué''.
+
+\textbf{Descripción:} Martin sostiene que la mayoría de los comentarios compensan código poco claro; el único valioso explica una intención que el código no puede comunicar por sí solo (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+// Las reglas oficiales del juego otorgan un turno extra al sacar seis.
+if (diceRoll == MaximumFaceValue)
+{
+    GrantExtraTurn();
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+// Si el valor del dado es igual al valor maximo
+if (diceRoll == MaximumFaceValue)
+{
+    // Otorga un turno extra
+    GrantExtraTurn();
+}
+\end{lstlisting}

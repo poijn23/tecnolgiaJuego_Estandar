@@ -1,0 +1,70 @@
+\subsection{Identidad de los Objetos}
+
+\subsubsection{Regla: identidad mediante clave de negocio}
+
+\textbf{Regla:} La identidad de una entidad se define mediante su clave de negocio (\emph{business key}). Prohibido sobrescribir \texttt{Equals}/\texttt{GetHashCode} con todos los atributos o con un identificador autoincremental sin significado en el dominio.
+
+\textbf{Descripción:} Las guías de diseño de .NET recomiendan basar la igualdad en los atributos que determinan la identidad en el dominio, no en la totalidad del estado interno (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardTile : IEquatable<BoardTile>
+{
+    public int Row { get; }
+    public int Column { get; }
+    public bool IsOccupied { get; set; }
+
+    public BoardTile(int row, int column)
+    {
+        Row = row;
+        Column = column;
+    }
+
+    public bool Equals(BoardTile other)
+    {
+        return other is not null && Row == other.Row && Column == other.Column;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as BoardTile);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Row, Column);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardTile : IEquatable<BoardTile>
+{
+    public int InternalId { get; set; }
+    public int Row { get; }
+    public int Column { get; }
+    public bool IsOccupied { get; set; }
+
+    public BoardTile(int row, int column)
+    {
+        Row = row;
+        Column = column;
+    }
+
+    public bool Equals(BoardTile other)
+    {
+        return other is not null && InternalId == other.InternalId;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as BoardTile);
+    }
+
+    public override int GetHashCode()
+    {
+        return InternalId.GetHashCode();
+    }
+}
+\end{lstlisting}

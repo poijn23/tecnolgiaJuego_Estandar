@@ -1,0 +1,31 @@
+\subsection{Salida Anticipada (\emph{Early Exit})}
+
+\subsubsection{Regla: cláusula de guarda con retorno anticipado}
+
+\textbf{Regla:} Todo método descarta primero, con \texttt{return} anticipado, los casos que no requieren procesar el resto de la lógica. Prohibido anidar la lógica principal dentro de un \texttt{if} que solo comprueba una precondición de entrada.
+
+\textbf{Descripción:} La industria de videojuegos prefiere \emph{early exit} sobre el principio clásico de salida única (SESE): la lógica de una partida evalúa constantemente precondiciones, y anidar el método completo dentro de ellas solo añade profundidad sin claridad. McConnell recomienda salir de una rutina en cuanto se determina que no hay más trabajo que hacer (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void ProcessTurn(Player player)
+{
+    if (!player.IsActive)
+    {
+        return;
+    }
+
+    ExecuteTurn(player);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void ProcessTurn(Player player)
+{
+    if (player.IsActive)
+    {
+        ExecuteTurn(player);
+    }
+}
+\end{lstlisting}

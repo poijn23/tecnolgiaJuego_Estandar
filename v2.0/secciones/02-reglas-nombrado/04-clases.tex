@@ -1,0 +1,37 @@
+\subsection{Clases}
+
+\subsubsection{Regla: PascalCase y sustantivo singular}
+
+\textbf{Regla:} El nombre de una clase se escribe en \texttt{PascalCase} y es un sustantivo o frase nominal en singular (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardTile
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardTiles
+{
+}
+\end{lstlisting}
+
+\subsubsection{Regla: sin prefijos ni abreviaturas poco claras}
+
+\textbf{Regla:} Sin prefijos que indiquen que un tipo es una clase (\texttt{CTile}, \texttt{ClsPlayer}) ni abreviaturas poco reconocidas (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class ClsTrnMgr
+{
+}
+\end{lstlisting}

@@ -1,0 +1,69 @@
+\subsection{Convenciones}
+
+\subsubsection{Regla: variable de excepción nombrada \texttt{ex}}
+
+\textbf{Regla:} Toda variable de excepción que sí se utiliza en el bloque \texttt{catch} se nombra \texttt{ex}.
+
+\textbf{Descripción:} Convención propia del proyecto para mantener los bloques \texttt{catch} predecibles en todo el equipo (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, destination);
+}
+catch (InvalidMoveException ex)
+{
+    _logger.Warning($"Invalid move attempted by {player.Name}: {ex.Message}");
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, destination);
+}
+catch (InvalidMoveException exception)
+{
+    _logger.Warning($"Invalid move attempted by {player.Name}: {exception.Message}");
+}
+\end{lstlisting}
+
+\subsubsection{Regla: orden de las cláusulas \texttt{catch}}
+
+\textbf{Regla:} Varias cláusulas \texttt{catch} en un mismo \texttt{try} se ordenan del tipo más derivado al menos derivado (Microsoft, 2025a).
+
+\textbf{Descripción:} Con herencia directa entre los tipos, como abajo, el compilador rechaza el orden incorrecto con un error: no es solo preferencia de estilo.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, ParsePosition(rawDestination));
+}
+catch (ArgumentOutOfRangeException ex)
+{
+    _logger.Warning($"Position out of board bounds for {player.Name}: {ex.Message}");
+}
+catch (ArgumentException ex)
+{
+    _logger.Warning($"Invalid position format for {player.Name}: {ex.Message}");
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (no compila --- CS0160):}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, ParsePosition(rawDestination));
+}
+catch (ArgumentException ex)
+{
+    _logger.Warning($"Invalid position format for {player.Name}: {ex.Message}");
+}
+catch (ArgumentOutOfRangeException ex)
+{
+    _logger.Warning($"Position out of board bounds for {player.Name}: {ex.Message}");
+}
+\end{lstlisting}

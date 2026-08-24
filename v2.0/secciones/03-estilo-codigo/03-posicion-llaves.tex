@@ -1,0 +1,26 @@
+\subsection{Posición de las Llaves}
+
+\subsubsection{Regla: estilo Allman}
+
+\textbf{Regla:} Llave de apertura y cierre en su propia línea, alineadas con el bloque que delimitan. Prohibido que \texttt{else}, \texttt{catch} o \texttt{finally} compartan línea con la llave anterior (Microsoft, 2025e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+if (player.IsActive)
+{
+    ExecuteTurn(player);
+}
+else
+{
+    SkipTurn(player);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+if (player.IsActive) {
+    ExecuteTurn(player);
+} else {
+    SkipTurn(player);
+}
+\end{lstlisting}

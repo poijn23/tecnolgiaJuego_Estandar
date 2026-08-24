@@ -1,0 +1,104 @@
+\subsection{Variables}
+
+\subsubsection{Regla: camelCase y nombres descriptivos}
+
+\textbf{Regla:} Variables locales y parámetros en \texttt{camelCase}. Prohibidos los nombres de un solo carácter, salvo contadores de ciclos simples y no anidados; en ciclos anidados, cada contador debe tener nombre descriptivo (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public Tile GetTileAt(int rowIndex, int columnIndex)
+{
+    for (int row = 0; row < BoardSize; row++)
+    {
+        for (int column = 0; column < BoardSize; column++)
+        {
+            if (row == rowIndex && column == columnIndex)
+            {
+                return _tiles[row, column];
+            }
+        }
+    }
+
+    return null;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public Tile GetTileAt(int rowIndex, int columnIndex)
+{
+    for (int i = 0; i < BoardSize; i++)
+    {
+        for (int j = 0; j < BoardSize; j++)
+        {
+            if (i == rowIndex && j == columnIndex)
+            {
+                return _tiles[i, j];
+            }
+        }
+    }
+
+    return null;
+}
+\end{lstlisting}
+
+\subsubsection{Regla: nombres de colecciones en plural}
+
+\textbf{Regla:} Toda colección (arreglo, lista, diccionario o cualquier \texttt{IEnumerable<T>}) se nombra con un sustantivo en plural (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameBoard
+{
+    private readonly List<Player> _players;
+
+    public GameBoard(List<Player> players)
+    {
+        _players = players;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameBoard
+{
+    private readonly List<Player> _playerList;
+
+    public GameBoard(List<Player> playerList)
+    {
+        _playerList = playerList;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: una declaración por línea}
+
+\textbf{Regla:} No se declara más de una variable en la misma sentencia, aunque compartan tipo (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+int currentRow = startingRow;
+int currentColumn = startingColumn;
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+int currentRow = startingRow, currentColumn = startingColumn;
+\end{lstlisting}
+
+\subsubsection{Regla: prefijos interrogativos para variables booleanas}
+
+\textbf{Regla:} Toda variable \texttt{bool} se nombra como una pregunta cerrada, con prefijo \texttt{is}, \texttt{has}, \texttt{can} o \texttt{should} (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+bool isPlayerTurnActive = true;
+bool hasReachedFinalTile = false;
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+bool playerTurnActive = true;
+bool finalTileReached = false;
+\end{lstlisting}

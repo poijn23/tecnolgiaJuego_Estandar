@@ -1,0 +1,61 @@
+\subsection{Excepciones Encadenadas}
+
+\subsubsection{Regla: preservar la excepción original como causa}
+
+\textbf{Regla:} Al lanzar una excepción personalizada desde un \texttt{catch}, se pasa la excepción original como \texttt{innerException} en el constructor (Microsoft, 2025a).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.SaveState(currentState);
+}
+catch (IOException ex)
+{
+    throw new GameStateException("Failed to persist game state.", ex);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.SaveState(currentState);
+}
+catch (IOException ex)
+{
+    throw new GameStateException("Failed to persist game state: " + ex.Message);
+}
+\end{lstlisting}
+
+\subsubsection{Regla: \texttt{throw;} en lugar de \texttt{throw ex;}}
+
+\textbf{Regla:} Al relanzar la misma excepción capturada, se usa \texttt{throw;} sin especificar la variable.
+
+\textbf{Descripción:} \texttt{throw ex;} reinicia la traza de la pila; \texttt{throw;} conserva la original completa (Microsoft, 2025a).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, destination);
+}
+catch (InvalidMoveException ex)
+{
+    _logger.Error($"Unrecoverable move failure for {player.Name}: {ex.Message}");
+    throw;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, destination);
+}
+catch (InvalidMoveException ex)
+{
+    _logger.Error($"Unrecoverable move failure for {player.Name}: {ex.Message}");
+    throw ex;
+}
+\end{lstlisting}
