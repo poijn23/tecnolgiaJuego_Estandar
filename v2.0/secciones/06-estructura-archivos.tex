@@ -1,0 +1,84 @@
+\section{Estructura de Archivos}
+
+\subsection{Regla: una clase de nivel superior por archivo}
+
+\textbf{Regla:} Cada archivo fuente deberá contener exactamente una clase, interfaz, \texttt{record} o \texttt{enum} de nivel superior, y el nombre del archivo deberá coincidir exactamente con el nombre de ese tipo.
+
+\textbf{Descripción:} McConnell recomienda mantener una única clase por archivo como parte de la organización física del código, de manera que localizar el archivo correspondiente a un tipo sea inmediato para cualquier integrante del equipo (McConnell, 2004).
+
+\textbf{Código correcto (archivo \texttt{TurnManager.cs}):}
+\begin{lstlisting}[style=csharpstyle]
+namespace BoardGame.Logic;
+
+public sealed class TurnManager
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (archivo \texttt{GameLogic.cs}):}
+\begin{lstlisting}[style=csharpstyle]
+namespace BoardGame.Logic;
+
+public sealed class TurnManager
+{
+}
+
+public sealed class ScoreBoard
+{
+}
+\end{lstlisting}
+
+\subsection{Regla: orden de los elementos dentro de la clase}
+
+\textbf{Regla:} Dentro de una clase, sus elementos deberán declararse estrictamente en el siguiente orden: constantes, campos estáticos, campos de instancia, constructores, propiedades y, por último, métodos.
+
+\textbf{Descripción:} McConnell recomienda organizar los elementos de una clase siguiendo un orden consistente y predecible, de manera que cualquier persona del equipo sepa dónde buscar un tipo concreto de miembro sin recorrer todo el archivo (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller
+{
+    private const int MinimumFaceValue = 1;
+
+    private static readonly Random s_random = Random.Shared;
+
+    private readonly int _maximumFaceValue;
+
+    public DiceRoller(int maximumFaceValue)
+    {
+        _maximumFaceValue = maximumFaceValue;
+    }
+
+    public int LastRoll { get; private set; }
+
+    public int Roll()
+    {
+        LastRoll = s_random.Next(MinimumFaceValue, _maximumFaceValue + 1);
+        return LastRoll;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller
+{
+    public int Roll()
+    {
+        LastRoll = s_random.Next(MinimumFaceValue, _maximumFaceValue + 1);
+        return LastRoll;
+    }
+
+    private readonly int _maximumFaceValue;
+
+    public int LastRoll { get; private set; }
+
+    public DiceRoller(int maximumFaceValue)
+    {
+        _maximumFaceValue = maximumFaceValue;
+    }
+
+    private const int MinimumFaceValue = 1;
+    private static readonly Random s_random = Random.Shared;
+}
+\end{lstlisting}

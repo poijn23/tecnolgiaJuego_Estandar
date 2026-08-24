@@ -1,0 +1,75 @@
+\subsection{Métodos}
+
+\subsubsection{Regla: PascalCase y verbo descriptivo}
+
+\textbf{Regla:} El nombre de un método deberá escribirse en \texttt{PascalCase} y comenzar con un verbo o frase verbal que describa la acción que realiza.
+
+\textbf{Descripción:} Microsoft establece \texttt{PascalCase} como la convención para todos los métodos públicos y privados en C\#, a diferencia de otros lenguajes que usan minúscula inicial (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public int CalculateTotalScore(int basePoints, int bonusPoints)
+{
+    return basePoints + bonusPoints;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public int totalScore(int basePoints, int bonusPoints)
+{
+    return basePoints + bonusPoints;
+}
+\end{lstlisting}
+
+\subsubsection{Regla: máximo de parámetros}
+
+\textbf{Regla:} Un método no deberá recibir más de tres parámetros. Cuando la operación requiera más datos de entrada, estos deberán encapsularse en un objeto de transferencia de datos (DTO).
+
+\textbf{Descripción:} McConnell recomienda limitar el número de parámetros de una rutina, ya que una lista larga de parámetros incrementa la probabilidad de invocarla con el orden o el valor incorrecto (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public readonly record struct MoveRequest(Player Player, Tile Origin, Tile Destination);
+
+public sealed class MoveExecutor
+{
+    public MoveResult ExecuteMove(MoveRequest moveRequest)
+    {
+        return new MoveResult(moveRequest.Player, moveRequest.Destination);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MoveExecutor
+{
+    public MoveResult ExecuteMove(Player player, Tile origin, Tile destination, int diceRoll, bool isDoubleTurn)
+    {
+        return new MoveResult(player, destination);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: métodos booleanos como pregunta}
+
+\textbf{Regla:} Un método que devuelva \texttt{bool} deberá nombrarse con un prefijo interrogativo (\texttt{Is}, \texttt{Has}, \texttt{Can}) seguido del predicado que evalúa.
+
+\textbf{Descripción:} Esta convención extiende a los métodos la misma recomendación que Martin aplica a las variables booleanas: el nombre debe leerse como la pregunta que el método responde (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public bool IsMoveValid(Tile origin, Tile destination)
+{
+    return destination.IsWithinBoard && !destination.IsOccupied;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public bool CheckMove(Tile origin, Tile destination)
+{
+    return destination.IsWithinBoard && !destination.IsOccupied;
+}
+\end{lstlisting}

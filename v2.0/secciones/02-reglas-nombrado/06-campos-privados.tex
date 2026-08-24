@@ -1,0 +1,59 @@
+\subsection{Campos Privados}
+
+\subsubsection{Regla: prefijo de guion bajo}
+
+\textbf{Regla:} Todo campo de instancia \texttt{private} o \texttt{internal} que no sea constante deberá escribirse en \texttt{camelCase} y anteponer un guion bajo (\texttt{\_campo}).
+
+\textbf{Descripción:} Esta regla no proviene del PDF de referencia, sino que se incorpora como práctica estándar de la industria porque facilita el análisis automático del código: los analizadores de estilo de C\# y el propio autocompletado del editor permiten distinguir de inmediato un campo de instancia de una variable local o un parámetro. La convención de nombrado del equipo de .NET Runtime, adoptada oficialmente por Microsoft, establece que los campos de instancia \texttt{private} e \texttt{internal} no constantes deben escribirse en \texttt{camelCase} con un guion bajo inicial (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private readonly List<Player> _players;
+    private int _currentPlayerIndex;
+
+    public TurnManager(List<Player> players)
+    {
+        _players = players;
+        _currentPlayerIndex = 0;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private readonly List<Player> players;
+    private int currentPlayerIndex;
+
+    public TurnManager(List<Player> players)
+    {
+        this.players = players;
+        currentPlayerIndex = 0;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: prefijo \texttt{s\_} para campos estáticos}
+
+\textbf{Regla:} Todo campo \texttt{static} que sea \texttt{private} o \texttt{internal} y no constante deberá anteponer el prefijo \texttt{s\_} antes del nombre en \texttt{camelCase}, para distinguirlo visualmente de un campo de instancia.
+
+\textbf{Descripción:} Microsoft documenta explícitamente esta convención --- configurable mediante reglas de nombrado del editor --- como parte del estilo oficial usado en el propio código fuente de .NET (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSessionRegistry
+{
+    private static readonly List<Player> s_connectedPlayers = new();
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSessionRegistry
+{
+    private static readonly List<Player> _connectedPlayers = new();
+}
+\end{lstlisting}

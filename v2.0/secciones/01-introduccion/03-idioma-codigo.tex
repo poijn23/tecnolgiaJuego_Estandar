@@ -1,0 +1,23 @@
+\subsection{Idioma del código}
+
+\subsubsection{Regla: identificadores en inglés}
+
+\textbf{Regla:} Todo identificador del código fuente --- nombres de clases, interfaces, métodos, variables, constantes, espacios de nombres y mensajes de excepción lanzados desde el propio código --- deberá escribirse en inglés. Los comentarios que documenten la justificación de negocio (el ``por qué'') podrán redactarse en español cuando el equipo lo considere más claro para el contexto académico del proyecto, pero el código en sí mismo debe mantenerse en inglés de forma consistente.
+
+\textbf{Descripción:} Microsoft utiliza el inglés como idioma de todos los identificadores, palabras clave y bibliotecas del .NET Framework y de C\#; escribir el código en un único idioma evita mezclar términos de dos idiomas dentro de un mismo identificador y mantiene la coherencia con el resto del ecosistema de .NET que el equipo consulta a diario (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public int CalculatePlayerScore(Player player)
+{
+    return player.BaseScore + player.BonusScore;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public int calcularPlayerScore(Player jugador)
+{
+    return jugador.BaseScore + jugador.BonusScore;
+}
+\end{lstlisting}

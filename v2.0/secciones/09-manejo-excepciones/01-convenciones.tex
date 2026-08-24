@@ -1,0 +1,69 @@
+\subsection{Convenciones}
+
+\subsubsection{Regla: variable de excepción nombrada \texttt{ex}}
+
+\textbf{Regla:} En todo bloque \texttt{catch} donde la variable de excepción sí se utilice, deberá nombrarse siempre \texttt{ex}.
+
+\textbf{Descripción:} Esta es una convención propia del proyecto, adoptada para mantener el código de los bloques \texttt{catch} breve y predecible en todo el equipo. McConnell recomienda fijar una única convención de nombrado para cada categoría de variable y aplicarla de manera uniforme en todo el proyecto, en lugar de dejar el nombre a criterio de quien escribe cada bloque (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, destination);
+}
+catch (InvalidMoveException ex)
+{
+    _logger.Warning($"Invalid move attempted by {player.Name}: {ex.Message}");
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, destination);
+}
+catch (InvalidMoveException exception)
+{
+    _logger.Warning($"Invalid move attempted by {player.Name}: {exception.Message}");
+}
+\end{lstlisting}
+
+\subsubsection{Regla: orden de las cláusulas \texttt{catch}}
+
+\textbf{Regla:} Cuando un mismo bloque \texttt{try} tenga varias cláusulas \texttt{catch}, estas deberán ordenarse siempre del tipo de excepción más derivado al menos derivado.
+
+\textbf{Descripción:} Microsoft recomienda ordenar las cláusulas \texttt{catch} de la más derivada a la menos derivada, ya que una excepción más derivada nunca es capturada por una cláusula \texttt{catch} que la precede y que maneja su clase base (Microsoft, 2025a). Cuando existe una relación de herencia directa entre los tipos, como en el ejemplo siguiente, el compilador de C\# rechaza el orden incorrecto con un error, lo que confirma que esta regla no es solo una preferencia de estilo.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, ParsePosition(rawDestination));
+}
+catch (ArgumentOutOfRangeException ex)
+{
+    _logger.Warning($"Position out of board bounds for {player.Name}: {ex.Message}");
+}
+catch (ArgumentException ex)
+{
+    _logger.Warning($"Invalid position format for {player.Name}: {ex.Message}");
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (no compila --- CS0160):}
+\begin{lstlisting}[style=csharpstyle]
+try
+{
+    _board.MovePlayer(player, ParsePosition(rawDestination));
+}
+catch (ArgumentException ex)
+{
+    _logger.Warning($"Invalid position format for {player.Name}: {ex.Message}");
+}
+catch (ArgumentOutOfRangeException ex)
+{
+    _logger.Warning($"Position out of board bounds for {player.Name}: {ex.Message}");
+}
+\end{lstlisting}

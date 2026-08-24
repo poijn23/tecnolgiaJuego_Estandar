@@ -1,0 +1,41 @@
+\subsection{Clases}
+
+\subsubsection{Regla: PascalCase y sustantivo singular}
+
+\textbf{Regla:} El nombre de una clase deberá escribirse en \texttt{PascalCase} y ser un sustantivo o frase nominal en singular.
+
+\textbf{Descripción:} Las guías de diseño de .NET establecen que las clases deben nombrarse con sustantivos o frases nominales en \texttt{PascalCase}, distinguiéndolas así de los métodos, que se nombran con frases verbales (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardTile
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardTiles
+{
+}
+\end{lstlisting}
+
+\subsubsection{Regla: sin prefijos ni abreviaturas poco claras}
+
+\textbf{Regla:} No se utilizarán prefijos para indicar que un tipo es una clase (por ejemplo, \texttt{CTile} o \texttt{ClsPlayer}), ni abreviaturas que no sean ampliamente reconocidas.
+
+\textbf{Descripción:} Las guías de diseño de .NET indican expresamente que los nombres de clase no deben llevar prefijos que identifiquen su tipo (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class ClsTrnMgr
+{
+}
+\end{lstlisting}

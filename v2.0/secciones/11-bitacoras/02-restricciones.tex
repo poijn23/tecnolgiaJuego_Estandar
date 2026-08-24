@@ -1,0 +1,37 @@
+\subsection{Restricciones}
+
+\subsubsection{Regla: prohibido \texttt{Console.WriteLine} como bitácora}
+
+\textbf{Regla:} Queda estrictamente prohibido usar \texttt{Console.WriteLine}, \texttt{Console.Error.WriteLine} o \texttt{Debug.Print} para registrar eventos del juego. Todo registro debe pasar por el colaborador de registro del proyecto.
+
+\textbf{Descripción:} Escribir directamente a la salida estándar impide filtrar mensajes por severidad, redirigirlos a otro destino o desactivarlos en producción sin modificar el código. McConnell recomienda centralizar la salida de diagnóstico de un programa en un único mecanismo configurable en lugar de dispersar sentencias de impresión directas por todo el código (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void SaveGameState(GameState state)
+{
+    try
+    {
+        _repository.Save(state);
+    }
+    catch (IOException ex)
+    {
+        _logger.Error($"Failed to save game state for session {state.SessionId}: {ex.Message}");
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void SaveGameState(GameState state)
+{
+    try
+    {
+        _repository.Save(state);
+    }
+    catch (IOException ex)
+    {
+        Console.WriteLine("Failed to save game state: " + ex.Message);
+    }
+}
+\end{lstlisting}

@@ -1,0 +1,55 @@
+\subsection{Variables No Utilizadas}
+
+\subsubsection{Regla: excepción sin nombre en \texttt{catch}}
+
+\textbf{Regla:} Queda prohibido asignar un nombre genérico (\texttt{ex}, \texttt{ignored}, \texttt{e}) a una variable de excepción que no se utiliza dentro del bloque \texttt{catch}. C\# permite omitir por completo el identificador de la variable cuando el tipo de la excepción es suficiente para el manejo requerido, y así deberá hacerse.
+
+\textbf{Descripción:} La documentación de C\# indica expresamente que se puede omitir la declaración de una variable de excepción y especificar únicamente el tipo en la cláusula \texttt{catch} (Microsoft, 2026a).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public bool TryParseMove(string rawInput)
+{
+    try
+    {
+        ParseMove(rawInput);
+        return true;
+    }
+    catch (FormatException)
+    {
+        return false;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public bool TryParseMove(string rawInput)
+{
+    try
+    {
+        ParseMove(rawInput);
+        return true;
+    }
+    catch (FormatException ignored)
+    {
+        return false;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: descarte \texttt{\_} en expresiones lambda}
+
+\textbf{Regla:} Cuando una expresión lambda reciba un parámetro que no utiliza en su cuerpo, dicho parámetro deberá nombrarse con el descarte \texttt{\_} en lugar de un nombre convencional sin usar.
+
+\textbf{Descripción:} La documentación de C\# describe el descarte como una variable marcador de posición intencionalmente no utilizada, y explica su uso para omitir parámetros de entrada no utilizados en una expresión lambda (Microsoft, 2025b).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+_players.RemoveAll(_ => _players.Count > MaximumPlayers);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+_players.RemoveAll(p => _players.Count > MaximumPlayers);
+\end{lstlisting}

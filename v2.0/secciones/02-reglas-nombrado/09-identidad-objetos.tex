@@ -1,0 +1,70 @@
+\subsection{Identidad de los Objetos}
+
+\subsubsection{Regla: identidad mediante clave de negocio}
+
+\textbf{Regla:} La identidad de una entidad deberá definirse estrictamente mediante una clave de negocio (\emph{business key}): el atributo o la combinación de atributos que la identifican de forma única dentro del dominio del juego. Queda prohibido sobrescribir \texttt{Equals} y \texttt{GetHashCode} utilizando todos los atributos del objeto o utilizando únicamente un identificador autoincremental sin significado en el dominio.
+
+\textbf{Descripción:} Las guías de diseño de .NET recomiendan basar la igualdad de un tipo en los atributos que realmente determinan su identidad en el dominio, en lugar de comparar la totalidad del estado interno del objeto (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardTile : IEquatable<BoardTile>
+{
+    public int Row { get; }
+    public int Column { get; }
+    public bool IsOccupied { get; set; }
+
+    public BoardTile(int row, int column)
+    {
+        Row = row;
+        Column = column;
+    }
+
+    public bool Equals(BoardTile other)
+    {
+        return other is not null && Row == other.Row && Column == other.Column;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as BoardTile);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Row, Column);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardTile : IEquatable<BoardTile>
+{
+    public int InternalId { get; set; }
+    public int Row { get; }
+    public int Column { get; }
+    public bool IsOccupied { get; set; }
+
+    public BoardTile(int row, int column)
+    {
+        Row = row;
+        Column = column;
+    }
+
+    public bool Equals(BoardTile other)
+    {
+        return other is not null && InternalId == other.InternalId;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as BoardTile);
+    }
+
+    public override int GetHashCode()
+    {
+        return InternalId.GetHashCode();
+    }
+}
+\end{lstlisting}

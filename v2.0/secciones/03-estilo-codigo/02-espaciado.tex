@@ -1,0 +1,47 @@
+\subsection{Espaciado}
+
+\subsubsection{Regla: espacio entre palabra reservada y paréntesis, y línea en blanco entre miembros}
+
+\textbf{Regla:} Se dejará un espacio en blanco entre una palabra reservada (\texttt{if}, \texttt{for}, \texttt{while}, \texttt{switch}) y el paréntesis que le sigue, así como un espacio alrededor de cada operador binario. Se dejará exactamente una línea en blanco entre la declaración de dos métodos o propiedades consecutivas.
+
+\textbf{Descripción:} Las convenciones de código de C\# de Microsoft ejemplifican este espaciado y recomiendan al menos una línea en blanco entre definiciones de métodos y propiedades (Microsoft, 2025e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class ScoreBoard
+{
+    private int totalScore;
+
+    public void AddPoints(int points)
+    {
+        if (points > 0)
+        {
+            totalScore = totalScore + points;
+        }
+    }
+
+    public int GetTotalScore()
+    {
+        return totalScore;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class ScoreBoard
+{
+    private int totalScore;
+    public void AddPoints(int points)
+    {
+        if(points>0)
+        {
+            totalScore=totalScore+points;
+        }
+    }
+    public int GetTotalScore()
+    {
+        return totalScore;
+    }
+}
+\end{lstlisting}

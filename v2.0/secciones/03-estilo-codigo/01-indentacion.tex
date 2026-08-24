@@ -1,0 +1,37 @@
+\subsection{Indentación}
+
+\subsubsection{Regla: cuatro espacios por nivel}
+
+\textbf{Regla:} Cada nivel de indentación se compondrá de exactamente cuatro espacios en blanco. Queda prohibido el uso del carácter de tabulación.
+
+\textbf{Descripción:} Las convenciones de código de C\# de Microsoft especifican el uso de cuatro espacios para la indentación y prohíben expresamente los caracteres de tabulación (Microsoft, 2025e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public int RollDice()
+{
+    int faceValue = Random.Shared.Next(1, 7);
+
+    if (faceValue == 6)
+    {
+        return faceValue + BonusRoll();
+    }
+
+    return faceValue;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public int RollDice()
+{
+  int faceValue = Random.Shared.Next(1, 7);
+
+  if (faceValue == 6)
+  {
+      return faceValue + BonusRoll();
+  }
+
+  return faceValue;
+}
+\end{lstlisting}

@@ -1,0 +1,28 @@
+\subsection{Posición de las Llaves}
+
+\subsubsection{Regla: estilo Allman}
+
+\textbf{Regla:} La llave de apertura y la llave de cierre de cualquier bloque (clases, métodos, \texttt{if}, \texttt{else}, \texttt{for}, \texttt{switch}, entre otros) deberán colocarse cada una en su propia línea, alineadas con el nivel de indentación del bloque que delimitan. Queda prohibido que un \texttt{else}, \texttt{catch} o \texttt{finally} comparta línea con la llave de cierre del bloque anterior.
+
+\textbf{Descripción:} Las convenciones de código de C\# de Microsoft especifican el estilo ``Allman'' para las llaves, en el que cada llave de apertura y cierre ocupa su propia línea (Microsoft, 2025e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+if (player.IsActive)
+{
+    ExecuteTurn(player);
+}
+else
+{
+    SkipTurn(player);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+if (player.IsActive) {
+    ExecuteTurn(player);
+} else {
+    SkipTurn(player);
+}
+\end{lstlisting}

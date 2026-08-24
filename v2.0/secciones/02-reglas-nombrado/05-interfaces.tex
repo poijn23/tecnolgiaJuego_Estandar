@@ -1,0 +1,61 @@
+\subsection{Interfaces}
+
+\subsubsection{Regla: prefijo \texttt{I}}
+
+\textbf{Regla:} Toda interfaz deberá nombrarse en \texttt{PascalCase} con el prefijo \texttt{I}, seguido de un sustantivo, una frase nominal o un adjetivo que describa la capacidad o el rol que representa.
+
+\textbf{Descripción:} La convención oficial de C\# antepone la letra \texttt{I} para indicar de forma inmediata que el tipo es una interfaz (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IMovable
+{
+    void Move(Tile destination);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public interface Movable
+{
+    void Move(Tile destination);
+}
+\end{lstlisting}
+
+\subsubsection{Regla: correspondencia entre interfaz e implementación estándar}
+
+\textbf{Regla:} Cuando una clase sea la implementación estándar de una interfaz, el nombre de la clase deberá coincidir exactamente con el de la interfaz, sin el prefijo \texttt{I}.
+
+\textbf{Descripción:} Las guías de diseño de .NET recomiendan que, en un par interfaz-clase donde la clase es la implementación estándar de la interfaz, los nombres difieran únicamente por el prefijo \texttt{I} (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IDiceRoller
+{
+    int Roll();
+}
+
+public sealed class DiceRoller : IDiceRoller
+{
+    public int Roll()
+    {
+        return Random.Shared.Next(1, 7);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IDiceRoller
+{
+    int Roll();
+}
+
+public sealed class RandomDiceGenerator : IDiceRoller
+{
+    public int Roll()
+    {
+        return Random.Shared.Next(1, 7);
+    }
+}
+\end{lstlisting}

@@ -1,0 +1,44 @@
+\subsection{A Nivel de Miembro}
+
+\subsubsection{Regla: orden de las etiquetas \texttt{param}, \texttt{returns} y \texttt{exception}}
+
+\textbf{Regla:} Cuando un método requiera documentación por su complejidad, las etiquetas obligatorias deberán aparecer exactamente en este orden: una \texttt{<param>} por cada parámetro, seguida de \texttt{<returns>} y, de existir, \texttt{<exception>}.
+
+\textbf{Descripción:} La documentación de C\# reconoce estas etiquetas como parte del conjunto validado por el compilador para describir parámetros, valores de retorno y excepciones de un miembro (Microsoft, 2026c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+/// <summary>
+/// Calcula el puntaje final aplicando el multiplicador de la casilla actual.
+/// </summary>
+/// <param name="baseScore">Puntaje base acumulado antes del multiplicador.</param>
+/// <param name="tile">Casilla en la que se detuvo el jugador.</param>
+/// <returns>El puntaje final despues de aplicar el multiplicador de la casilla.</returns>
+/// <exception cref="ArgumentOutOfRangeException">Si <paramref name="baseScore"/> es negativo.</exception>
+public int CalculateFinalScore(int baseScore, BoardTile tile)
+{
+    if (baseScore < 0)
+    {
+        throw new ArgumentOutOfRangeException(nameof(baseScore));
+    }
+
+    return baseScore * tile.ScoreMultiplier;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+/// <returns>El puntaje final despues de aplicar el multiplicador de la casilla.</returns>
+/// <exception cref="ArgumentOutOfRangeException">Si <paramref name="baseScore"/> es negativo.</exception>
+/// <param name="baseScore">Puntaje base acumulado antes del multiplicador.</param>
+/// <param name="tile">Casilla en la que se detuvo el jugador.</param>
+public int CalculateFinalScore(int baseScore, BoardTile tile)
+{
+    if (baseScore < 0)
+    {
+        throw new ArgumentOutOfRangeException(nameof(baseScore));
+    }
+
+    return baseScore * tile.ScoreMultiplier;
+}
+\end{lstlisting}

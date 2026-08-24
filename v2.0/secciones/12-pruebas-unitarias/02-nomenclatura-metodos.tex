@@ -1,0 +1,21 @@
+\subsection{Nomenclatura de Métodos de Prueba}
+
+\subsubsection{Regla: patrón método-estado-comportamiento esperado}
+
+\textbf{Regla:} El nombre de un método de prueba deberá componerse de tres partes, escritas en \texttt{PascalCase} y separadas por guion bajo, en este orden: el nombre del método bajo prueba, el estado o condición evaluada y el comportamiento esperado. Esta regla es independiente del framework de pruebas que el equipo decida utilizar; el atributo que marca el método como una prueba se omite deliberadamente en los ejemplos de esta sección.
+
+\textbf{Descripción:} Osherove propone exactamente esta estructura de tres partes para nombrar pruebas unitarias, de manera que el nombre por sí solo describa qué se prueba, bajo qué condición y qué resultado se espera, sin necesidad de leer el cuerpo del método (Osherove, 2013).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void Roll_FaceValueSix_GrantsExtraTurn()
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void TestRollExtraTurn()
+{
+}
+\end{lstlisting}

@@ -1,0 +1,71 @@
+\subsection{Restricciones}
+
+\subsubsection{Regla: prohibido capturar o lanzar \texttt{Exception} genérica}
+
+\textbf{Regla:} Queda estrictamente prohibido capturar o lanzar directamente el tipo \texttt{System.Exception}, o cualquier otro tipo genérico de excepción base, tanto en la firma de un método como en un bloque \texttt{catch}. Deberá capturarse o lanzarse siempre el tipo más específico disponible.
+
+\textbf{Descripción:} La regla de análisis de código \texttt{CA1031} de .NET (``Do not catch general exception types'') señala expresamente que no deben capturarse excepciones genéricas, ya que ocultan problemas en tiempo de ejecución a quien usa la biblioteca y dificultan la depuración (Microsoft, 2016).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void EstablishConnection()
+{
+    try
+    {
+        _database.Connect();
+    }
+    catch (TimeoutException ex)
+    {
+        throw new GameStateException("Connection timed out.", ex);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void EstablishConnection()
+{
+    try
+    {
+        _database.Connect();
+    }
+    catch (Exception ex)
+    {
+        throw new GameStateException("Connection failed.", ex);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: sufijo \texttt{Exception} y tres constructores obligatorios}
+
+\textbf{Regla:} Toda excepción personalizada deberá terminar su nombre con el sufijo \texttt{Exception} y deberá incluir, como mínimo, tres constructores: sin parámetros, con un mensaje de tipo \texttt{string}, y con un mensaje de tipo \texttt{string} junto con una excepción interna.
+
+\textbf{Descripción:} Microsoft recomienda terminar el nombre de las excepciones personalizadas con el sufijo \texttt{Exception} e incluir al menos estos tres constructores comunes (Microsoft, 2025a).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameStateException : Exception
+{
+    public GameStateException()
+    {
+    }
+
+    public GameStateException(string message) : base(message)
+    {
+    }
+
+    public GameStateException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameStateError : Exception
+{
+    public GameStateError(string message) : base(message)
+    {
+    }
+}
+\end{lstlisting}

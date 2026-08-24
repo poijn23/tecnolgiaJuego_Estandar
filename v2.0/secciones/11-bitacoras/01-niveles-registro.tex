@@ -1,0 +1,47 @@
+\subsection{Niveles de Registro}
+
+\subsubsection{Regla: elección del nivel según la severidad del evento}
+
+\textbf{Regla:} Cada mensaje de bitácora deberá registrarse con la severidad que corresponda al evento real, siguiendo esta clasificación de menor a mayor severidad:
+
+\begin{itemize}
+  \item \textbf{Trace}: información extremadamente detallada, útil solo durante depuración profunda; nunca debe habilitarse en producción.
+  \item \textbf{Debug}: información útil durante el desarrollo del juego, como el resultado intermedio de un cálculo de movimiento.
+  \item \textbf{Information}: el flujo normal del juego, como el inicio de una partida o el cambio de turno.
+  \item \textbf{Warning}: una condición anómala que no impide continuar la partida, como un intento de movimiento inválido.
+  \item \textbf{Error}: un fallo que impide completar la operación actual, como no poder guardar el estado de la partida.
+\end{itemize}
+
+\textbf{Descripción:} Esta taxonomía de cinco niveles es una escala ampliamente adoptada en la industria del software para clasificar eventos de bitácora según su severidad, independientemente del proveedor de registro que finalmente se elija (Microsoft, 2025d).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    public void StartTurn(Player player)
+    {
+        _logger.Information($"Turn started for {player.Name}");
+    }
+
+    public void RejectMove(Player player, Tile destination)
+    {
+        _logger.Warning($"Rejected move for {player.Name} to {destination}");
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    public void StartTurn(Player player)
+    {
+        _logger.Error($"Turn started for {player.Name}");
+    }
+
+    public void RejectMove(Player player, Tile destination)
+    {
+        _logger.Error($"Rejected move for {player.Name} to {destination}");
+    }
+}
+\end{lstlisting}

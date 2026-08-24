@@ -1,0 +1,63 @@
+\subsection{Estructuras de Control}
+
+\subsubsection{Regla: llaves obligatorias en todo bloque}
+
+\textbf{Regla:} Es obligatorio el uso de llaves \texttt{\{\}} en toda estructura de control, incluso cuando el bloque contenga una única instrucción.
+
+\textbf{Descripción:} La regla de estilo de código \texttt{IDE0011} de .NET establece \texttt{true} como valor predeterminado de la opción \texttt{csharp\_prefer\_braces}, es decir, preferir llaves incluso para una sola línea de código (Microsoft, 2023).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+if (diceRoll == MaximumFaceValue)
+{
+    GrantExtraTurn();
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+if (diceRoll == MaximumFaceValue)
+    GrantExtraTurn();
+\end{lstlisting}
+
+\subsubsection{Regla: rama \texttt{default} obligatoria en \texttt{switch}}
+
+\textbf{Regla:} Toda declaración \texttt{switch} deberá incluir siempre una rama \texttt{default} explícita que gestione los valores no contemplados.
+
+\textbf{Descripción:} McConnell indica que las estructuras de selección múltiple deben contemplar de forma explícita los casos no previstos para evitar que el programa continúe en un estado inconsistente (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public string DescribeTurnState(TurnState state)
+{
+    switch (state)
+    {
+        case TurnState.WaitingForRoll:
+            return "Waiting for roll";
+        case TurnState.Moving:
+            return "Moving";
+        case TurnState.Finished:
+            return "Finished";
+        default:
+            throw new ArgumentOutOfRangeException(nameof(state), state, "Unsupported turn state.");
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public string DescribeTurnState(TurnState state)
+{
+    switch (state)
+    {
+        case TurnState.WaitingForRoll:
+            return "Waiting for roll";
+        case TurnState.Moving:
+            return "Moving";
+        case TurnState.Finished:
+            return "Finished";
+    }
+
+    return string.Empty;
+}
+\end{lstlisting}

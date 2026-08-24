@@ -1,0 +1,40 @@
+\subsection{Estructuras de Datos: \texttt{class} frente a \texttt{record}}
+
+\subsubsection{Regla: mutabilidad como criterio de elección}
+
+\textbf{Regla:} La elección entre \texttt{class} y \texttt{record} dependerá de la mutabilidad del objeto. Las entidades cuyo estado cambia durante la partida deberán declararse como \texttt{class}. Los valores inmutables o los eventos que solo describen un hecho ocurrido deberán declararse como \texttt{record}.
+
+\textbf{Descripción:} \texttt{class} y \texttt{record} forman parte del propio lenguaje C\#, por lo que esta regla no depende de ningún framework ni biblioteca externa. La documentación de C\# describe los \texttt{record} como tipos pensados primordialmente para modelos de datos inmutables y comparación por valor, en contraste con las clases, pensadas para representar entidades con identidad y estado mutable (Microsoft, 2026b).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class Player
+{
+    public string Name { get; }
+    public int Score { get; private set; }
+
+    public Player(string name)
+    {
+        Name = name;
+        Score = 0;
+    }
+
+    public void AddScore(int points)
+    {
+        Score += points;
+    }
+}
+
+public sealed record DiceRolled(Player Player, int FaceValue);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed record Player(string Name, int Score);
+
+public sealed class DiceRolled
+{
+    public Player Player { get; set; }
+    public int FaceValue { get; set; }
+}
+\end{lstlisting}

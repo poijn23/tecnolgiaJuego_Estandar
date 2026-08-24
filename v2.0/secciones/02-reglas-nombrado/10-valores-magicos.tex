@@ -1,0 +1,50 @@
+\subsection{Valores Mágicos}
+
+\subsubsection{Regla: enumeradores y constantes en lugar de literales}
+
+\textbf{Regla:} Queda prohibido el uso de valores numéricos o cadenas literales directamente dentro de la lógica del juego. Todo valor con significado en el dominio deberá gestionarse mediante un \texttt{enum} o una constante de clase con nombre descriptivo.
+
+\textbf{Descripción:} Martin identifica los números mágicos como un mal olor de código porque obligan a quien lee el código a memorizar o adivinar el significado de un valor que aparece sin contexto (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public enum TurnState
+{
+    WaitingForRoll,
+    Moving,
+    Finished
+}
+
+public sealed class TurnManager
+{
+    private const int MaximumPlayers = 4;
+
+    public bool CanAddPlayer(int currentPlayerCount)
+    {
+        return currentPlayerCount < MaximumPlayers;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    public bool CanAddPlayer(int currentPlayerCount)
+    {
+        return currentPlayerCount < 4;
+    }
+
+    public void SetState(int state)
+    {
+        if (state == 2)
+        {
+            FinishTurn();
+        }
+    }
+
+    private void FinishTurn()
+    {
+    }
+}
+\end{lstlisting}

@@ -1,0 +1,26 @@
+\section{Comentarios Internos}
+
+\subsection{Regla: comentar el ``por qué'', nunca el ``qué''}
+
+\textbf{Regla:} El código debe ser autoexplicativo a través de la firma de los métodos y el nombrado descriptivo de las variables. Queda prohibido incluir comentarios de una línea (\texttt{//}) que expliquen qué hace una instrucción cuando esto ya es evidente a partir del propio código. Un comentario solo se permite en escenarios de alta complejidad, y en ese caso deberá explicar obligatoriamente la justificación de negocio o la razón técnica de la decisión, nunca repetir en prosa lo que la instrucción ya expresa.
+
+\textbf{Descripción:} Martin sostiene que la mayoría de los comentarios son un intento fallido de compensar código poco claro, y que el único comentario verdaderamente valioso es el que explica una intención o una restricción que el código por sí solo no puede comunicar (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+// Las reglas oficiales del juego otorgan un turno extra al sacar seis.
+if (diceRoll == MaximumFaceValue)
+{
+    GrantExtraTurn();
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+// Si el valor del dado es igual al valor maximo
+if (diceRoll == MaximumFaceValue)
+{
+    // Otorga un turno extra
+    GrantExtraTurn();
+}
+\end{lstlisting}

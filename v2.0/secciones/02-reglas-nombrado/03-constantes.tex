@@ -1,0 +1,54 @@
+\subsection{Constantes}
+
+\subsubsection{Regla: PascalCase para constantes}
+
+\textbf{Regla:} Toda constante deberá nombrarse en \texttt{PascalCase}, igual que un miembro público, sin guiones bajos ni mayúsculas sostenidas.
+
+\textbf{Descripción:} A diferencia de otros lenguajes que usan \texttt{SCREAMING\_SNAKE\_CASE}, la convención oficial de C\# mantiene \texttt{PascalCase} para los nombres de constantes --- de campo o locales, incluidas las \texttt{private} e \texttt{internal} --- precisamente para conservar la consistencia visual con el resto de los miembros del lenguaje (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameBoard
+{
+    private const int BoardSize = 8;
+    private const string DefaultGameMode = "Classic";
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameBoard
+{
+    private const int BOARD_SIZE = 8;
+    private const string DEFAULT_GAME_MODE = "Classic";
+}
+\end{lstlisting}
+
+\subsubsection{Regla: \texttt{const} frente a \texttt{static readonly}}
+
+\textbf{Regla:} Un valor constante conocido en tiempo de compilación deberá declararse con \texttt{const}. Un valor que se calcula una sola vez en tiempo de ejecución, pero que no debe modificarse después, deberá declararse con \texttt{static readonly} en lugar de \texttt{const}.
+
+\textbf{Descripción:} El propio compilador de C\# exige que todo valor \texttt{const} sea evaluable en tiempo de compilación y rechaza cualquier expresión que dependa de una llamada a método o de un cálculo en tiempo de ejecución.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller
+{
+    private const int MinimumFaceValue = 1;
+    private static readonly int MaximumFaceValue = LoadMaximumFaceValueFromConfig();
+
+    private static int LoadMaximumFaceValueFromConfig()
+    {
+        return 6;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller
+{
+    private static readonly int MinimumFaceValue = 1;
+    private static readonly int MaximumFaceValue = 6;
+}
+\end{lstlisting}
