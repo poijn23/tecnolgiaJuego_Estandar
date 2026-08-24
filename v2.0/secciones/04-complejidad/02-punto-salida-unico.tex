@@ -2,9 +2,9 @@
 
 \subsubsection{Regla: cláusula de guarda con retorno anticipado}
 
-\textbf{Regla:} Todo método deberá descartar primero, mediante una cláusula de guarda con \texttt{return} anticipado, los casos que no requieren procesar el resto de la lógica. Queda prohibido anidar la lógica principal de un método dentro de un \texttt{if} que se limita a comprobar una precondición de entrada.
+\textbf{Regla:} Todo método descarta primero, con \texttt{return} anticipado, los casos que no requieren procesar el resto de la lógica. Prohibido anidar la lógica principal dentro de un \texttt{if} que solo comprueba una precondición de entrada.
 
-\textbf{Descripción:} La industria del desarrollo de videojuegos favorece la salida anticipada (\emph{early exit}) sobre el principio clásico de entrada única y salida única (SESE), precisamente porque la lógica de una partida evalúa constantemente precondiciones --- ¿el jugador sigue activo?, ¿la casilla existe?, ¿el turno ya terminó? --- y anidar el cuerpo completo del método dentro de esas comprobaciones incrementa la profundidad de anidamiento sin aportar claridad. McConnell recomienda explícitamente salir de una rutina tan pronto como se determina que no hay más trabajo que realizar, en lugar de forzar un único punto de salida al final del método (McConnell, 2004).
+\textbf{Descripción:} La industria de videojuegos prefiere \emph{early exit} sobre el principio clásico de salida única (SESE): la lógica de una partida evalúa constantemente precondiciones, y anidar el método completo dentro de ellas solo añade profundidad sin claridad. McConnell recomienda salir de una rutina en cuanto se determina que no hay más trabajo que hacer (McConnell, 2004).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

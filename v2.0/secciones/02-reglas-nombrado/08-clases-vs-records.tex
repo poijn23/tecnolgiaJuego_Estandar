@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: mutabilidad como criterio de elección}
 
-\textbf{Regla:} La elección entre \texttt{class} y \texttt{record} dependerá de la mutabilidad del objeto. Las entidades cuyo estado cambia durante la partida deberán declararse como \texttt{class}. Los valores inmutables o los eventos que solo describen un hecho ocurrido deberán declararse como \texttt{record}.
-
-\textbf{Descripción:} \texttt{class} y \texttt{record} forman parte del propio lenguaje C\#, por lo que esta regla no depende de ningún framework ni biblioteca externa. La documentación de C\# describe los \texttt{record} como tipos pensados primordialmente para modelos de datos inmutables y comparación por valor, en contraste con las clases, pensadas para representar entidades con identidad y estado mutable (Microsoft, 2026b).
+\textbf{Regla:} Entidades cuyo estado cambia durante la partida se declaran \texttt{class}. Valores inmutables o eventos que solo describen un hecho ocurrido se declaran \texttt{record} (Microsoft, 2026b).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

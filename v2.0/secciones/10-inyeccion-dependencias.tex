@@ -2,9 +2,9 @@
 
 \subsection{Regla: inyección por constructor y dependencia de abstracciones}
 
-\textbf{Regla:} Toda clase que dependa de un servicio externo (por ejemplo, un generador de números aleatorios, un registro de partidas o un servicio de persistencia) deberá recibir esa dependencia a través de su constructor, declarada mediante una interfaz, en lugar de instanciar la implementación concreta dentro de la propia clase.
+\textbf{Regla:} Toda clase que dependa de un servicio externo recibe esa dependencia por constructor, declarada mediante una interfaz, en lugar de instanciarla dentro de la propia clase.
 
-\textbf{Descripción:} Esta regla es deliberadamente independiente de cualquier contenedor de inyección de dependencias concreto y de cualquier framework: aplica igual sin importar qué mecanismo de resolución de dependencias decida adoptar el equipo, o si no se adopta ninguno y las dependencias se ensamblan manualmente. Martin formula este principio como la inversión de dependencias: los módulos de alto nivel no deben depender de módulos de bajo nivel, sino que ambos deben depender de abstracciones (Martin, 2008).
+\textbf{Descripción:} Independiente de cualquier contenedor de inyección de dependencias: aplica igual sin importar qué mecanismo (o ninguno) adopte el equipo. Principio de inversión de dependencias de Martin: los módulos de alto nivel dependen de abstracciones, no de módulos de bajo nivel (Martin, 2008).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

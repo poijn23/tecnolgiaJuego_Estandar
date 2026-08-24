@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: máximo tres niveles de anidamiento}
 
-\textbf{Regla:} No se permitirá anidar más de tres niveles de profundidad de estructuras de control (\texttt{if}, \texttt{for}, \texttt{try}) dentro de un mismo método. Cuando el algoritmo lo requiera, las condiciones lógicas deberán combinarse en una sola línea o el fragmento deberá extraerse a un método privado.
-
-\textbf{Descripción:} McConnell señala que la profundidad de anidamiento excesiva es una de las causas principales de la complejidad estructural de una rutina y recomienda mantenerla baja para conservar la legibilidad del código (McConnell, 2004).
+\textbf{Regla:} No se anidan más de tres niveles de estructuras de control (\texttt{if}, \texttt{for}, \texttt{try}) por método. Combinar condiciones o extraer a un método privado cuando se supere (McConnell, 2004).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

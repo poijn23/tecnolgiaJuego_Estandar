@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: PascalCase para constantes}
 
-\textbf{Regla:} Toda constante deberá nombrarse en \texttt{PascalCase}, igual que un miembro público, sin guiones bajos ni mayúsculas sostenidas.
-
-\textbf{Descripción:} A diferencia de otros lenguajes que usan \texttt{SCREAMING\_SNAKE\_CASE}, la convención oficial de C\# mantiene \texttt{PascalCase} para los nombres de constantes --- de campo o locales, incluidas las \texttt{private} e \texttt{internal} --- precisamente para conservar la consistencia visual con el resto de los miembros del lenguaje (Microsoft, 2025c).
+\textbf{Regla:} Toda constante (de campo o local, incluidas \texttt{private} e \texttt{internal}) se escribe en \texttt{PascalCase}, sin \texttt{SCREAMING\_SNAKE\_CASE} (Microsoft, 2025c).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -26,9 +24,9 @@ public sealed class GameBoard
 
 \subsubsection{Regla: \texttt{const} frente a \texttt{static readonly}}
 
-\textbf{Regla:} Un valor constante conocido en tiempo de compilación deberá declararse con \texttt{const}. Un valor que se calcula una sola vez en tiempo de ejecución, pero que no debe modificarse después, deberá declararse con \texttt{static readonly} en lugar de \texttt{const}.
+\textbf{Regla:} Un valor conocido en tiempo de compilación se declara \texttt{const}. Un valor calculado una sola vez en tiempo de ejecución se declara \texttt{static readonly}.
 
-\textbf{Descripción:} El propio compilador de C\# exige que todo valor \texttt{const} sea evaluable en tiempo de compilación y rechaza cualquier expresión que dependa de una llamada a método o de un cálculo en tiempo de ejecución.
+\textbf{Descripción:} El compilador de C\# exige que todo \texttt{const} sea evaluable en tiempo de compilación; rechaza cualquier expresión que dependa de una llamada a método.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

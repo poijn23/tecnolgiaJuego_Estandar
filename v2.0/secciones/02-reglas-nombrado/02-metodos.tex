@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: PascalCase y verbo descriptivo}
 
-\textbf{Regla:} El nombre de un método deberá escribirse en \texttt{PascalCase} y comenzar con un verbo o frase verbal que describa la acción que realiza.
-
-\textbf{Descripción:} Microsoft establece \texttt{PascalCase} como la convención para todos los métodos públicos y privados en C\#, a diferencia de otros lenguajes que usan minúscula inicial (Microsoft, 2025c).
+\textbf{Regla:} El nombre de un método se escribe en \texttt{PascalCase} y comienza con un verbo o frase verbal (Microsoft, 2025c).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -24,9 +22,9 @@ public int totalScore(int basePoints, int bonusPoints)
 
 \subsubsection{Regla: máximo de parámetros}
 
-\textbf{Regla:} Un método no deberá recibir más de tres parámetros. Cuando la operación requiera más datos de entrada, estos deberán encapsularse en un objeto de transferencia de datos (DTO).
+\textbf{Regla:} Un método no recibe más de tres parámetros; con más datos de entrada, se encapsulan en un DTO.
 
-\textbf{Descripción:} McConnell recomienda limitar el número de parámetros de una rutina, ya que una lista larga de parámetros incrementa la probabilidad de invocarla con el orden o el valor incorrecto (McConnell, 2004).
+\textbf{Descripción:} McConnell señala que una lista larga de parámetros incrementa la probabilidad de invocar el método con el orden o el valor incorrecto (McConnell, 2004).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -54,9 +52,7 @@ public sealed class MoveExecutor
 
 \subsubsection{Regla: métodos booleanos como pregunta}
 
-\textbf{Regla:} Un método que devuelva \texttt{bool} deberá nombrarse con un prefijo interrogativo (\texttt{Is}, \texttt{Has}, \texttt{Can}) seguido del predicado que evalúa.
-
-\textbf{Descripción:} Esta convención extiende a los métodos la misma recomendación que Martin aplica a las variables booleanas: el nombre debe leerse como la pregunta que el método responde (Martin, 2008).
+\textbf{Regla:} Un método que devuelve \texttt{bool} se nombra con prefijo interrogativo (\texttt{Is}, \texttt{Has}, \texttt{Can}) (Martin, 2008).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

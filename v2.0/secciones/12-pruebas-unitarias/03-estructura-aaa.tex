@@ -2,9 +2,9 @@
 
 \subsubsection{Regla: separar Arrange, Act y Assert con líneas en blanco}
 
-\textbf{Regla:} El cuerpo de toda prueba unitaria deberá dividirse en tres bloques consecutivos --- preparación (\emph{Arrange}), ejecución (\emph{Act}) y verificación (\emph{Assert}) --- separados únicamente por una línea en blanco entre cada bloque, sin comentarios que los etiqueten.
+\textbf{Regla:} Tres bloques consecutivos --- preparación, ejecución, verificación --- separados solo por una línea en blanco, sin comentarios que los etiqueten (Osherove, 2013).
 
-\textbf{Descripción:} Osherove describe el patrón AAA como la forma más clara de estructurar una prueba, de manera que cualquier lector distinga a simple vista qué se prepara, qué se ejecuta y qué se verifica (Osherove, 2013). El bloque de verificación se muestra aquí con \texttt{ExpectEqual}, un marcador de posición para la llamada de aserción que finalmente provea el framework de pruebas que el equipo elija; la estructura en tres bloques aplica sin importar dicha elección.
+\textbf{Descripción:} \texttt{ExpectEqual} es un marcador de posición para la aserción del framework de pruebas que el equipo elija.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

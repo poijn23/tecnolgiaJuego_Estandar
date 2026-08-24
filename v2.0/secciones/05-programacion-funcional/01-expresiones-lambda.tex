@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: solo para operaciones concisas de una línea}
 
-\textbf{Regla:} El uso de expresiones lambda (\texttt{=>}) está permitido exclusivamente para operaciones concisas que quepan en una sola línea de expresión. Queda estrictamente prohibido utilizar una lambda con cuerpo de bloque (delimitado por llaves) para lógica que requiera varias instrucciones.
-
-\textbf{Descripción:} Martin sostiene que un bloque de código debe hacer una única cosa y ser lo más pequeño posible; una lambda con un cuerpo de bloque extenso oculta lógica compleja dentro de la firma de una llamada a método, dificultando su lectura y su prueba por separado (Martin, 2008).
+\textbf{Regla:} Las lambdas (\texttt{=>}) solo para operaciones que quepan en una línea. Prohibido un cuerpo de bloque con varias instrucciones (Martin, 2008).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

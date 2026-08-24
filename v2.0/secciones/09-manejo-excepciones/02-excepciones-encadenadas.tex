@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: preservar la excepción original como causa}
 
-\textbf{Regla:} Al lanzar una excepción personalizada a partir de una excepción capturada, es obligatorio pasar la excepción original como \texttt{innerException} en el constructor, para no perder la traza que originó el error.
-
-\textbf{Descripción:} Microsoft recomienda incluir la excepción original como excepción interna al lanzar una nueva excepción desde un bloque \texttt{catch}, de manera que quien la reciba pueda inspeccionar la causa raíz (Microsoft, 2025a).
+\textbf{Regla:} Al lanzar una excepción personalizada desde un \texttt{catch}, se pasa la excepción original como \texttt{innerException} en el constructor (Microsoft, 2025a).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -32,9 +30,9 @@ catch (IOException ex)
 
 \subsubsection{Regla: \texttt{throw;} en lugar de \texttt{throw ex;}}
 
-\textbf{Regla:} Al relanzar la misma excepción capturada sin envolverla en una nueva, deberá usarse la sentencia \texttt{throw;} sin especificar la variable.
+\textbf{Regla:} Al relanzar la misma excepción capturada, se usa \texttt{throw;} sin especificar la variable.
 
-\textbf{Descripción:} Microsoft advierte que \texttt{throw ex;} reinicia la traza de la pila en el punto actual, mientras que \texttt{throw;} conserva la traza original completa (Microsoft, 2025a).
+\textbf{Descripción:} \texttt{throw ex;} reinicia la traza de la pila; \texttt{throw;} conserva la original completa (Microsoft, 2025a).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

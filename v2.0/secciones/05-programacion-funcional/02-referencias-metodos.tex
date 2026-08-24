@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: grupo de método sobre lambda de reenvío}
 
-\textbf{Regla:} Cuando una expresión lambda se limite a reenviar sus argumentos directamente a otro método existente, deberá preferirse la conversión de grupo de métodos (usar el nombre del método directamente) sobre la lambda equivalente.
-
-\textbf{Descripción:} Esta preferencia produce un código más declarativo y más sencillo de depurar. La documentación de C\# indica que un objeto delegado se puede construir proporcionando directamente el nombre del método que envuelve, como alternativa a una expresión lambda (Microsoft, 2024).
+\textbf{Regla:} Si una lambda solo reenvía sus argumentos a otro método, se usa el grupo de método (el nombre directamente) en vez de la lambda (Microsoft, 2024).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

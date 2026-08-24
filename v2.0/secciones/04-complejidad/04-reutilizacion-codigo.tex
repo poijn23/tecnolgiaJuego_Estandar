@@ -2,9 +2,9 @@
 
 \subsubsection{Regla: principio DRY}
 
-\textbf{Regla:} Se debe cumplir estrictamente el principio DRY (\emph{Don't Repeat Yourself}). Queda prohibido duplicar un bloque de código: si una misma lógica se repite en dos o más métodos, deberá extraerse a un método privado reutilizable.
+\textbf{Regla:} Principio DRY (\emph{Don't Repeat Yourself}): prohibido duplicar un bloque de código; si la lógica se repite en dos o más métodos, se extrae a un método privado reutilizable.
 
-\textbf{Descripción:} Hunt y Thomas formularon el principio DRY como la exigencia de que todo conocimiento tenga una representación única, inequívoca y autorizada dentro de un sistema, de manera que un cambio de regla solo deba aplicarse en un lugar (Hunt \& Thomas, 2019). Fowler describe la extracción de un fragmento duplicado hacia un método con nombre propio como una de las refactorizaciones más elementales para eliminar duplicación (Fowler, 2018).
+\textbf{Descripción:} Hunt y Thomas formulan DRY como que todo conocimiento debe tener una única representación autorizada en el sistema (Hunt \& Thomas, 2019). Fowler describe la extracción a un método con nombre propio como la refactorización elemental para eliminar duplicación (Fowler, 2018).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

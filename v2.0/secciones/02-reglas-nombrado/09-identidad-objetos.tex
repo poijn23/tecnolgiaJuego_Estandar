@@ -2,9 +2,9 @@
 
 \subsubsection{Regla: identidad mediante clave de negocio}
 
-\textbf{Regla:} La identidad de una entidad deberá definirse estrictamente mediante una clave de negocio (\emph{business key}): el atributo o la combinación de atributos que la identifican de forma única dentro del dominio del juego. Queda prohibido sobrescribir \texttt{Equals} y \texttt{GetHashCode} utilizando todos los atributos del objeto o utilizando únicamente un identificador autoincremental sin significado en el dominio.
+\textbf{Regla:} La identidad de una entidad se define mediante su clave de negocio (\emph{business key}). Prohibido sobrescribir \texttt{Equals}/\texttt{GetHashCode} con todos los atributos o con un identificador autoincremental sin significado en el dominio.
 
-\textbf{Descripción:} Las guías de diseño de .NET recomiendan basar la igualdad de un tipo en los atributos que realmente determinan su identidad en el dominio, en lugar de comparar la totalidad del estado interno del objeto (Cwalina \& Abrams, 2008).
+\textbf{Descripción:} Las guías de diseño de .NET recomiendan basar la igualdad en los atributos que determinan la identidad en el dominio, no en la totalidad del estado interno (Cwalina \& Abrams, 2008).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: camelCase y nombres descriptivos}
 
-\textbf{Regla:} Toda variable local o parámetro deberá escribirse en \texttt{camelCase} (inicial en minúscula). Queda prohibido el uso de nombres de un solo carácter, salvo el contador de un ciclo simple y no anidado; en ciclos anidados, cada contador deberá tener un nombre descriptivo que indique qué recorre.
-
-\textbf{Descripción:} Microsoft indica expresamente que los parámetros y las variables locales deben usar \texttt{camelCase} y que los nombres de una sola letra deben evitarse salvo en contadores de ciclos simples (Microsoft, 2025c).
+\textbf{Regla:} Variables locales y parámetros en \texttt{camelCase}. Prohibidos los nombres de un solo carácter, salvo contadores de ciclos simples y no anidados; en ciclos anidados, cada contador debe tener nombre descriptivo (Microsoft, 2025c).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -46,19 +44,17 @@ public Tile GetTileAt(int rowIndex, int columnIndex)
 
 \subsubsection{Regla: nombres de colecciones en plural}
 
-\textbf{Regla:} Toda variable que almacene una colección de elementos (arreglo, lista, diccionario o cualquier tipo que implemente \texttt{IEnumerable<T>}) deberá nombrarse con un sustantivo en plural que describa los elementos que contiene.
-
-\textbf{Descripción:} Las guías de diseño de .NET recomiendan nombrar las colecciones con un sustantivo plural para distinguirlas a simple vista de una variable que almacena un único elemento (Cwalina \& Abrams, 2008).
+\textbf{Regla:} Toda colección (arreglo, lista, diccionario o cualquier \texttt{IEnumerable<T>}) se nombra con un sustantivo en plural (Cwalina \& Abrams, 2008).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 public sealed class GameBoard
 {
-    private readonly List<Player> players;
+    private readonly List<Player> _players;
 
     public GameBoard(List<Player> players)
     {
-        this.players = players;
+        _players = players;
     }
 }
 \end{lstlisting}
@@ -67,20 +63,18 @@ public sealed class GameBoard
 \begin{lstlisting}[style=csharpstyle]
 public sealed class GameBoard
 {
-    private readonly List<Player> playerList;
+    private readonly List<Player> _playerList;
 
     public GameBoard(List<Player> playerList)
     {
-        this.playerList = playerList;
+        _playerList = playerList;
     }
 }
 \end{lstlisting}
 
 \subsubsection{Regla: una declaración por línea}
 
-\textbf{Regla:} No se declarará más de una variable en la misma sentencia, incluso cuando compartan el mismo tipo de dato.
-
-\textbf{Descripción:} McConnell recomienda declarar cada variable en su propia línea y, de ser necesario, acompañarla de un comentario específico, ya que declarar varias variables juntas dificulta modificarlas o documentarlas de forma independiente (McConnell, 2004).
+\textbf{Regla:} No se declara más de una variable en la misma sentencia, aunque compartan tipo (McConnell, 2004).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -95,9 +89,7 @@ int currentRow = startingRow, currentColumn = startingColumn;
 
 \subsubsection{Regla: prefijos interrogativos para variables booleanas}
 
-\textbf{Regla:} Toda variable de tipo \texttt{bool} deberá nombrarse como una pregunta cerrada, utilizando prefijos como \texttt{is}, \texttt{has}, \texttt{can} o \texttt{should}.
-
-\textbf{Descripción:} Martin sostiene que los nombres booleanos deben leerse como una afirmación o pregunta clara (por ejemplo, \texttt{isActive}) para que el código que los utiliza se lea de forma natural (Martin, 2008).
+\textbf{Regla:} Toda variable \texttt{bool} se nombra como una pregunta cerrada, con prefijo \texttt{is}, \texttt{has}, \texttt{can} o \texttt{should} (Martin, 2008).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

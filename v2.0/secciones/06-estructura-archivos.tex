@@ -2,9 +2,7 @@
 
 \subsection{Regla: una clase de nivel superior por archivo}
 
-\textbf{Regla:} Cada archivo fuente deberá contener exactamente una clase, interfaz, \texttt{record} o \texttt{enum} de nivel superior, y el nombre del archivo deberá coincidir exactamente con el nombre de ese tipo.
-
-\textbf{Descripción:} McConnell recomienda mantener una única clase por archivo como parte de la organización física del código, de manera que localizar el archivo correspondiente a un tipo sea inmediato para cualquier integrante del equipo (McConnell, 2004).
+\textbf{Regla:} Cada archivo contiene exactamente una clase, interfaz, \texttt{record} o \texttt{enum} de nivel superior; el nombre del archivo coincide con el del tipo (McConnell, 2004).
 
 \textbf{Código correcto (archivo \texttt{TurnManager.cs}):}
 \begin{lstlisting}[style=csharpstyle]
@@ -30,9 +28,7 @@ public sealed class ScoreBoard
 
 \subsection{Regla: orden de los elementos dentro de la clase}
 
-\textbf{Regla:} Dentro de una clase, sus elementos deberán declararse estrictamente en el siguiente orden: constantes, campos estáticos, campos de instancia, constructores, propiedades y, por último, métodos.
-
-\textbf{Descripción:} McConnell recomienda organizar los elementos de una clase siguiendo un orden consistente y predecible, de manera que cualquier persona del equipo sepa dónde buscar un tipo concreto de miembro sin recorrer todo el archivo (McConnell, 2004).
+\textbf{Regla:} Orden fijo dentro de una clase: constantes, campos estáticos, campos de instancia, constructores, propiedades, métodos (McConnell, 2004).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

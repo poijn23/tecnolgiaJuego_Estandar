@@ -2,17 +2,15 @@
 
 \subsubsection{Regla: elección del nivel según la severidad del evento}
 
-\textbf{Regla:} Cada mensaje de bitácora deberá registrarse con la severidad que corresponda al evento real, siguiendo esta clasificación de menor a mayor severidad:
+\textbf{Regla:} Cada mensaje se registra con la severidad que corresponda, de menor a mayor (Microsoft, 2025d):
 
 \begin{itemize}
-  \item \textbf{Trace}: información extremadamente detallada, útil solo durante depuración profunda; nunca debe habilitarse en producción.
-  \item \textbf{Debug}: información útil durante el desarrollo del juego, como el resultado intermedio de un cálculo de movimiento.
-  \item \textbf{Information}: el flujo normal del juego, como el inicio de una partida o el cambio de turno.
-  \item \textbf{Warning}: una condición anómala que no impide continuar la partida, como un intento de movimiento inválido.
-  \item \textbf{Error}: un fallo que impide completar la operación actual, como no poder guardar el estado de la partida.
+  \item \textbf{Trace}: detalle de depuración profunda; nunca en producción.
+  \item \textbf{Debug}: información útil en desarrollo (resultado intermedio de un cálculo).
+  \item \textbf{Information}: flujo normal del juego (inicio de partida, cambio de turno).
+  \item \textbf{Warning}: anomalía que no impide continuar (movimiento inválido).
+  \item \textbf{Error}: fallo que impide completar la operación (no se pudo guardar la partida).
 \end{itemize}
-
-\textbf{Descripción:} Esta taxonomía de cinco niveles es una escala ampliamente adoptada en la industria del software para clasificar eventos de bitácora según su severidad, independientemente del proveedor de registro que finalmente se elija (Microsoft, 2025d).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

@@ -2,9 +2,9 @@
 
 \subsubsection{Regla: variable de excepción nombrada \texttt{ex}}
 
-\textbf{Regla:} En todo bloque \texttt{catch} donde la variable de excepción sí se utilice, deberá nombrarse siempre \texttt{ex}.
+\textbf{Regla:} Toda variable de excepción que sí se utiliza en el bloque \texttt{catch} se nombra \texttt{ex}.
 
-\textbf{Descripción:} Esta es una convención propia del proyecto, adoptada para mantener el código de los bloques \texttt{catch} breve y predecible en todo el equipo. McConnell recomienda fijar una única convención de nombrado para cada categoría de variable y aplicarla de manera uniforme en todo el proyecto, en lugar de dejar el nombre a criterio de quien escribe cada bloque (McConnell, 2004).
+\textbf{Descripción:} Convención propia del proyecto para mantener los bloques \texttt{catch} predecibles en todo el equipo (McConnell, 2004).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -32,9 +32,9 @@ catch (InvalidMoveException exception)
 
 \subsubsection{Regla: orden de las cláusulas \texttt{catch}}
 
-\textbf{Regla:} Cuando un mismo bloque \texttt{try} tenga varias cláusulas \texttt{catch}, estas deberán ordenarse siempre del tipo de excepción más derivado al menos derivado.
+\textbf{Regla:} Varias cláusulas \texttt{catch} en un mismo \texttt{try} se ordenan del tipo más derivado al menos derivado (Microsoft, 2025a).
 
-\textbf{Descripción:} Microsoft recomienda ordenar las cláusulas \texttt{catch} de la más derivada a la menos derivada, ya que una excepción más derivada nunca es capturada por una cláusula \texttt{catch} que la precede y que maneja su clase base (Microsoft, 2025a). Cuando existe una relación de herencia directa entre los tipos, como en el ejemplo siguiente, el compilador de C\# rechaza el orden incorrecto con un error, lo que confirma que esta regla no es solo una preferencia de estilo.
+\textbf{Descripción:} Con herencia directa entre los tipos, como abajo, el compilador rechaza el orden incorrecto con un error: no es solo preferencia de estilo.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

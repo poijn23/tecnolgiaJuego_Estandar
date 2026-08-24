@@ -2,9 +2,7 @@
 
 \subsubsection{Regla: enumeradores y constantes en lugar de literales}
 
-\textbf{Regla:} Queda prohibido el uso de valores numéricos o cadenas literales directamente dentro de la lógica del juego. Todo valor con significado en el dominio deberá gestionarse mediante un \texttt{enum} o una constante de clase con nombre descriptivo.
-
-\textbf{Descripción:} Martin identifica los números mágicos como un mal olor de código porque obligan a quien lee el código a memorizar o adivinar el significado de un valor que aparece sin contexto (Martin, 2008).
+\textbf{Regla:} Prohibido usar valores numéricos o cadenas literales directamente en la lógica del juego; todo valor con significado en el dominio se gestiona mediante \texttt{enum} o constante de clase (Martin, 2008).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
