@@ -1,0 +1,85 @@
+\subsection{Complejidad Ciclomática}
+
+\subsubsection{Regla: máximo de 10 por método}
+
+\textbf{Regla:} La complejidad ciclomática de cada método es como máximo 10. Una complejidad superior se divide mediante métodos con una única responsabilidad. El umbral se configura con \texttt{CA1502: 10} en \texttt{CodeMetricsConfig.txt} (Microsoft, 2023d).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public int CalculateScore(Player player, int baseScore)
+{
+    int score = baseScore;
+
+    if (player.HasShield)
+    {
+        score = ApplyShieldBonus(score);
+    }
+
+    if (player.HasCompanion)
+    {
+        score = ApplyCompanionBonus(score);
+    }
+
+    return score;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public int CalculateScore(Player player, int baseScore)
+{
+    int score = baseScore;
+
+    if (player.HasShield)
+    {
+        score = ApplyShieldBonus(score);
+    }
+
+    if (player.HasCompanion)
+    {
+        score = ApplyCompanionBonus(score);
+    }
+
+    if (player.HasCrown)
+    {
+        score = ApplyCrownBonus(score);
+    }
+
+    if (player.HasMap)
+    {
+        score = ApplyMapBonus(score);
+    }
+
+    if (player.HasKey)
+    {
+        score = ApplyKeyBonus(score);
+    }
+
+    if (player.HasTreasure)
+    {
+        score = ApplyTreasureBonus(score);
+    }
+
+    if (player.HasPotion)
+    {
+        score = ApplyPotionBonus(score);
+    }
+
+    if (player.HasCompletedQuest)
+    {
+        score = ApplyQuestBonus(score);
+    }
+
+    if (player.IsInCastle)
+    {
+        score = ApplyCastleBonus(score);
+    }
+
+    if (player.IsFinalRound)
+    {
+        score = ApplyFinalRoundBonus(score);
+    }
+
+    return score;
+}
+\end{lstlisting}

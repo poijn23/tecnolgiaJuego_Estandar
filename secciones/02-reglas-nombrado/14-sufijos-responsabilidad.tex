@@ -1,0 +1,57 @@
+\subsection{Sufijos por Responsabilidad}
+
+\subsubsection{Regla: sufijos definidos por .NET}
+
+\textbf{Regla:} Se aplican los sufijos establecidos por las guías de diseño de .NET: \texttt{Attribute} para atributos, \texttt{EventArgs} para datos de eventos, \texttt{EventHandler} para delegados de eventos, \texttt{Callback} para otros delegados, \texttt{Exception} para excepciones, \texttt{Dictionary} para diccionarios y \texttt{Collection} para colecciones personalizadas (Microsoft, 2023c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnChangedEventArgs : EventArgs
+{
+    public TurnChangedEventArgs(Player currentPlayer)
+    {
+        CurrentPlayer = currentPlayer;
+    }
+
+    public Player CurrentPlayer { get; }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnChangedData : EventArgs
+{
+    public TurnChangedData(Player currentPlayer)
+    {
+        CurrentPlayer = currentPlayer;
+    }
+
+    public Player CurrentPlayer { get; }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: sufijos arquitectónicos del proyecto}
+
+\textbf{Regla:} Para expresar una responsabilidad arquitectónica real, el proyecto adopta los sufijos \texttt{Service}, \texttt{Repository}, \texttt{Controller}, \texttt{Factory}, \texttt{Provider} y \texttt{Validator}. Se prohíbe añadirlos cuando la clase no desempeña esa responsabilidad.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class SaveGameService
+{
+    public void Save(GameState state)
+    {
+        Persist(state);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class SaveGameManager
+{
+    public void Save(GameState state)
+    {
+        Persist(state);
+    }
+}
+\end{lstlisting}

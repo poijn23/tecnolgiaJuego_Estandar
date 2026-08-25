@@ -1,0 +1,52 @@
+\subsection{Valores Mágicos}
+
+\subsubsection{Regla: enumeradores y constantes en lugar de literales}
+
+\textbf{Regla:} Prohibido usar valores numéricos o cadenas literales directamente en la lógica del juego; todo valor con significado en el dominio se gestiona mediante \texttt{enum} o constante de clase (Martin, 2008).
+
+\textbf{Código correcto:}
+\textit{Archivo \texttt{TurnState.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public enum TurnState
+{
+    WaitingForRoll,
+    Moving,
+    Finished
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{TurnManager.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private const int MaximumPlayers = 4;
+
+    public bool CanAddPlayer(int currentPlayerCount)
+    {
+        return currentPlayerCount < MaximumPlayers;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    public bool CanAddPlayer(int currentPlayerCount)
+    {
+        return currentPlayerCount < 4;
+    }
+
+    public void SetState(int state)
+    {
+        if (state == 2)
+        {
+            FinishTurn();
+        }
+    }
+
+    private void FinishTurn()
+    {
+    }
+}
+\end{lstlisting}

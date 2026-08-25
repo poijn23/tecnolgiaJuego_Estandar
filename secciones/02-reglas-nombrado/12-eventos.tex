@@ -1,0 +1,55 @@
+\subsection{Eventos}
+
+\subsubsection{Regla: verbo y tiempo verbal}
+
+\textbf{Regla:} Los eventos se nombran en \texttt{PascalCase} con un verbo o frase verbal. El presente progresivo indica que la acción está por ocurrir (\texttt{TurnChanging}) y el pasado indica que ya ocurrió (\texttt{TurnChanged}); no se usan prefijos como \texttt{Before} o \texttt{After} (Microsoft, 2023a).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public class TurnManager
+{
+    public event EventHandler? TurnChanged;
+
+    protected virtual void OnTurnChanged(EventArgs e)
+    {
+        TurnChanged?.Invoke(this, e);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public class TurnManager
+{
+    public event EventHandler? AfterTurnChange;
+
+    protected virtual void RaiseTurnChanged(EventArgs e)
+    {
+        AfterTurnChange?.Invoke(this, e);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: \texttt{EventHandler} y \texttt{EventArgs}}
+
+\textbf{Regla:} Se utiliza \texttt{EventHandler<TEventArgs>} para eventos con datos. La clase de datos termina en \texttt{EventArgs}; los parámetros del manejador se llaman \texttt{sender} y \texttt{e}; el método que eleva el evento comienza con \texttt{On} (Microsoft, 2023b).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public event EventHandler<TurnChangedEventArgs>? TurnChanged;
+
+private void HandleTurnChanged(object? sender, TurnChangedEventArgs e)
+{
+    UpdateCurrentPlayer(e.CurrentPlayer);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public event Action<Player>? TurnChange;
+
+private void HandleTurnChange(Player player)
+{
+    UpdateCurrentPlayer(player);
+}
+\end{lstlisting}

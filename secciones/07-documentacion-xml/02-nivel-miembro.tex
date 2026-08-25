@@ -1,0 +1,9 @@
+\subsection{A Nivel de Miembro}
+
+\subsubsection{Regla: orden de las etiquetas \texttt{param}, \texttt{returns} y \texttt{exception}}
+
+\textbf{Regla:} En un método público de la capa de servicios, las etiquetas se redactan en inglés y aparecen en este orden: \texttt{<summary>}, una etiqueta \texttt{<param>} por cada parámetro, \texttt{<returns>} si devuelve un valor y \texttt{<exception>} por cada excepción documentada (Microsoft, 2026c).
+
+\textbf{Ejemplo correcto:} \texttt{CalculateFinalScore} documenta primero su propósito; después describe \texttt{baseScore} y \texttt{tile}; luego el valor devuelto; y finalmente \texttt{ArgumentOutOfRangeException}. Todo el contenido está en inglés.
+
+\textbf{Ejemplo incorrecto:} El método coloca \texttt{returns} antes de \texttt{param}, omite parámetros o combina descripciones en español con identificadores en inglés.

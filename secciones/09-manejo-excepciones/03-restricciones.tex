@@ -1,0 +1,73 @@
+\subsection{Restricciones}
+
+\subsubsection{Regla: prohibido capturar o lanzar \texttt{Exception} genérica}
+
+\textbf{Regla:} Prohibido lanzar directamente \texttt{System.Exception} u otro tipo genérico de excepción base, o capturarlo en un bloque \texttt{catch}; siempre se usa el tipo más específico. Esta restricción no impide heredar de \texttt{Exception} ni recibirla como parámetro \texttt{innerException} en el constructor convencional de una excepción personalizada.
+
+\textbf{Descripción:} Regla de análisis \texttt{CA1031} de .NET: las excepciones genéricas ocultan problemas en tiempo de ejecución y dificultan la depuración (Microsoft, 2016).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void EstablishConnection()
+{
+    try
+    {
+        _database.Connect();
+    }
+    catch (TimeoutException ex)
+    {
+        _logger.Error("Database connection timed out.", ex);
+        throw;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void EstablishConnection()
+{
+    try
+    {
+        _database.Connect();
+    }
+    catch (Exception ex)
+    {
+        _logger.Error("Database connection failed.", ex);
+        throw;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: preferir excepciones predefinidas}
+
+\textbf{Regla:} Se usa una excepción predefinida cuando expresa correctamente el error. Para argumentos nulos se usa \texttt{ArgumentNullException}; para argumentos inválidos, \texttt{ArgumentException} o una derivada; y para una operación incompatible con el estado actual, \texttt{InvalidOperationException}. Solo se crea una excepción personalizada cuando no existe una equivalente y el llamador necesita tratar esa condición por separado (Microsoft, 2025a).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void StartTurn(Player player)
+{
+    ArgumentNullException.ThrowIfNull(player);
+
+    if (!player.IsActive)
+    {
+        throw new InvalidOperationException("The player is not active.");
+    }
+
+    BeginTurn(player);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void StartTurn(Player player)
+{
+    ArgumentNullException.ThrowIfNull(player);
+
+    if (!player.IsActive)
+    {
+        throw new GameStateException("The player cannot start a turn.");
+    }
+
+    BeginTurn(player);
+}
+\end{lstlisting}

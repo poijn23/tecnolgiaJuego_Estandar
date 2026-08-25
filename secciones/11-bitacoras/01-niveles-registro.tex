@@ -1,0 +1,55 @@
+\subsection{Niveles de Registro}
+
+\subsubsection{Regla: elección del nivel según la severidad del evento}
+
+\textbf{Regla:} Cada mensaje se registra mediante el método de log4net que corresponde a su severidad, de menor a mayor (Apache Software Foundation, s. f.-a):
+
+\begin{itemize}
+  \item \textbf{Debug}: información útil en desarrollo (resultado intermedio de un cálculo).
+  \item \textbf{Info}: flujo normal del juego (inicio de partida, cambio de turno).
+  \item \textbf{Warn}: anomalía que no impide continuar (movimiento inválido).
+  \item \textbf{Error}: fallo que impide completar una operación, pero permite que el proceso continúe.
+  \item \textbf{Fatal}: fallo irrecuperable que obliga a terminar la sesión o el proceso.
+\end{itemize}
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    public void StartTurn(Player player)
+    {
+        _logger.Info($"Turn started. Player={player.Name}.");
+    }
+
+    public void RejectMove(Player player, Tile destination)
+    {
+        _logger.Warn($"Move rejected. Player={player.Name}; Destination={destination}.");
+    }
+
+    public void AbortSession(GameSession session, Exception ex)
+    {
+        _logger.Fatal($"Session aborted. SessionId={session.Id}.", ex);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    public void StartTurn(Player player)
+    {
+        _logger.Error($"Turn started. Player={player.Name}.");
+    }
+
+    public void RejectMove(Player player, Tile destination)
+    {
+        _logger.Error($"Move rejected. Player={player.Name}; Destination={destination}.");
+    }
+
+    public void AbortSession(GameSession session, Exception ex)
+    {
+        _logger.Debug($"Session aborted. SessionId={session.Id}.", ex);
+    }
+}
+\end{lstlisting}

@@ -1,0 +1,20 @@
+\subsection{Expresiones Lambda}
+
+\subsubsection{Regla: solo para operaciones concisas de una línea}
+
+\textbf{Regla:} Las lambdas (\texttt{=>}) solo para operaciones que quepan en una línea. Prohibido un cuerpo de bloque con varias instrucciones (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+_players.RemoveAll(player => !player.IsActive);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+_players.RemoveAll(player =>
+{
+    bool shouldRemove = !player.IsActive;
+    _logger.Debug($"Player evaluated. Player={player.Name}.");
+    return shouldRemove;
+});
+\end{lstlisting}

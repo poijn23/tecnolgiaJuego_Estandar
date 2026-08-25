@@ -1,0 +1,35 @@
+\subsection{Restricciones}
+
+\subsubsection{Regla: prohibido \texttt{Console.WriteLine} como bitácora}
+
+\textbf{Regla:} Prohibido \texttt{Console.WriteLine}, \texttt{Console.Error.WriteLine} o \texttt{Debug.Print} para registrar eventos del juego; todo registro pasa por el colaborador de registro del proyecto (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void SaveGameState(GameState state)
+{
+    try
+    {
+        _repository.Save(state);
+    }
+    catch (IOException ex)
+    {
+        _logger.Error($"Save game failed. SessionId={state.SessionId}.", ex);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void SaveGameState(GameState state)
+{
+    try
+    {
+        _repository.Save(state);
+    }
+    catch (IOException)
+    {
+        Console.WriteLine($"Save game failed. SessionId={state.SessionId}.");
+    }
+}
+\end{lstlisting}

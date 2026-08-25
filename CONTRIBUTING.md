@@ -18,7 +18,7 @@ Este repositorio contiene un documento LaTeX que se edita entre varias personas.
 
 ## Compilar el documento en local
 
-Necesitas una distribución de LaTeX (TeX Live, MiKTeX, etc.) con `latexmk` y `biber`.
+Necesitas una distribución de LaTeX (TeX Live, MiKTeX, etc.) con `latexmk`.
 
 ```bash
 latexmk -pdf main.tex
@@ -31,7 +31,6 @@ También puedes revisar el PDF generado automáticamente como artefacto en cada 
 ```
 main.tex               Documento principal
 secciones/             Una sección por archivo, incluida desde main.tex
-referencias.bib        Bibliografía
 .github/workflows/     Compilación automática en cada push/PR
 ```
 

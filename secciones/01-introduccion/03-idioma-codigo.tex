@@ -1,0 +1,31 @@
+\subsection{Idioma del código}
+
+\subsubsection{Regla: todo el contenido del programa en inglés}
+
+\textbf{Regla:} Todo elemento que forme parte del programa se escribe en inglés: clases, interfaces, métodos, propiedades, eventos, variables, constantes, parámetros genéricos, espacios de nombres, comentarios, documentación XML, mensajes de excepción, mensajes de bitácora y cualquier cadena visible para la persona usuaria. El estándar se redacta en español, pero el código y sus textos permanecen íntegramente en inglés (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public int CalculatePlayerScore(Player player)
+{
+    if (!player.IsActive)
+    {
+        throw new InvalidOperationException("The player is not active.");
+    }
+
+    return player.BaseScore + player.BonusScore;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public int calcularPlayerScore(Player jugador)
+{
+    if (!jugador.IsActive)
+    {
+        throw new InvalidOperationException("El jugador no esta activo.");
+    }
+
+    return jugador.BaseScore + jugador.BonusScore;
+}
+\end{lstlisting}

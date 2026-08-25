@@ -1,0 +1,9 @@
+\subsection{A Nivel de Clase}
+
+\subsubsection{Regla: etiqueta \texttt{summary} en servicios públicos}
+
+\textbf{Regla:} Toda clase pública de la capa de servicios se documenta con una etiqueta \texttt{<summary>} redactada en inglés. Las clases de dominio, infraestructura, interfaz gráfica y pruebas no requieren documentación XML (Microsoft, 2026c).
+
+\textbf{Ejemplo correcto:} \texttt{SaveGameService} incluye un \texttt{summary} en inglés que indica: ``Saves and restores game sessions.''
+
+\textbf{Ejemplo incorrecto:} \texttt{SaveGameService} carece de \texttt{summary}, o lo redacta en español. También es incorrecto agregar documentación XML rutinaria a cada clase fuera de la capa de servicios.

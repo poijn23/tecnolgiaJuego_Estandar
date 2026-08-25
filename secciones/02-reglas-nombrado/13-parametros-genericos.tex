@@ -1,0 +1,23 @@
+\subsection{Parámetros de Tipo Genérico}
+
+\subsubsection{Regla: prefijo \texttt{T} y nombre descriptivo}
+
+\textbf{Regla:} Un único parámetro completamente genérico puede llamarse \texttt{T}. Cuando su función o restricción aporta significado, se usa un nombre descriptivo en \texttt{PascalCase} con prefijo \texttt{T}, como \texttt{TEntity} o \texttt{TSession} (Microsoft, 2023c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IRepository<TEntity>
+    where TEntity : Entity
+{
+    TEntity FindById(Guid id);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IRepository<E>
+    where E : Entity
+{
+    E FindById(Guid id);
+}
+\end{lstlisting}
