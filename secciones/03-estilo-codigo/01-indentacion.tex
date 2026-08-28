@@ -1,0 +1,41 @@
+\subsection{Indentación}
+
+\subsubsection{Regla: cuatro espacios por nivel}
+
+\textbf{Regla:} Se adopta la configuración predeterminada de formato de C\#: cada nivel de indentación usa cuatro espacios, el ancho de tabulación es cuatro y no se insertan caracteres de tabulación. La configuración equivalente es \texttt{indent\_style = space}, \texttt{indent\_size = 4} y \texttt{tab\_width = 4} (Microsoft, 2025e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public int RollDice()
+{
+    const int MinimumFaceValue = 1;
+    const int MaximumFaceValue = 6;
+    const int ExclusiveMaximumFaceValue = MaximumFaceValue + 1;
+    int faceValue = Random.Shared.Next(MinimumFaceValue, ExclusiveMaximumFaceValue);
+
+    if (faceValue == MaximumFaceValue)
+    {
+        return faceValue + BonusRoll();
+    }
+
+    return faceValue;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public int RollDice()
+{
+  const int MinimumFaceValue = 1;
+  const int MaximumFaceValue = 6;
+  const int ExclusiveMaximumFaceValue = MaximumFaceValue + 1;
+  int faceValue = Random.Shared.Next(MinimumFaceValue, ExclusiveMaximumFaceValue);
+
+  if (faceValue == MaximumFaceValue)
+  {
+      return faceValue + BonusRoll();
+  }
+
+  return faceValue;
+}
+\end{lstlisting}

@@ -8,6 +8,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{tocloft}
+\usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 
 \geometry{margin=2.5cm}
@@ -18,9 +19,6 @@
 \setlength{\cftsubsecnumwidth}{4em}
 \setlength{\cftsubsubsecnumwidth}{5em}
 
-\newcommand{\sectionplaceholder}[1]{\section{#1}\mbox{}\par}
-\newcommand{\subsectionplaceholder}[1]{\subsection{#1}\mbox{}\par}
-
 \lstdefinestyle{csharpstyle}{
   language=[Sharp]C,
   basicstyle=\ttfamily\small,
@@ -30,11 +28,16 @@
   showstringspaces=false,
   breaklines=true,
   frame=single,
-  columns=fullflexible
+  columns=fullflexible,
+  extendedchars=true,
+  literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1
 }
 
-\title{Estándar de Codificación C\# para Desarrollo de Videojuegos}
-\author{}
+\title{Estándar de Codificación C\# para Desarrollo de Videojuegos\\\large Versión 2.0 --- Juego de Mesa 2D}
+\author{Angel Gabriel Aguilar Hernández \and José Eduardo Prior Hernández}
 \date{}
 
 \begin{document}
@@ -42,18 +45,19 @@
 \maketitle
 \tableofcontents
 
-\input{secciones/01-introduccion}
-\input{secciones/02-proposito}
-\input{secciones/03-reglas-nombrado/index}
-\input{secciones/04-organizacion-proyecto/index}
-\input{secciones/05-practicas-programacion/index}
-\input{secciones/06-manejo-conexiones/index}
-\input{secciones/07-pruebas-unitarias/index}
-\input{secciones/08-validacion-seguridad/index}
-\input{secciones/09-dtos-modelos/index}
-\input{secciones/10-manejo-documentos/index}
-\input{secciones/11-gestion-ventanas/index}
-\input{secciones/12-dependencias-externas}
-\input{secciones/13-vulnerabilidades-conocidas}
+\input{secciones/01-introduccion/index}
+\input{secciones/02-reglas-nombrado/index}
+\input{secciones/03-estilo-codigo/index}
+\input{secciones/04-complejidad/index}
+\input{secciones/05-programacion-funcional/index}
+\input{secciones/06-estructura-archivos}
+\input{secciones/07-documentacion-xml/index}
+\input{secciones/08-comentarios-internos/index}
+\input{secciones/09-manejo-excepciones/index}
+\input{secciones/10-inyeccion-dependencias}
+\input{secciones/11-bitacoras/index}
+\input{secciones/12-pruebas-unitarias/index}
+\input{secciones/13-declaracion-uso-ia}
+\input{secciones/14-referencias}
 
 \end{document}

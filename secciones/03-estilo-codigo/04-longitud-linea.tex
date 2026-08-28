@@ -1,0 +1,18 @@
+\subsection{Longitud de Línea}
+
+\subsubsection{Regla: máximo de 120 caracteres}
+
+\textbf{Regla:} Ninguna línea de código supera 120 caracteres, incluida la indentación. Las invocaciones, declaraciones y expresiones que excedan el límite se dividen en varias líneas manteniendo una indentación de cuatro espacios. El límite de 120 caracteres es una decisión del equipo para conservar legibilidad en revisiones y comparaciones de código.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+MoveResult validatedMoveResult = moveValidationService.ValidateAndExecuteMove(
+    currentPlayer,
+    selectedOriginTile,
+    selectedDestinationTile);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+MoveResult validatedMoveResult = moveValidationService.ValidateAndExecuteMove(currentPlayer, selectedOriginTile, selectedDestinationTile);
+\end{lstlisting}

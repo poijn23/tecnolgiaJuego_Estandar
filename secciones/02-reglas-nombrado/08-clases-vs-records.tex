@@ -1,0 +1,67 @@
+\subsection{Estructuras de Datos: \texttt{class} frente a \texttt{record}}
+
+\subsubsection{Regla: mutabilidad como criterio de elección}
+
+\textbf{Regla:} Entidades cuyo estado cambia durante la partida se declaran \texttt{class}. Valores inmutables o eventos que solo describen un hecho ocurrido se declaran \texttt{record} (Microsoft, 2026b).
+
+\textbf{Código correcto:}
+\textit{Archivo \texttt{Player.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class Player
+{
+    public Player(string name)
+    {
+        Name = name;
+        Score = 0;
+    }
+
+    public string Name { get; }
+    public int Score { get; private set; }
+
+    public void AddScore(int points)
+    {
+        Score += points;
+    }
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{DiceRolled.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed record DiceRolled(Player Player, int FaceValue);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\textit{Archivo \texttt{Player.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed record Player
+{
+    public Player(string name)
+    {
+        Name = name;
+        Score = 0;
+    }
+
+    public string Name { get; }
+    public int Score { get; private set; }
+
+    public void AddScore(int points)
+    {
+        Score += points;
+    }
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{DiceRolled.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRolled
+{
+    public DiceRolled(Player player, int faceValue)
+    {
+        Player = player;
+        FaceValue = faceValue;
+    }
+
+    public Player Player { get; }
+    public int FaceValue { get; }
+}
+\end{lstlisting}

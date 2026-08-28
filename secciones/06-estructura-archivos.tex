@@ -1,0 +1,133 @@
+\section{Estructura de Archivos}
+
+\subsection{Regla: una clase de nivel superior por archivo}
+
+\textbf{Regla:} Cada archivo contiene exactamente una clase, interfaz, \texttt{record} o \texttt{enum} de nivel superior; el nombre del archivo coincide con el del tipo (McConnell, 2004).
+
+\textbf{Código correcto (archivo \texttt{TurnManager.cs}):}
+\begin{lstlisting}[style=csharpstyle]
+namespace BoardGame.Logic;
+
+public sealed class TurnManager
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (archivo \texttt{GameLogic.cs}):}
+\begin{lstlisting}[style=csharpstyle]
+namespace BoardGame.Logic;
+
+public sealed class TurnManager
+{
+}
+
+public sealed class ScoreBoard
+{
+}
+\end{lstlisting}
+
+\subsection{Regla: orden de los elementos dentro de la clase}
+
+\textbf{Regla:} Orden fijo dentro de una clase: constantes, campos estáticos, campos de instancia, constructores, propiedades, métodos (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller
+{
+    private const int MinimumFaceValue = 1;
+
+    private static readonly Random _random = Random.Shared;
+
+    private readonly int _maximumFaceValue;
+
+    public DiceRoller(int maximumFaceValue)
+    {
+        _maximumFaceValue = maximumFaceValue;
+    }
+
+    public int LastRoll { get; private set; }
+
+    public int Roll()
+    {
+        LastRoll = _random.Next(MinimumFaceValue, _maximumFaceValue + 1);
+        return LastRoll;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller
+{
+    public int Roll()
+    {
+        LastRoll = _random.Next(MinimumFaceValue, _maximumFaceValue + 1);
+        return LastRoll;
+    }
+
+    private readonly int _maximumFaceValue;
+
+    public int LastRoll { get; private set; }
+
+    public DiceRoller(int maximumFaceValue)
+    {
+        _maximumFaceValue = maximumFaceValue;
+    }
+
+    private const int MinimumFaceValue = 1;
+    private static readonly Random _random = Random.Shared;
+}
+\end{lstlisting}
+
+\subsection{Regla: orden y continuidad de directivas \texttt{using}}
+
+\textbf{Regla:} Las directivas \texttt{using} se colocan fuera del espacio de nombres en un único bloque sin líneas en blanco. Las directivas \texttt{System} aparecen primero y cada conjunto se ordena alfabéticamente (Microsoft, 2022a; Microsoft, 2022b). La configuración equivalente es:
+
+\begin{itemize}
+  \item \texttt{csharp\_using\_directive\_placement = outside\_namespace}
+  \item \texttt{dotnet\_sort\_system\_directives\_first = true}
+  \item \texttt{dotnet\_separate\_import\_directive\_groups = false}
+\end{itemize}
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+using System;
+using System.Collections.Generic;
+using BoardGame.Core;
+using log4net;
+
+namespace BoardGame.Services;
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+using log4net;
+
+using System.Collections.Generic;
+using BoardGame.Core;
+using System;
+
+namespace BoardGame.Services;
+\end{lstlisting}
+
+\subsection{Regla: agrupación mediante espacios de nombres}
+
+\textbf{Regla:} Todo tipo pertenece a un espacio de nombres que refleja la organización del proyecto y la responsabilidad del archivo. Se usa la declaración de ámbito de archivo y un solo espacio de nombres por archivo; por ejemplo, los servicios de guardado se agrupan bajo \texttt{BoardGame.Services.Saves} (Microsoft, 2026d).
+
+\textbf{Código correcto (archivo \texttt{SaveGameService.cs}):}
+\begin{lstlisting}[style=csharpstyle]
+namespace BoardGame.Services.Saves;
+
+public sealed class SaveGameService
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (archivo \texttt{SaveGameService.cs}):}
+\begin{lstlisting}[style=csharpstyle]
+namespace BoardGame;
+
+public sealed class SaveGameService
+{
+}
+\end{lstlisting}

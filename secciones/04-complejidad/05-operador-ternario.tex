@@ -1,0 +1,15 @@
+\subsection{Operador Ternario}
+
+\subsubsection{Regla: solo para seleccionar un valor simple}
+
+\textbf{Regla:} El operador condicional \texttt{?:} se usa cuando una condición sencilla selecciona entre dos valores sin efectos secundarios. Se prohíben operadores ternarios anidados; cuando existen más decisiones o acciones, se utiliza una estructura \texttt{if}/\texttt{else} (Microsoft, 2026e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+string status = player.IsActive ? "Active" : "Inactive";
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+string status = player.IsActive ? player.HasWon ? "Winner" : "Playing" : "Inactive";
+\end{lstlisting}

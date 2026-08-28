@@ -1,0 +1,71 @@
+\subsection{Interfaces}
+
+\subsubsection{Regla: prefijo \texttt{I}}
+
+\textbf{Regla:} Toda interfaz se escribe en \texttt{PascalCase} con prefijo \texttt{I}, seguido de un sustantivo, frase nominal o adjetivo que describa la capacidad o rol (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IMovable
+{
+    void Move(Tile destination);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public interface Movable
+{
+    void Move(Tile destination);
+}
+\end{lstlisting}
+
+\subsubsection{Regla: correspondencia entre interfaz e implementación estándar}
+
+\textbf{Regla:} Cuando una clase es la implementación estándar de una interfaz, su nombre coincide exactamente con el de la interfaz, sin el prefijo \texttt{I} (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\textit{Archivo \texttt{IDiceRoller.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IDiceRoller
+{
+    int Roll();
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{DiceRoller.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller : IDiceRoller
+{
+    private const int MinimumFaceValue = 1;
+    private const int ExclusiveMaximumFaceValue = 7;
+
+    public int Roll()
+    {
+        return Random.Shared.Next(MinimumFaceValue, ExclusiveMaximumFaceValue);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\textit{Archivo \texttt{IDiceRoller.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IDiceRoller
+{
+    int Roll();
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{RandomDiceGenerator.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class RandomDiceGenerator : IDiceRoller
+{
+    private const int MinimumFaceValue = 1;
+    private const int ExclusiveMaximumFaceValue = 7;
+
+    public int Roll()
+    {
+        return Random.Shared.Next(MinimumFaceValue, ExclusiveMaximumFaceValue);
+    }
+}
+\end{lstlisting}

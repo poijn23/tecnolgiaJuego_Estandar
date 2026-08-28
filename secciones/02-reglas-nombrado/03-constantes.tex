@@ -1,0 +1,53 @@
+\subsection{Constantes}
+
+\subsubsection{Regla: PascalCase para constantes}
+
+\textbf{Regla:} Toda constante (de campo o local, incluidas \texttt{private} e \texttt{internal}) se escribe en \texttt{PascalCase}, sin \texttt{SCREAMING\_SNAKE\_CASE} (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameBoard
+{
+    private const int BoardSize = 8;
+    private const string DefaultGameMode = "Classic";
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameBoard
+{
+    private const int BOARD_SIZE = 8;
+    private const string DEFAULT_GAME_MODE = "Classic";
+}
+\end{lstlisting}
+
+\subsubsection{Regla: \texttt{const} frente a \texttt{static readonly}}
+
+\textbf{Regla:} Un valor conocido en tiempo de compilación se declara \texttt{const}. Un valor calculado una sola vez en tiempo de ejecución se declara \texttt{static readonly}.
+
+\textbf{Descripción:} El compilador de C\# exige que todo \texttt{const} sea evaluable en tiempo de compilación; rechaza cualquier expresión que dependa de una llamada a método.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller
+{
+    private const int MinimumFaceValue = 1;
+    private const int DefaultMaximumFaceValue = 6;
+    private static readonly int _maximumFaceValue = LoadMaximumFaceValueFromConfig();
+
+    private static int LoadMaximumFaceValueFromConfig()
+    {
+        return DefaultMaximumFaceValue;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRoller
+{
+    private static readonly int _minimumFaceValue = 1;
+    private static readonly int _maximumFaceValue = 6;
+}
+\end{lstlisting}

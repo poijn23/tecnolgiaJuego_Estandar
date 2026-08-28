@@ -1,0 +1,51 @@
+\subsection{Propiedades}
+
+\subsubsection{Regla: PascalCase y acceso mínimo necesario}
+
+\textbf{Regla:} Las propiedades se nombran en \texttt{PascalCase} con un sustantivo, frase nominal o adjetivo. Si su valor no cambia después de construir el objeto, se expone solo \texttt{get} o se utiliza \texttt{init}; no se agrega un \texttt{set} público innecesario (Microsoft, 2025f).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerProfile
+{
+    public PlayerProfile(string displayName)
+    {
+        DisplayName = displayName;
+    }
+
+    public string DisplayName { get; }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerProfile
+{
+    public string displayName { get; set; }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: modificación controlada con \texttt{private set}}
+
+\textbf{Regla:} Cuando una propiedad cambia durante la partida, se mantiene el \texttt{get} público y se restringe el \texttt{set} al menor nivel necesario. La modificación del estado de dominio se realiza mediante un método que expresa la operación (Microsoft, 2025f).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class Player
+{
+    public int Score { get; private set; }
+
+    public void AddScore(int points)
+    {
+        Score += points;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class Player
+{
+    public int Score { get; set; }
+}
+\end{lstlisting}

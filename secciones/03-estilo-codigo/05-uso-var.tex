@@ -1,0 +1,17 @@
+\subsection{Uso de \texttt{var}}
+
+\subsubsection{Regla: solo cuando el tipo es evidente}
+
+\textbf{Regla:} Se usa \texttt{var} cuando el tipo se reconoce directamente en el lado derecho, especialmente en una construcción con \texttt{new}. Se escribe el tipo explícito para tipos integrados y cuando una llamada a método no permite inferir el tipo con claridad. Las reglas \texttt{IDE0007} e \texttt{IDE0008} permiten aplicar esta preferencia (Microsoft, 2022c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+var player = new Player("Alice");
+int remainingTurns = CalculateRemainingTurns();
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+Player player = new Player("Alice");
+var remainingTurns = CalculateRemainingTurns();
+\end{lstlisting}

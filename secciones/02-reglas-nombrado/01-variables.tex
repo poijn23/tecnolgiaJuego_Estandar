@@ -1,0 +1,102 @@
+\subsection{Variables}
+
+\subsubsection{Regla: camelCase y nombres descriptivos}
+
+\textbf{Regla:} Variables locales y parámetros en \texttt{camelCase}. Se permite \texttt{i} únicamente como índice de un ciclo corto, simple y no anidado. Se permiten \texttt{j} y \texttt{k} solo como segundo y tercer índice de una operación posicional o matemática breve, sin significado de dominio. Cuando el contador representa filas, columnas, jugadores, rondas u otro concepto del juego, o cuando el cuerpo del ciclo no es inmediato, se usa un nombre descriptivo como \texttt{rowIndex}, \texttt{columnIndex} o \texttt{playerIndex} (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void RevealTiles(IReadOnlyList<Tile> tiles)
+{
+    for (int i = 0; i < tiles.Count; i++)
+    {
+        tiles[i].Reveal();
+    }
+}
+
+public void ResetBoard()
+{
+    for (int rowIndex = 0; rowIndex < BoardSize; rowIndex++)
+    {
+        for (int columnIndex = 0; columnIndex < BoardSize; columnIndex++)
+        {
+            _tiles[rowIndex, columnIndex].Reset();
+        }
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void ResetBoard()
+{
+    for (int i = 0; i < BoardSize; i++)
+    {
+        for (int j = 0; j < BoardSize; j++)
+        {
+            _tiles[i, j].Reset();
+        }
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: nombres de colecciones en plural}
+
+\textbf{Regla:} Toda colección (arreglo, lista, diccionario o cualquier \texttt{IEnumerable<T>}) se nombra con un sustantivo en plural (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameBoard
+{
+    private readonly List<Player> _players;
+
+    public GameBoard(List<Player> players)
+    {
+        _players = players;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameBoard
+{
+    private readonly List<Player> _playerList;
+
+    public GameBoard(List<Player> playerList)
+    {
+        _playerList = playerList;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: una declaración por línea}
+
+\textbf{Regla:} No se declara más de una variable en la misma sentencia, aunque compartan tipo (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+int currentRow = startingRow;
+int currentColumn = startingColumn;
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+int currentRow = startingRow, currentColumn = startingColumn;
+\end{lstlisting}
+
+\subsubsection{Regla: prefijos interrogativos para variables booleanas}
+
+\textbf{Regla:} Toda variable \texttt{bool} se nombra como una pregunta cerrada, con prefijo \texttt{is}, \texttt{has}, \texttt{can} o \texttt{should} (Martin, 2008).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+bool isPlayerTurnActive = true;
+bool hasReachedFinalTile = false;
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+bool playerTurnActive = true;
+bool finalTileReached = false;
+\end{lstlisting}

@@ -1,0 +1,17 @@
+\subsection{Formato de Mensajes}
+
+\subsubsection{Regla: acción, contexto y excepción separada}
+
+\textbf{Regla:} Todo mensaje comienza con una oración breve en inglés que identifica la acción o el resultado. El contexto variable se agrega como pares \texttt{Key=Value} separados por punto y coma. Una excepción se entrega en el parámetro correspondiente de log4net y no se concatena su propiedad \texttt{Message}. El \texttt{PatternLayout} agrega fecha, hilo, nivel y nombre del logger (Apache Software Foundation, s. f.-b).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+_logger.Error(
+    $"Save game failed. SessionId={state.SessionId}; PlayerId={player.Id}.",
+    ex);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+_logger.Error("Error: " + ex.Message);
+\end{lstlisting}

@@ -1,0 +1,57 @@
+\subsection{Campos Privados}
+
+\subsubsection{Regla: prefijo de guion bajo}
+
+\textbf{Regla:} Todo campo \texttt{private} o \texttt{internal} no constante, sea de instancia o estático, se escribe en \texttt{camelCase} con guion bajo inicial (\texttt{\_campo}). No se emplea el prefijo especial \texttt{s\_} para campos estáticos.
+
+\textbf{Descripción:} Facilita el análisis automático del código (autocompletado, analizadores de estilo) y es la convención de nombrado oficial del equipo de .NET Runtime (Microsoft, 2025c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private readonly List<Player> _players;
+    private int _currentPlayerIndex;
+
+    public TurnManager(List<Player> players)
+    {
+        _players = players;
+        _currentPlayerIndex = 0;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private readonly List<Player> players;
+    private int currentPlayerIndex;
+
+    public TurnManager(List<Player> players)
+    {
+        this.players = players;
+        currentPlayerIndex = 0;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: misma convención para campos estáticos}
+
+\textbf{Regla:} Un campo \texttt{static} privado o interno conserva el prefijo de guion bajo y no agrega marcadores relacionados con su almacenamiento.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSessionRegistry
+{
+    private static readonly List<Player> _connectedPlayers = new();
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSessionRegistry
+{
+    private static readonly List<Player> s_connectedPlayers = new();
+}
+\end{lstlisting}

@@ -1,0 +1,19 @@
+\subsection{Nomenclatura de las Clases de Prueba}
+
+\subsubsection{Regla: prefijo \texttt{Test}}
+
+\textbf{Regla:} Una clase de prueba se nombra igual que la clase examinada, con el prefijo \texttt{Test} (Osherove, 2013). Esta es una excepción explícita a la regla general de nombres de clase en singular.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TestDiceRoller
+{
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class DiceRollerTest
+{
+}
+\end{lstlisting}
