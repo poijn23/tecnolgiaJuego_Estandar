@@ -34,6 +34,8 @@ public class TurnManager
 
 \textbf{Regla:} Se utiliza \texttt{EventHandler<TEventArgs>} para eventos con datos. La clase de datos termina en \texttt{EventArgs}; los parámetros del manejador se llaman \texttt{sender} y \texttt{e}; el método que eleva el evento comienza con \texttt{On} (Microsoft, 2023b).
 
+\textbf{Excepción:} \texttt{sender} y \texttt{e} son la única excepción admitida a la regla general de nombres descriptivos para parámetros (Sección 2.1): siguen la firma estándar del delegado \texttt{EventHandler} de .NET y no se renombran ni se sustituyen por un descarte.
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 public event EventHandler<TurnChangedEventArgs>? TurnChanged;

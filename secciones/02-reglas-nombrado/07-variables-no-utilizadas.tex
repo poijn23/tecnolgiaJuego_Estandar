@@ -4,48 +4,52 @@
 
 \textbf{Regla:} Prohibido asignar un nombre genérico (\texttt{ex}, \texttt{ignored}) a una variable de excepción no usada; se omite el identificador y se deja solo el tipo (Microsoft, 2026a).
 
+\textbf{Descripción:} Un \texttt{catch} que descarta la excepción también debe evitar el patrón de control de flujo por \texttt{return}: la sección de manejo de errores exige que toda excepción capturada y no relanzada quede registrada (Sección 11.1), nunca silenciada mediante un simple valor de retorno.
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
-public bool TryParseMove(string rawInput)
+public void ValidateMoveFormat(string rawInput)
 {
     try
     {
         ParseMove(rawInput);
-        return true;
     }
     catch (FormatException)
     {
-        return false;
+        _logger.Warn($"Move input has an invalid format. RawInput={rawInput}.");
     }
 }
 \end{lstlisting}
 
 \textbf{Código incorrecto:}
 \begin{lstlisting}[style=csharpstyle]
-public bool TryParseMove(string rawInput)
+public void ValidateMoveFormat(string rawInput)
 {
     try
     {
         ParseMove(rawInput);
-        return true;
     }
     catch (FormatException ignored)
     {
-        return false;
+        _logger.Warn($"Move input has an invalid format. RawInput={rawInput}.");
     }
 }
 \end{lstlisting}
 
 \subsubsection{Regla: descarte \texttt{\_} en expresiones lambda}
 
-\textbf{Regla:} Un parámetro de lambda no utilizado en el cuerpo se nombra con el descarte \texttt{\_} (Microsoft, 2025b).
+\textbf{Regla:} Un parámetro de lambda se nombra con el descarte \texttt{\_} únicamente cuando no participa en el cuerpo de la expresión: comunica de forma explícita al resto del equipo que ese valor es irrelevante para la operación y evita que el analizador de estilo señale un parámetro sin usar (Microsoft, 2025b). En una lambda con más de un parámetro no utilizado, cada uno se descarta por separado con su propio \texttt{\_}; el compilador los trata como posiciones independientes, no como una variable compartida.
+
+\textbf{Prohibido:} Usar el descarte cuando el parámetro sí se lee en el cuerpo de la lambda, aunque sea una sola vez. El compilador lo permite como un identificador válido, pero oculta la intención del valor y obliga a quien lee el código a inferir por el contexto qué representa.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
+_players.RemoveAll(player => !player.IsActive);
 _players.RemoveAll(_ => _players.Count > MaximumPlayers);
 \end{lstlisting}
 
 \textbf{Código incorrecto:}
 \begin{lstlisting}[style=csharpstyle]
-_players.RemoveAll(p => _players.Count > MaximumPlayers);
+_players.RemoveAll(player => _players.Count > MaximumPlayers);
+_players.RemoveAll(_ => !_.IsActive);
 \end{lstlisting}

@@ -49,3 +49,30 @@ public sealed class Player
     public int Score { get; set; }
 }
 \end{lstlisting}
+
+\subsubsection{Regla: propiedad totalmente mutable en objetos de datos}
+
+\textbf{Regla:} Cuando la clase solo transporta datos y no protege ninguna invariante de dominio --- una configuración, un objeto de transferencia (DTO) ---, la propiedad expone \texttt{get} y \texttt{set} públicos mediante una propiedad autoimplementada, sin envolverla en un método de acceso manual (Microsoft, 2025f).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSettings
+{
+    public int BoardSize { get; set; }
+    public bool SoundEnabled { get; set; }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSettings
+{
+    private int _boardSize;
+    private bool _soundEnabled;
+
+    public int GetBoardSize() => _boardSize;
+    public void SetBoardSize(int value) => _boardSize = value;
+    public bool GetSoundEnabled() => _soundEnabled;
+    public void SetSoundEnabled(bool value) => _soundEnabled = value;
+}
+\end{lstlisting}

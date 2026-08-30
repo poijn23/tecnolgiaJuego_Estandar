@@ -55,3 +55,38 @@ public sealed class GameSessionRegistry
     private static readonly List<Player> s_connectedPlayers = new();
 }
 \end{lstlisting}
+
+\subsubsection{Regla: momento de inicialización de un campo}
+
+\textbf{Regla:} Todo campo queda inicializado antes de que la instancia esté disponible para su uso. Un campo cuyo valor no depende de los parámetros del constructor se inicializa en línea, en su propia declaración. Un campo cuyo valor depende de un parámetro del constructor o de lógica de construcción se inicializa en el cuerpo del constructor. Prohibido dejar un campo de referencia no anulable sin asignar en el constructor para que un método posterior lo asigne por primera vez (McConnell, 2004).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSession
+{
+    private readonly Guid _sessionId = Guid.NewGuid();
+    private readonly List<Player> _players;
+
+    public GameSession(List<Player> players)
+    {
+        _players = players;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSession
+{
+    private List<Player> _players;
+
+    public GameSession(List<Player> players)
+    {
+    }
+
+    public void Configure(List<Player> players)
+    {
+        _players = players;
+    }
+}
+\end{lstlisting}

@@ -7,3 +7,11 @@
 \textbf{Ejemplo correcto:} ``TODO(GAME-142): Replace the temporary save adapter.'' vincula una acción específica con la tarea correspondiente.
 
 \textbf{Ejemplo incorrecto:} ``TODO: Fix this later.'' no identifica una tarea ni explica el resultado esperado.
+
+\subsubsection{Regla: sin marcadores pendientes al enviar a revisión}
+
+\textbf{Regla:} Una solicitud de cambios enviada a revisión, y el código integrado a la rama principal, no contiene ningún comentario \texttt{TODO} ni \texttt{FIXME}. Un \texttt{TODO} o \texttt{FIXME} es una herramienta de trabajo en progreso: antes de solicitar la revisión, el trabajo pendiente se completa o se registra como una tarea independiente en el sistema de seguimiento del equipo, y el comentario se retira del código.
+
+\textbf{Ejemplo correcto:} El módulo de guardado enviado a revisión no contiene ningún \texttt{TODO} ni \texttt{FIXME}; el trabajo pendiente quedó registrado como la tarea GAME-150 en el backlog del equipo.
+
+\textbf{Ejemplo incorrecto:} La solicitud de cambios incluye ``TODO(GAME-142): Replace the temporary save adapter.'' sin haberlo resuelto ni retirado antes de solicitar la revisión.

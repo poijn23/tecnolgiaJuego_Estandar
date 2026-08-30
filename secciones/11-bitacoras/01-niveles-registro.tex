@@ -12,6 +12,8 @@
   \item \textbf{Fatal}: fallo irrecuperable que obliga a terminar la sesión o el proceso.
 \end{itemize}
 
+\textbf{Regla: excepción y severidad.} El objeto de excepción se adjunta como segundo parámetro de la llamada de registro únicamente en \texttt{Warn}, \texttt{Error} y \texttt{Fatal}, los niveles que se originan en un bloque \texttt{catch}; \texttt{Debug} e \texttt{Info} documentan flujo normal y no reciben una excepción. Toda excepción que se captura y se maneja sin volver a lanzarse se registra, como mínimo, en \texttt{Warn}. Cuando el \texttt{catch} solo traduce la excepción a otro tipo y la relanza (Sección 9.2), el registro ocurre en el punto donde finalmente se maneja, no en cada traducción intermedia. Una excepción que obliga a finalizar la sesión o el proceso completo --- no solo la operación en curso --- se registra en \texttt{Fatal}.
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 public sealed class TurnManager
