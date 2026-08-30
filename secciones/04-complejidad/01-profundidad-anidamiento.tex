@@ -8,10 +8,12 @@
 \begin{lstlisting}[style=csharpstyle]
 public void ProcessTurn(Player player)
 {
-    if (player is not null && player.IsActive)
+    if (player is null || !player.IsActive)
     {
-        ExecuteTurn(player);
+        return;
     }
+
+    ExecuteTurn(player);
 }
 
 private void ExecuteTurn(Player player)

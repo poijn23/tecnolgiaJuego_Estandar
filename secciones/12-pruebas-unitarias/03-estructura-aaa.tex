@@ -27,3 +27,32 @@ public void Roll_FaceValueSix_GrantsExtraTurn()
     ExpectEqual(6, faceValue);
 }
 \end{lstlisting}
+
+\subsubsection{Regla: una única aserción por prueba}
+
+\textbf{Regla:} El bloque de verificación contiene una única llamada de aserción, como \texttt{ExpectEqual} (Osherove, 2013). Para comparar varios atributos de un mismo objeto, se prefiere una sola aserción sobre el propio \texttt{Equals} de la clase (Sección 2.9) en lugar de una aserción por atributo. Un caso puntual que en verdad necesite más de una aserción se admite solo con un comentario, inmediatamente antes de las aserciones, que explique el motivo de esa decisión.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void MoveTo_ValidDestination_UpdatesCurrentTile()
+{
+    Player player = new(startingTile: new BoardTile(0, 0));
+
+    player.MoveTo(new BoardTile(2, 3));
+
+    ExpectEqual(new BoardTile(2, 3), player.CurrentTile);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void MoveTo_ValidDestination_UpdatesCurrentTile()
+{
+    Player player = new(startingTile: new BoardTile(0, 0));
+
+    player.MoveTo(new BoardTile(2, 3));
+
+    ExpectEqual(2, player.CurrentTile.Row);
+    ExpectEqual(3, player.CurrentTile.Column);
+}
+\end{lstlisting}

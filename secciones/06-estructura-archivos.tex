@@ -81,7 +81,7 @@ public sealed class DiceRoller
 
 \subsection{Regla: orden y continuidad de directivas \texttt{using}}
 
-\textbf{Regla:} Las directivas \texttt{using} se colocan fuera del espacio de nombres en un único bloque sin líneas en blanco. Las directivas \texttt{System} aparecen primero y cada conjunto se ordena alfabéticamente (Microsoft, 2022a; Microsoft, 2022b). La configuración equivalente es:
+\textbf{Regla:} Las directivas \texttt{using} se colocan fuera del espacio de nombres en un único bloque sin líneas en blanco entre grupos. El bloque se ordena en tres grupos consecutivos, cada uno alfabético internamente: primero los espacios de nombres de \texttt{System}, después las bibliotecas de terceros (por ejemplo \texttt{log4net}) y al final los espacios de nombres propios del proyecto (\texttt{BoardGame.*}) (Microsoft, 2022a; Microsoft, 2022b). La configuración equivalente es:
 
 \begin{itemize}
   \item \texttt{csharp\_using\_directive\_placement = outside\_namespace}
@@ -93,8 +93,8 @@ public sealed class DiceRoller
 \begin{lstlisting}[style=csharpstyle]
 using System;
 using System.Collections.Generic;
-using BoardGame.Core;
 using log4net;
+using BoardGame.Core;
 
 namespace BoardGame.Services;
 \end{lstlisting}

@@ -2,7 +2,7 @@
 
 \subsubsection{Regla: etiqueta \texttt{summary} en servicios públicos}
 
-\textbf{Regla:} Toda clase pública de la capa de servicios se documenta con una etiqueta \texttt{<summary>} redactada en inglés. Las clases de dominio, infraestructura, interfaz gráfica y pruebas no requieren documentación XML (Microsoft, 2026c).
+\textbf{Regla:} La documentación XML se agrega únicamente en clases públicas de la capa de servicios, con una etiqueta \texttt{<summary>} redactada en inglés. Prohibido agregar documentación XML a clases de dominio, infraestructura, interfaz gráfica o pruebas, salvo que expongan una API pública externa al proyecto (Microsoft, 2026c).
 
 \textbf{Ejemplo correcto:} \texttt{SaveGameService} incluye un \texttt{summary} en inglés que indica: ``Saves and restores game sessions.''
 

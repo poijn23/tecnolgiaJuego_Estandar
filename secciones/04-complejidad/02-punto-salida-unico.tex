@@ -6,6 +6,8 @@
 
 \textbf{Descripción:} La industria de videojuegos prefiere \emph{early exit} sobre el principio clásico de salida única (SESE): la lógica de una partida evalúa constantemente precondiciones, y anidar el método completo dentro de ellas solo añade profundidad sin claridad. McConnell recomienda salir de una rutina en cuanto se determina que no hay más trabajo que hacer (McConnell, 2004).
 
+\textbf{Criterio arquitectónico:} El early exit es obligatorio cuando la condición evaluada es una precondición de entrada: un requisito que, de no cumplirse, hace innecesario procesar el resto del método (un argumento inválido, un objeto inactivo, una colección vacía). En ese caso el retorno anticipado sustituye al anidamiento y no es opcional. Cuando la condición forma parte de la decisión de negocio central del método --- no de una precondición de entrada ---, este estándar no exige fragmentarla en salidas adicionales; la elección entre un \texttt{return} adicional y una estructura \texttt{if}/\texttt{else} se decide por legibilidad caso por caso.
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 public void ProcessTurn(Player player)
