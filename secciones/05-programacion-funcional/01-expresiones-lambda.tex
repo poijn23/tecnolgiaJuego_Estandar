@@ -21,18 +21,13 @@ _players.RemoveAll(player =>
 
 \subsubsection{Regla: contextos en los que se prohíbe una expresión lambda}
 
-\textbf{Regla:} Se prohíbe la expresión lambda en tres contextos:
+\textbf{Regla:} Se prohíbe la expresión lambda en tres contextos: la suscripción a un evento que deba cancelarse, la asignación sobre el estado capturado y la lambda escrita dentro de otra lambda.
 
-\begin{itemize}
-  \item \textbf{Evento cuya suscripción deba cancelarse.} Cada aparición de una lambda crea un delegado distinto, por lo que \texttt{-=} no retira lo que registró \texttt{+=}; el manejador se declara como método con nombre (Microsoft, 2015).
-  \item \textbf{Asignación sobre el estado capturado.} El cuerpo de una lambda solo lee sus entradas y devuelve un resultado; para modificar una variable capturada o un campo se usa \texttt{foreach} o un método con nombre (Microsoft, 2026g).
-  \item \textbf{Lambda dentro de otra lambda.} La lambda interior se extrae a un método privado y se pasa como grupo de método (Sección 5.2).
-\end{itemize}
+\textbf{Descripción:} Las lambdas se retiran del código sobre todo por pérdida de legibilidad, dificultad para depurar y degradación del rendimiento (Zheng et al., 2021); los tres contextos prohibidos concentran esas causas en defectos que el compilador no señala.
 
-\textbf{Descripción:} Las lambdas se retiran del código sobre todo por pérdida de legibilidad, dificultad para depurar y degradación del rendimiento (Zheng et al., 2021). Un manejador registrado con lambda reúne las tres y, además, mantiene vivo al suscriptor mientras exista el publicador.
+\textbf{Prohibido --- evento cuya suscripción deba cancelarse:} Cada aparición de una lambda crea un delegado distinto, por lo que \texttt{-=} no retira lo que registró \texttt{+=}; el manejador se declara como método con nombre (Microsoft, 2015).
 
 \textbf{Código correcto:}
-\textit{Suscripción a un evento:}
 \begin{lstlisting}[style=csharpstyle]
 public sealed class ScoreBoardView
 {
@@ -64,29 +59,7 @@ public sealed class ScoreBoardView
 }
 \end{lstlisting}
 
-\textit{Asignación sobre el estado capturado:}
-\begin{lstlisting}[style=csharpstyle]
-public int CalculateTotalScore()
-{
-    return _players.Sum(player => player.Score);
-}
-\end{lstlisting}
-
-\textit{Lambda dentro de otra lambda:}
-\begin{lstlisting}[style=csharpstyle]
-public IReadOnlyList<Player> FindPlayersWithWinningCard()
-{
-    return _players.Where(HasWinningCard).ToList();
-}
-
-private bool HasWinningCard(Player player)
-{
-    return player.Cards.Any(card => card.IsWinning);
-}
-\end{lstlisting}
-
 \textbf{Código incorrecto:}
-\textit{Suscripción a un evento:}
 \begin{lstlisting}[style=csharpstyle]
 public sealed class ScoreBoardView
 {
@@ -113,7 +86,17 @@ public sealed class ScoreBoardView
 }
 \end{lstlisting}
 
-\textit{Asignación sobre el estado capturado:}
+\textbf{Prohibido --- asignación sobre el estado capturado:} El cuerpo de una lambda solo lee sus entradas y devuelve un resultado; para modificar una variable capturada o un campo se usa \texttt{foreach} o un método con nombre (Microsoft, 2026g).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public int CalculateTotalScore()
+{
+    return _players.Sum(player => player.Score);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
 \begin{lstlisting}[style=csharpstyle]
 public int CalculateTotalScore()
 {
@@ -123,7 +106,22 @@ public int CalculateTotalScore()
 }
 \end{lstlisting}
 
-\textit{Lambda dentro de otra lambda:}
+\textbf{Prohibido --- lambda dentro de otra lambda:} La lambda interior se extrae a un método privado y se pasa como grupo de método (Sección 5.2).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public IReadOnlyList<Player> FindPlayersWithWinningCard()
+{
+    return _players.Where(HasWinningCard).ToList();
+}
+
+private bool HasWinningCard(Player player)
+{
+    return player.Cards.Any(card => card.IsWinning);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
 \begin{lstlisting}[style=csharpstyle]
 public IReadOnlyList<Player> FindPlayersWithWinningCard()
 {
