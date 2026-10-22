@@ -2,7 +2,7 @@
 
 \subsubsection{Regla: mutabilidad como criterio de elección}
 
-\textbf{Regla:} Entidades cuyo estado cambia durante la partida se declaran \texttt{class}. Valores inmutables o eventos que solo describen un hecho ocurrido se declaran \texttt{record} (Microsoft, 2026b).
+\textbf{Regla:} Entidades cuyo estado cambia durante la partida se declaran \texttt{class}. Valores inmutables o eventos que solo describen un hecho ocurrido se declaran \texttt{record} (Microsoft, 2026b). Un objeto que viaja por la red como contrato de servicio es un objeto de datos y sigue la Sección 2.11.3.
 
 \textbf{Código correcto:}
 \textit{Archivo \texttt{Player.cs}:}
@@ -64,4 +64,27 @@ public sealed class DiceRolled
     public Player Player { get; }
     public int FaceValue { get; }
 }
+\end{lstlisting}
+
+\textbf{Excepción:} Un valor inmutable que contiene un dato sensible (una contraseña, un token de sesión o su hash) se declara \texttt{sealed class}, no \texttt{record}. El compilador genera para todo \texttt{record} un \texttt{ToString} que escribe el nombre y el valor de cada propiedad pública (Microsoft, 2026b), así que registrar el objeto en la bitácora o verlo en un mensaje de error expone el secreto. Además, la igualdad que genera un \texttt{record} compara los arreglos por referencia, por lo que no sirve para un hash guardado en un \texttt{byte[]}.
+
+\textbf{Código correcto (dato sensible):}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class JoinRequest
+{
+    public JoinRequest(string playerName, string roomPassword)
+    {
+        PlayerName = playerName;
+        RoomPassword = roomPassword;
+    }
+
+    public string PlayerName { get; }
+
+    public string RoomPassword { get; }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (dato sensible):}
+\begin{lstlisting}[style=csharpstyle]
+public sealed record JoinRequest(string PlayerName, string RoomPassword);
 \end{lstlisting}

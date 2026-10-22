@@ -20,16 +20,34 @@ public int totalScore(int basePoints, int bonusPoints)
 }
 \end{lstlisting}
 
+\textbf{Métodos de conversión:} Un método que convierte un valor en otro tipo se nombra \texttt{To<Tipo>} o \texttt{From<Tipo>}, como \texttt{ToString} o \texttt{TimeSpan.FromHours}. Es la convención de .NET para las conversiones con nombre (Microsoft, 2019), por lo que \texttt{To} y \texttt{From} cuentan como frase verbal.
+
+\textbf{Código correcto (conversión):}
+\begin{lstlisting}[style=csharpstyle]
+public static MoveSummary ToSummary(MoveResult moveResult)
+{
+    return new MoveSummary(moveResult.Player.Name, moveResult.Destination.Row);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (conversión):}
+\begin{lstlisting}[style=csharpstyle]
+public static MoveSummary SummaryOf(MoveResult moveResult)
+{
+    return new MoveSummary(moveResult.Player.Name, moveResult.Destination.Row);
+}
+\end{lstlisting}
+
 \subsubsection{Regla: máximo de parámetros}
 
-\textbf{Regla:} Un método no recibe más de tres parámetros; con más datos de entrada, se encapsulan en un DTO.
+\textbf{Regla:} Un método no recibe más de tres parámetros; con más datos de entrada, se encapsulan en un DTO. El límite aplica también a los constructores. Un parámetro \texttt{params} cuenta como uno solo, sin importar cuántos argumentos reciba en la llamada.
 
-\textbf{Descripción:} McConnell señala que una lista larga de parámetros incrementa la probabilidad de invocar el método con el orden o el valor incorrecto (McConnell, 2004).
+\textbf{Descripción:} McConnell señala que una lista larga de parámetros incrementa la probabilidad de invocar el método con el orden o el valor incorrecto (McConnell, 2004). El riesgo es el mismo al invocar un constructor. En cambio, los argumentos de un \texttt{params} son todos del mismo tipo y cumplen el mismo papel, así que su orden no se puede confundir con el de otro parámetro.
 
 \textbf{Código correcto:}
 \textit{Archivo \texttt{MoveRequest.cs}:}
 \begin{lstlisting}[style=csharpstyle]
-public readonly record struct MoveRequest(Player Player, Tile Origin, Tile Destination);
+public sealed record MoveRequest(Player Player, Tile Origin, Tile Destination);
 \end{lstlisting}
 
 \textit{Archivo \texttt{MoveExecutor.cs}:}
@@ -56,7 +74,9 @@ public sealed class MoveExecutor
 
 \subsubsection{Regla: métodos booleanos como pregunta}
 
-\textbf{Regla:} Un método que devuelve \texttt{bool} y expresa una pregunta se nombra con prefijo interrogativo (\texttt{Is}, \texttt{Has}, \texttt{Can}) (Martin, 2008). Se exceptúan patrones convencionales de .NET como \texttt{Try...} y miembros definidos por la plataforma o por una interfaz, como \texttt{Equals}.
+\textbf{Regla:} Un método que devuelve \texttt{bool} y expresa una pregunta se nombra con uno de los prefijos \texttt{Is}, \texttt{Are}, \texttt{Has}, \texttt{Can} o \texttt{Should} (Martin, 2008). Es la misma lista que la de las variables booleanas (Sección 2.1.4), escrita en mayúscula. Se exceptúan patrones convencionales de .NET como \texttt{Try...} y miembros definidos por la plataforma o por una interfaz, como \texttt{Equals}.
+
+\textbf{Excepción:} Un método que verifica una contraseña, una firma o un certificado se nombra con el verbo \texttt{Verify}, aunque devuelva \texttt{bool}. Así nombra .NET sus propias operaciones criptográficas (\texttt{RSA.VerifyData}, \texttt{X509Certificate2.Verify}). En estos métodos importa el trabajo que realizan, no solo la respuesta: una verificación señuelo se ejecuta aunque su resultado se descarte, para que el tiempo de respuesta no revele si la cuenta existe.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

@@ -163,3 +163,46 @@ public sealed class GameSession
     public int ActivePlayerCount => _players.Count(player => player.IsActive);
 }
 \end{lstlisting}
+
+\textbf{Qué es un catálogo de diccionario:} Una clase cuyo único propósito es exponer entradas de un diccionario cuyo contenido puede cambiar mientras el programa se ejecuta, como un archivo de recursos que cambia con el idioma. Una clase que guarda valores fijos, aunque vengan de un archivo de recursos que no cambia con el idioma, no es un catálogo y usa propiedades autoimplementadas (Sección 2.3.2).
+
+\textbf{Excepción:} Se permite el cuerpo de expresión fuera de un catálogo cuando un tercero exige que el valor sea una propiedad y no un método:
+\begin{itemize}
+    \item \textbf{Interfaz:} la interfaz declara la propiedad, como \texttt{IAccountRepository Accounts \{ get; \}}.
+    \item \textbf{Enlace de datos:} la vista enlaza el valor por el nombre de la propiedad, como en un modelo de vista (MVVM).
+    \item \textbf{Framework:} el framework necesita la propiedad para funcionar, como un \texttt{DbSet<T>} de Entity Framework Core, cuya alternativa obligaría a usar el operador \texttt{!} que prohíbe la Sección 9.4.1.
+\end{itemize}
+
+\textbf{Alcance:} La regla trata el cuerpo de expresión de la propiedad completa (\texttt{public int Total => ...;}). No aplica a los accesores escritos con cuerpo de expresión (\texttt{get => \_value;} y \texttt{set => \_value = value;}), que equivalen a \texttt{get \{ return \_value; \}} y solo reenvían a un estado interno.
+
+\textbf{Código correcto (enlace de datos):}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class LobbyViewModel : ViewModel
+{
+    public bool IsWaiting
+    {
+        get => Get<bool>();
+        set => Set(value);
+    }
+
+    [DependsOn(nameof(IsWaiting))]
+    public bool IsReady => !IsWaiting;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (enlace de datos):}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class LobbyViewModel : ViewModel
+{
+    public bool IsWaiting
+    {
+        get => Get<bool>();
+        set => Set(value);
+    }
+
+    public bool IsReady()
+    {
+        return !IsWaiting;
+    }
+}
+\end{lstlisting}

@@ -32,7 +32,9 @@ public sealed class TurnChangedData : EventArgs
 
 \subsubsection{Regla: sufijos arquitectónicos del proyecto}
 
-\textbf{Regla:} Para expresar una responsabilidad arquitectónica real, el proyecto adopta los sufijos \texttt{Service}, \texttt{Repository}, \texttt{Controller}, \texttt{Factory}, \texttt{Provider} y \texttt{Validator}. Se prohíbe añadirlos cuando la clase no desempeña esa responsabilidad.
+\textbf{Regla:} Para expresar una responsabilidad arquitectónica real, el proyecto adopta los sufijos \texttt{Service}, \texttt{Repository}, \texttt{Controller}, \texttt{Factory}, \texttt{Provider}, \texttt{Validator}, \texttt{View}, \texttt{ViewModel}, \texttt{Store} y \texttt{Client}. Se prohíbe añadirlos cuando la clase no desempeña esa responsabilidad.
+
+\textbf{Descripción:} La lista es abierta: una clase puede usar otro sustantivo que describa lo que hace, como \texttt{Translator}, \texttt{Hasher} o \texttt{Generator}. Lo que fija la lista es el significado de cada sufijo listado: \texttt{View} y \texttt{ViewModel} son las dos partes de una pantalla con el patrón MVVM, \texttt{Store} guarda y recupera datos locales del cliente, y \texttt{Client} se comunica con un servicio remoto. Un sufijo genérico que no describe ninguna responsabilidad, como \texttt{Manager}, \texttt{Handler} o \texttt{Helper}, no se usa en una clase.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -55,3 +57,33 @@ public sealed class SaveGameManager
     }
 }
 \end{lstlisting}
+
+\subsubsection{Regla: nombre de la clase base al final de la clase derivada}
+
+\textbf{Regla:} Una clase que hereda de una clase base de .NET o de un framework termina con el nombre de esa clase base, como \texttt{ArgumentOutOfRangeException}, que hereda de \texttt{Exception} (Microsoft, 2023c). Se exceptúan las clases base cuyo nombre no agrega información, como \texttt{Game} o \texttt{Panel}, y los controles de la interfaz, que se nombran por lo que muestran.
+
+\textbf{Descripción:} El sufijo muestra la relación con la clase base sin abrir el archivo. Las guías de .NET piden usar el criterio para no aplicarlo a ciegas: \texttt{Button} hereda de \texttt{Control} y no termina en \texttt{Control} (Microsoft, 2023c).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MoveNotationConverter : ValueConverter<Move, string>
+{
+    public MoveNotationConverter()
+        : base(move => move.ToNotation(), notation => Move.FromNotation(notation))
+    {
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MoveNotation : ValueConverter<Move, string>
+{
+    public MoveNotation()
+        : base(move => move.ToNotation(), notation => Move.FromNotation(notation))
+    {
+    }
+}
+\end{lstlisting}
+
+\textbf{Nota:} Las lambdas de este ejemplo no se pueden sustituir por grupos de método, porque el constructor de \texttt{ValueConverter} recibe árboles de expresión.
