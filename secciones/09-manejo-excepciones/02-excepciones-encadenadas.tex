@@ -4,6 +4,8 @@
 
 \textbf{Regla:} Cuando una excepción se traduce a otro tipo porque la capa actual puede aportar contexto útil, se conserva la excepción original como \texttt{innerException}. Se prefiere un tipo predefinido de .NET y solo se utiliza una excepción personalizada cuando el llamador necesita distinguir una condición propia del dominio (Microsoft, 2025a).
 
+\textbf{Excepción:} En la frontera de red, el servicio que responde a un cliente remoto descarta la excepción original al traducirla al fallo que recibe el cliente, siempre que antes la registre con \texttt{Error} (Sección 11.1). La causa original contiene la traza de la pila, nombres de tablas y mensajes del motor de base de datos; enviarla al cliente expone información interna (MITRE, 2026), y como \texttt{innerException} de un fallo de red no llega al cliente.
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 try
@@ -25,6 +27,37 @@ try
 catch (IOException ex)
 {
     throw new InvalidOperationException("Failed to persist game state: " + ex.Message);
+}
+\end{lstlisting}
+
+\textbf{Código correcto (frontera de red):}
+\begin{lstlisting}[style=csharpstyle]
+public MatchSummary SaveMatch(MatchResult result)
+{
+    try
+    {
+        return _matchArchive.Save(result);
+    }
+    catch (DbUpdateException ex)
+    {
+        _logger.Error($"The match could not be saved. MatchId={result.MatchId}", ex);
+        throw new FaultException(MatchServerFailureReason);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (frontera de red):}
+\begin{lstlisting}[style=csharpstyle]
+public MatchSummary SaveMatch(MatchResult result)
+{
+    try
+    {
+        return _matchArchive.Save(result);
+    }
+    catch (DbUpdateException ex)
+    {
+        throw new FaultException(ex.ToString());
+    }
 }
 \end{lstlisting}
 

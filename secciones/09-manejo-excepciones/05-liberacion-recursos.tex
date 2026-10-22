@@ -1,0 +1,69 @@
+\subsection{Liberación de Recursos}
+
+\subsubsection{Regla: la clase dueña de un recurso lo libera}
+
+\textbf{Regla:} Todo objeto \texttt{IDisposable} creado y usado dentro de un mismo método se declara con \texttt{using}. Una clase que crea un objeto \texttt{IDisposable} y lo guarda en un campo es su dueña: implementa \texttt{IDisposable} y lo libera en su \texttt{Dispose}. Una dependencia recibida por constructor (Sección 10) no se libera, porque la clase no es su dueña (Microsoft, 2025g).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class ReplayRecorder : IDisposable
+{
+    private readonly FileStream _replayFile;
+
+    public ReplayRecorder(string replayPath)
+    {
+        _replayFile = File.Create(replayPath);
+    }
+
+    public void Dispose()
+    {
+        _replayFile.Dispose();
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class ReplayRecorder
+{
+    private readonly FileStream _replayFile;
+
+    public ReplayRecorder(string replayPath)
+    {
+        _replayFile = File.Create(replayPath);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: cerrar un canal WCF con \texttt{Close} y \texttt{Abort}}
+
+\textbf{Regla:} Un canal o cliente WCF no se libera con \texttt{using} ni con una llamada directa a \texttt{Close} dentro de \texttt{Dispose}. Se llama a \texttt{Close} dentro de un \texttt{try} y, si falla con \texttt{CommunicationException} o \texttt{TimeoutException}, se llama a \texttt{Abort}.
+
+\textbf{Descripción:} \texttt{Close} puede lanzar una excepción cuando la red falla. Dentro del bloque \texttt{finally} que genera \texttt{using}, esa excepción oculta la que se lanzó en el cuerpo y omite el código que sigue; \texttt{Abort} libera el canal sin intentar comunicarse con el servidor (Microsoft, 2018).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void Dispose()
+{
+    try
+    {
+        _channel.Close();
+    }
+    catch (CommunicationException)
+    {
+        _channel.Abort();
+    }
+    catch (TimeoutException)
+    {
+        _channel.Abort();
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void Dispose()
+{
+    _channel.Close();
+}
+\end{lstlisting}
