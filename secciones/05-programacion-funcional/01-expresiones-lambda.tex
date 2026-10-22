@@ -1,12 +1,15 @@
 \subsection{Expresiones Lambda}
 
-\subsubsection{Regla: solo para operaciones concisas de una línea}
+\subsubsection{Regla: cuerpo de una sola expresión}
 
-\textbf{Regla:} Las lambdas (\texttt{=>}) solo para operaciones que quepan en una línea. Prohibido un cuerpo de bloque con varias instrucciones (Martin, 2008).
+\textbf{Regla:} El cuerpo de una lambda (\texttt{=>}) es una sola expresión, sin llaves. Prohibido un cuerpo de bloque con varias instrucciones (Martin, 2008). Si la llamada que contiene la lambda se divide en varias líneas, la lambda completa queda en una sola de ellas y no se corta por dentro.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 _players.RemoveAll(player => !player.IsActive);
+
+Player? winner = _players.FirstOrDefault(
+    player => player.Score >= WinningScore && player.IsActive);
 \end{lstlisting}
 
 \textbf{Código incorrecto:}

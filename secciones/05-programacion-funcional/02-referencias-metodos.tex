@@ -13,3 +13,37 @@ _players.ForEach(RegisterPlayerScore);
 \begin{lstlisting}[style=csharpstyle]
 _players.ForEach(player => RegisterPlayerScore(player));
 \end{lstlisting}
+
+\textbf{Excepción --- árbol de expresión:} Cuando el parámetro que recibe la lambda es un árbol de expresión (\texttt{Expression\textless{}Func\textless{}...\textgreater{}\textgreater{}}), como en el constructor de \texttt{ValueConverter} de Entity Framework Core, se conserva la lambda. El compilador no convierte un grupo de método en un árbol de expresión y rechaza el código con el error CS0428; además, el framework necesita la lambda como datos para analizarla, por lo que no es una indirección innecesaria.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TileStateConverter : ValueConverter<TileState, string>
+{
+    public TileStateConverter()
+        : base(state => ToCode(state), code => FromCode(code))
+    {
+    }
+
+    public static string ToCode(TileState state)
+    {
+        return state.ToString().ToUpperInvariant();
+    }
+
+    public static TileState FromCode(string code)
+    {
+        return Enum.Parse<TileState>(code, ignoreCase: true);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TileStateConverter : ValueConverter<TileState, string>
+{
+    public TileStateConverter()
+        : base(ToCode, FromCode)
+    {
+    }
+}
+\end{lstlisting}
