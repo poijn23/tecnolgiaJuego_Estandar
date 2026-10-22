@@ -1,6 +1,7 @@
 \section{Documentación XML}
 
-Los comentarios de documentación XML se escriben íntegramente en inglés y son obligatorios únicamente en la capa de servicios. Otras capas no agregan documentación XML salvo que una API pública externa lo requiera expresamente. Para respetar la política de ejemplos sin comentarios, esta sección ilustra las reglas mediante descripciones textuales fuera de los bloques de código.
+Los comentarios de documentación XML se escriben íntegramente en inglés y son obligatorios únicamente en los servicios. Un servicio es toda interfaz pública cuyo nombre termina en \texttt{Service}, junto con la clase que la implementa, en cualquier proyecto de la solución. Un contrato de red (por ejemplo, una interfaz marcada con \texttt{[ServiceContract]}) es un servicio. Ningún otro tipo agrega documentación XML. El código generado por una herramienta, como \texttt{Strings.Designer.cs}, queda fuera de esta sección. Para respetar la política de ejemplos sin comentarios, esta sección ilustra las reglas mediante descripciones textuales fuera de los bloques de código.
 
 \input{secciones/07-documentacion-xml/01-nivel-clase}
 \input{secciones/07-documentacion-xml/02-nivel-miembro}
+\input{secciones/07-documentacion-xml/03-verificacion}

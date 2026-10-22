@@ -2,8 +2,16 @@
 
 \subsubsection{Regla: orden de las etiquetas \texttt{param}, \texttt{returns} y \texttt{exception}}
 
-\textbf{Regla:} En un método público de la capa de servicios, las etiquetas se redactan en inglés y aparecen en este orden: \texttt{<summary>}, una etiqueta \texttt{<param>} por cada parámetro, \texttt{<returns>} si devuelve un valor y \texttt{<exception>} por cada excepción documentada (Microsoft, 2026c).
+\textbf{Regla:} Cada miembro de la interfaz de un servicio se documenta en inglés con las etiquetas en este orden: \texttt{<summary>}, una etiqueta \texttt{<param>} por cada parámetro, \texttt{<returns>} si devuelve un valor y \texttt{<exception>} por cada excepción documentada. Las propiedades llevan \texttt{<summary>}; los constructores no se documentan, porque no forman parte de la interfaz (Microsoft, 2026c).
 
 \textbf{Ejemplo correcto:} \texttt{CalculateFinalScore} documenta primero su propósito; después describe \texttt{baseScore} y \texttt{tile}; luego el valor devuelto; y finalmente \texttt{ArgumentOutOfRangeException}. Todo el contenido está en inglés.
 
 \textbf{Ejemplo incorrecto:} El método coloca \texttt{returns} antes de \texttt{param}, omite parámetros o combina descripciones en español con identificadores en inglés.
+
+\subsubsection{Regla: qué excepciones se documentan}
+
+\textbf{Regla:} Se documenta con \texttt{<exception>} toda excepción que el método deja salir hacia quien lo llama, incluidos los fallos de red que el servicio envía al cliente (por ejemplo, \texttt{FaultException<TDetail>}). No se documentan las excepciones que el propio método captura y maneja.
+
+\textbf{Ejemplo correcto:} \texttt{IAccountService.LogIn} documenta \texttt{FaultException<InvalidCredentialsFault>} y \texttt{FaultException<AccountRestrictedFault>}.
+
+\textbf{Ejemplo incorrecto:} \texttt{IAccountService.LogIn} documenta \texttt{DbUpdateException}, que el servicio captura y nunca llega al cliente.
