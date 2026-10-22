@@ -1,0 +1,35 @@
+\subsection{Coincidencia de Patrones}
+
+\subsubsection{Regla: patrón de tipo en lugar de \texttt{as} con comprobación de nulo}
+
+\textbf{Regla:} Para comprobar el tipo de un valor y usarlo convertido se emplea el patrón \texttt{is Tipo nombre}, o \texttt{is not Tipo nombre} cuando forma parte de una cláusula de guarda (Sección 4.2). Prohibido usar \texttt{as} seguido de una comprobación de nulo o una conversión explícita después de \texttt{is}. La variable que introduce el patrón sigue las reglas de nombrado de variables (Sección 2.1) (Microsoft, 2026i).
+
+\textbf{Descripción:} El patrón comprueba el tipo y declara la variable en una sola expresión, y el compilador solo la considera asignada en la rama donde el patrón se cumple, por lo que no puede usarse por error cuando la comprobación falla.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void ApplyEffect(Tile tile)
+{
+    if (tile is not TrapTile trapTile)
+    {
+        return;
+    }
+
+    trapTile.Trigger();
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public void ApplyEffect(Tile tile)
+{
+    TrapTile trapTile = tile as TrapTile;
+
+    if (trapTile == null)
+    {
+        return;
+    }
+
+    trapTile.Trigger();
+}
+\end{lstlisting}

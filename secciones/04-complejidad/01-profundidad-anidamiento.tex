@@ -2,7 +2,7 @@
 
 \subsubsection{Regla: máximo tres niveles de anidamiento}
 
-\textbf{Regla:} No se anidan más de tres niveles de estructuras de control (\texttt{if}, \texttt{for}, \texttt{try}) por método. Combinar condiciones o extraer a un método privado cuando se supere (McConnell, 2004).
+\textbf{Regla:} No se anidan más de tres niveles de estructuras de control por método. Cuenta como nivel toda estructura que abre un bloque: \texttt{if}, \texttt{else}, \texttt{for}, \texttt{foreach}, \texttt{while}, \texttt{do}, \texttt{switch}, \texttt{try}, \texttt{catch}, \texttt{finally}, \texttt{using} y \texttt{lock}. El cuerpo del método es el nivel 0; la primera estructura dentro de él es el nivel 1. Un \texttt{else} o un \texttt{catch} ocupa el mismo nivel que su \texttt{if} o su \texttt{try}. Cuando se supera el límite, se combinan condiciones o se extrae la parte interna a un método privado (McConnell, 2004).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
