@@ -1,0 +1,31 @@
+\subsection{Raíz de Composición}
+
+\subsubsection{Regla: los servicios se construyen solo en la raíz de composición}
+
+\textbf{Regla:} Los servicios externos se crean con \texttt{new} o se registran en el contenedor únicamente en la raíz de composición: el punto de arranque de cada aplicación, como \texttt{Program}, las clases de registro de servicios del servidor o el método de inicialización del juego en el cliente. Ninguna otra clase crea los servicios que consume.
+
+\textbf{Descripción:} La raíz de composición es el único lugar de la aplicación donde se arma el grafo de objetos; concentrarla ahí permite cambiar una implementación sin tocar las clases que la usan (van Deursen \& Seemann, 2019).
+
+\textbf{Excepción:} Una clase puede crear las partes que forman parte de ella y comparten su tiempo de vida, como una unidad de trabajo que crea sus repositorios sobre el mismo contexto de base de datos.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class BoardGame : Game
+{
+    private TurnManager? _turnManager;
+
+    protected override void Initialize()
+    {
+        _turnManager = new TurnManager(new DiceRoller());
+        base.Initialize();
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MatchScreen
+{
+    private readonly TurnManager _turnManager = new TurnManager(new DiceRoller());
+}
+\end{lstlisting}
