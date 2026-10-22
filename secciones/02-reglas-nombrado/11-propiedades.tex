@@ -76,3 +76,90 @@ public sealed class GameSettings
     public void SetSoundEnabled(bool value) => _soundEnabled = value;
 }
 \end{lstlisting}
+
+\subsubsection{Regla: cuerpo de expresión solo en catálogos de diccionario}
+
+\textbf{Regla:} El cuerpo de expresión (\texttt{=>}) en una propiedad se usa únicamente en un catálogo de diccionario: una clase cuyas propiedades de solo lectura exponen, cada una, una entrada de un diccionario de clave y valor, como un archivo de recursos o una tabla de configuración. Cada propiedad consulta su entrada en cada acceso mediante un método privado que recibe la clave. Fuera de un catálogo de diccionario, un valor que se calcula a partir de otros miembros se obtiene mediante un método (Sección 2.2.1). Prohibido almacenar la entrada del diccionario en una propiedad autoimplementada, ya sea con un inicializador (\mbox{\texttt{\{ get; \} =}}) o desde el constructor (Microsoft, 2025f).
+
+\textbf{Descripción:} El cuerpo de expresión consulta el diccionario en cada acceso, por lo que la propiedad refleja cualquier cambio de su contenido, como un cambio de idioma durante la partida; una propiedad autoimplementada guarda la entrada una sola vez y la conserva aunque el diccionario cambie.
+
+\textbf{Código correcto:}
+\textit{Archivo \texttt{TextCatalog.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TextCatalog
+{
+    private readonly ITextDictionary _dictionary;
+
+    public TextCatalog(ITextDictionary dictionary)
+    {
+        _dictionary = dictionary;
+    }
+
+    public string BoardLabel => GetEntry(nameof(BoardLabel));
+
+    public string TurnLabel => GetEntry(nameof(TurnLabel));
+
+    private string GetEntry(string key)
+    {
+        return _dictionary.FindEntry(key) ?? key;
+    }
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{GameSession.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSession
+{
+    private readonly List<Player> _players;
+
+    public GameSession(List<Player> players)
+    {
+        _players = players;
+    }
+
+    public int CountActivePlayers()
+    {
+        return _players.Count(player => player.IsActive);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\textit{Archivo \texttt{TextCatalog.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TextCatalog
+{
+    private readonly ITextDictionary _dictionary;
+
+    public TextCatalog(ITextDictionary dictionary)
+    {
+        _dictionary = dictionary;
+        BoardLabel = GetEntry(nameof(BoardLabel));
+        TurnLabel = GetEntry(nameof(TurnLabel));
+    }
+
+    public string BoardLabel { get; }
+
+    public string TurnLabel { get; }
+
+    private string GetEntry(string key)
+    {
+        return _dictionary.FindEntry(key) ?? key;
+    }
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{GameSession.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class GameSession
+{
+    private readonly List<Player> _players;
+
+    public GameSession(List<Player> players)
+    {
+        _players = players;
+    }
+
+    public int ActivePlayerCount => _players.Count(player => player.IsActive);
+}
+\end{lstlisting}

@@ -35,3 +35,51 @@ public void StartTurn(Player player)
     _turnManager.Start(player);
 }
 \end{lstlisting}
+
+\subsubsection{Regla: valor alternativo con \texttt{??} cuando una expresión puede ser nula}
+
+\textbf{Regla:} Cuando una expresión puede ser \texttt{null} y existe un valor alternativo válido para ese caso, el resultado se obtiene con el operador \texttt{??} en una sola expresión. Prohibido comparar la expresión con \texttt{null} mediante el operador ternario \texttt{?:} o un \texttt{if} solo para elegir entre ella y su alternativa. Si no existe un valor alternativo válido, el caso nulo se trata como un error (Sección 9.3.2).
+
+\textbf{Descripción:} El operador \texttt{??} evalúa su operando izquierdo una sola vez y evalúa el derecho únicamente cuando el izquierdo es \texttt{null} (Microsoft, 2026h). Esta regla precisa la Sección 4.5: cuando la única condición es que el valor sea nulo, se usa \texttt{??} en lugar de \texttt{?:}.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerProfile
+{
+    public PlayerProfile(string accountName, string? nickname)
+    {
+        AccountName = accountName;
+        Nickname = nickname;
+    }
+
+    public string AccountName { get; }
+
+    public string? Nickname { get; }
+
+    public string GetDisplayName()
+    {
+        return Nickname ?? AccountName;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerProfile
+{
+    public PlayerProfile(string accountName, string? nickname)
+    {
+        AccountName = accountName;
+        Nickname = nickname;
+    }
+
+    public string AccountName { get; }
+
+    public string? Nickname { get; }
+
+    public string GetDisplayName()
+    {
+        return Nickname is not null ? Nickname : AccountName;
+    }
+}
+\end{lstlisting}
