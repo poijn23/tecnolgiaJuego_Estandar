@@ -1,0 +1,24 @@
+\subsection{Atributos}
+
+\subsubsection{Regla: un atributo por línea, encima del elemento}
+
+\textbf{Regla:} Cada atributo se escribe entre sus propios corchetes y en su propia línea, encima del elemento al que se aplica. No se agrupan varios atributos en unos mismos corchetes ni se escribe el atributo en la misma línea que la declaración (Microsoft, 2025e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+[DataContract]
+public sealed class MoveRequest
+{
+    [DataMember]
+    public int PieceId { get; set; }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+[DataContract] public sealed class MoveRequest
+{
+    [DataMember, Required]
+    public int PieceId { get; set; }
+}
+\end{lstlisting}

@@ -1,0 +1,43 @@
+\subsection{División de Líneas}
+
+\subsubsection{Regla: cómo continuar una instrucción en varias líneas}
+
+\textbf{Regla:} El estándar no fija una longitud máxima de línea. Cuando una instrucción se divide en varias líneas para que se lea mejor, se siguen estas convenciones:
+
+\begin{itemize}
+  \item un operador binario (\texttt{\&\&}, \texttt{||}, \texttt{??}, \texttt{+}) se coloca al inicio de la línea de continuación, no al final de la anterior;
+  \item en una cadena de llamadas, cada \texttt{.Metodo()} va en su propia línea;
+  \item si los argumentos de una llamada se dividen, la línea termina en el paréntesis de apertura y cada argumento va en su propia línea;
+  \item la llamada \texttt{: base(...)} o \texttt{: this(...)} va en su propia línea, debajo de la firma del constructor;
+  \item cada línea de continuación lleva un nivel más de indentación que la línea donde empieza la instrucción.
+\end{itemize}
+
+La opción \texttt{dotnet\_style\_operator\_placement\_when\_wrapping = beginning\_of\_line} aplica la primera convención en el editor (Microsoft, 2025e).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+bool canMove = player.IsActive
+    && board.IsInside(target)
+    && !board.IsOccupied(target);
+
+builder.Property(piece => piece.Kind)
+    .HasMaxLength(KindLength)
+    .IsUnicode(false);
+
+throw Reject(
+    new MoveLog(MoveResult.Blocked, attempt, player.PlayerId),
+    MoveRejection.Blocked);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+bool canMove = player.IsActive &&
+    board.IsInside(target) &&
+    !board.IsOccupied(target);
+
+builder.Property(piece => piece.Kind).HasMaxLength(KindLength)
+    .IsUnicode(false);
+
+throw Reject(new MoveLog(MoveResult.Blocked, attempt,
+    player.PlayerId), MoveRejection.Blocked);
+\end{lstlisting}
