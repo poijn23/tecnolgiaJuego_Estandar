@@ -6,6 +6,28 @@
 
 \textbf{Descripción:} Martin sostiene que la mayoría de los comentarios compensan código poco claro; el comentario valioso explica una intención que el código no puede comunicar por sí solo (Martin, 2008).
 
-\textbf{Ejemplo correcto:} ``The official rules grant an extra turn after the maximum roll.'' explica una regla de negocio que no resulta evidente por la condición.
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+if (rollValue == MaximumFaceValue)
+{
+    // The official rules grant an extra turn after the maximum roll.
+    GrantExtraTurn();
+}
+\end{lstlisting}
 
-\textbf{Ejemplo incorrecto:} ``If the roll equals the maximum value, grant an extra turn.'' repite literalmente la condición y la llamada ejecutada.
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+if (rollValue == MaximumFaceValue)
+{
+    // If the roll equals the maximum value, grant an extra turn.
+    GrantExtraTurn();
+}
+\end{lstlisting}
+
+\subsubsection{Regla: referencias a reglas y requisitos}
+
+\textbf{Regla:} Un comentario puede expresar su porqué citando el número de una regla de este estándar o el identificador de un requisito del proyecto (caso de uso, regla de negocio o decisión de diseño). La cita debe existir en la versión vigente del documento citado; cuando cambia la numeración del estándar o del requisito, el comentario se actualiza en el mismo cambio.
+
+\textbf{Ejemplo correcto:} En \texttt{.editorconfig}, el comentario ``\texttt{\# 3.3.1 Allman braces}'' antecede las opciones que aplican esa regla, y ``\texttt{-- Seats in the match: 2 or 4, never 3 (CU-17 RN-02).}'' explica una restricción de una columna SQL.
+
+\textbf{Ejemplo incorrecto:} ``\texttt{\# 3.4.1 At most 120 characters per line}'' cita una regla que ya no existe en la versión vigente del estándar.
