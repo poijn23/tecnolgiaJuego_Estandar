@@ -1,0 +1,33 @@
+\subsection{Diseño de Excepciones Propias}
+
+\subsubsection{Regla: constructores de una excepción propia}
+
+\textbf{Regla:} Una excepción propia hereda de \texttt{Exception}, se declara \texttt{sealed}, termina en \texttt{Exception} (Sección 2.14.1), fija su mensaje en inglés dentro del constructor y expone sus datos mediante propiedades de solo lectura. Si no lleva datos, declara los tres constructores estándar que exige la regla de análisis \texttt{CA1032} (Microsoft, 2016b). Si lleva datos obligatorios, declara solo los constructores que los reciben.
+
+\textbf{Descripción:} Un constructor sin parámetros dejaría una excepción con datos sin asignar, lo que contradice la Sección 2.6.3. Como la clase es \texttt{sealed}, ninguna clase derivada necesita los constructores restantes.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TileOccupiedException : Exception
+{
+    public TileOccupiedException(Tile tile)
+        : base($"The tile is already occupied. Row={tile.Row} Column={tile.Column}")
+    {
+        Tile = tile;
+    }
+
+    public Tile Tile { get; }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public class TileOccupiedException : Exception
+{
+    public TileOccupiedException()
+    {
+    }
+
+    public Tile? Tile { get; set; }
+}
+\end{lstlisting}
