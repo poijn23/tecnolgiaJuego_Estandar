@@ -1,0 +1,19 @@
+\subsection{Tamaño de Métodos y Archivos}
+
+\subsubsection{Regla: máximo de 30 líneas por método y 300 por archivo}
+
+\textbf{Regla:} El cuerpo de un método no supera 30 líneas, sin contar las llaves que lo abren y lo cierran. Un archivo de código no supera 300 líneas. Al superar cualquiera de los dos límites, se extrae la parte con una responsabilidad propia a un método privado o a una clase nueva (McConnell, 2004; Martin, 2008). El código generado por herramientas, como \texttt{Strings.Designer.cs}, queda fuera de este límite.
+
+\textbf{Descripción:} McConnell señala que las rutinas largas acumulan responsabilidades y concentran más errores por línea a partir de cierto tamaño (McConnell, 2004), y Martin recomienda que una función haga una sola cosa (Martin, 2008). Un límite explícito convierte esas recomendaciones en un criterio que se puede revisar en cada solicitud de integración.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public void StartMatch(MatchSetup setup)
+{
+    PlacePlayers(setup.Players);
+    ShuffleDeck(setup.Deck);
+    AnnounceFirstTurn(setup.Players);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:} un método \texttt{StartMatch} de 60 líneas que coloca a los jugadores, baraja el mazo y anuncia el primer turno dentro del mismo cuerpo.

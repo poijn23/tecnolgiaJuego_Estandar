@@ -2,7 +2,26 @@
 
 \subsubsection{Regla: máximo de 10 por método}
 
-\textbf{Regla:} La complejidad ciclomática de cada método es como máximo 10. Una complejidad superior se divide mediante métodos con una única responsabilidad. El umbral se configura con \texttt{CA1502: 10} en \texttt{CodeMetricsConfig.txt} (Microsoft, 2023d).
+\textbf{Regla:} La complejidad ciclomática de cada método es como máximo 10. Una complejidad superior se divide mediante métodos con una única responsabilidad (Microsoft, 2022d).
+
+\textbf{Configuración:} El analizador CA1502 viene desactivado de forma predeterminada, por lo que el umbral solo se aplica al compilar si se completan los tres pasos siguientes:
+\begin{enumerate}
+    \item Crear \texttt{CodeMetricsConfig.txt} en la raíz de la solución con la línea \texttt{CA1502: 10}.
+    \item Declararlo como archivo adicional en \texttt{Directory.Build.props}, para que llegue a todos los proyectos.
+    \item Activar el diagnóstico en \texttt{.editorconfig}.
+\end{enumerate}
+
+\textit{Archivo \texttt{Directory.Build.props}:}
+\begin{lstlisting}[style=csharpstyle,language=XML]
+<ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)CodeMetricsConfig.txt" />
+</ItemGroup>
+\end{lstlisting}
+
+\textit{Archivo \texttt{.editorconfig}:}
+\begin{lstlisting}[style=csharpstyle,language={}]
+dotnet_diagnostic.CA1502.severity = warning
+\end{lstlisting}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

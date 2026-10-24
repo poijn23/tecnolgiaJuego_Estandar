@@ -47,3 +47,51 @@ public sealed class MoveValidator
     }
 }
 \end{lstlisting}
+
+\subsubsection{Regla: una sola definición para cada dato}
+
+\textbf{Regla:} DRY también aplica a los datos: un valor que representa un mismo conocimiento (el largo máximo de un correo, el tamaño de un hash, un margen de pantalla compartido) se declara una sola vez, como constante en la capa más interna que lo necesita, y el resto de las capas hace referencia a esa constante. Dos constantes con el mismo número pero distinto significado no son duplicación y se mantienen separadas, porque cambiar una no debe cambiar la otra (Hunt \& Thomas, 2019).
+
+\textbf{Descripción:} Si la regla de dominio y la configuración de la base de datos declaran cada una su propio largo máximo, basta con cambiar una de ellas para que el dominio acepte un valor que la base de datos rechaza al guardar.
+
+\textbf{Código correcto:}
+\textit{Archivo \texttt{PlayerRules.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public static class PlayerRules
+{
+    public const int MaximumNicknameLength = 30;
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{PlayerConfiguration.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerConfiguration : IEntityTypeConfiguration<Player>
+{
+    public void Configure(EntityTypeBuilder<Player> builder)
+    {
+        builder.Property(player => player.Nickname).HasMaxLength(PlayerRules.MaximumNicknameLength);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\textit{Archivo \texttt{PlayerRules.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public static class PlayerRules
+{
+    public const int MaximumNicknameLength = 30;
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{PlayerConfiguration.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class PlayerConfiguration : IEntityTypeConfiguration<Player>
+{
+    private const int NicknameLength = 30;
+
+    public void Configure(EntityTypeBuilder<Player> builder)
+    {
+        builder.Property(player => player.Nickname).HasMaxLength(NicknameLength);
+    }
+}
+\end{lstlisting}
