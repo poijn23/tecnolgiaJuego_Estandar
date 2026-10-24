@@ -1,0 +1,9 @@
+\subsection{Verificación}
+
+\subsubsection{Regla: el compilador exige la documentación de los servicios}
+
+\textbf{Regla:} Todo proyecto que contiene un servicio activa \texttt{GenerateDocumentationFile} en su \texttt{.csproj}. En esos proyectos, el aviso CS1591 (miembro público sin documentación) se suprime en los tipos que no son servicios y se trata como error en los servicios, de modo que la compilación falla si falta un \texttt{summary} (Microsoft, 2026c).
+
+\textbf{Ejemplo correcto:} \texttt{Bastion.Server.Application.csproj} declara \texttt{<GenerateDocumentationFile>true</GenerateDocumentationFile>} y la compilación falla si \texttt{ILoginService} pierde su documentación.
+
+\textbf{Ejemplo incorrecto:} \texttt{Directory.Build.props} declara \texttt{GenerateDocumentationFile} en \texttt{false} para toda la solución, por lo que la falta de documentación solo se detecta en revisión.
