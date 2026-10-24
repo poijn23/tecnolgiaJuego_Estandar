@@ -1,0 +1,31 @@
+\subsection{Manejadores \texttt{async void}}
+
+\subsubsection{Regla: un manejador \texttt{async void} no deja escapar excepciones}
+
+\textbf{Regla:} \texttt{async void} se usa únicamente en manejadores de eventos. Todo su cuerpo queda dentro de un \texttt{try} que captura cada excepción que la operación puede lanzar y la maneja según la Sección 11.1.
+
+\textbf{Descripción:} Un método \texttt{async void} no devuelve una \texttt{Task} donde guardar la excepción: la lanza directamente sobre el contexto de sincronización activo, ningún \texttt{catch} del llamador la recibe y el proceso termina (Cleary, 2013).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+private async void HandleRollClick(object? sender, EventArgs e)
+{
+    try
+    {
+        await _dice.RollAsync();
+    }
+    catch (TimeoutException ex)
+    {
+        _logger.Warn("The dice roll did not finish in time.", ex);
+        ShowRetryNotice();
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+private async void HandleRollClick(object? sender, EventArgs e)
+{
+    await _dice.RollAsync();
+}
+\end{lstlisting}
