@@ -1,0 +1,36 @@
+\subsection{Proveedor de Tiempo}
+
+\subsubsection{Regla: el tiempo se obtiene de un \texttt{TimeProvider} inyectado}
+
+\textbf{Regla:} Prohibido leer el reloj del sistema con \texttt{DateTime.Now}, \texttt{DateTime.UtcNow} o \texttt{DateTimeOffset.UtcNow} fuera de la raíz de composición. Una clase que necesita la hora actual recibe un \texttt{TimeProvider} por constructor y llama a \texttt{GetUtcNow()}. En la raíz de composición se registra \texttt{TimeProvider.System}.
+
+\textbf{Descripción:} El tiempo es un resultado no determinista y, por lo tanto, un servicio externo (Sección 10.1). \texttt{TimeProvider} es la abstracción del tiempo que ofrece .NET; con ella el código se vuelve predecible y una prueba puede fijar la hora mediante \texttt{FakeTimeProvider} (Microsoft, 2026j).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnTimer
+{
+    private readonly TimeProvider _timeProvider;
+
+    public TurnTimer(TimeProvider timeProvider)
+    {
+        _timeProvider = timeProvider;
+    }
+
+    public bool HasTurnExpired(DateTimeOffset turnDeadline)
+    {
+        return _timeProvider.GetUtcNow() > turnDeadline;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnTimer
+{
+    public bool HasTurnExpired(DateTimeOffset turnDeadline)
+    {
+        return DateTimeOffset.UtcNow > turnDeadline;
+    }
+}
+\end{lstlisting}
