@@ -4,7 +4,7 @@
 
 \textbf{Regla:} Prohibido lanzar directamente \texttt{System.Exception} u otro tipo genérico de excepción base, o capturarlo en un bloque \texttt{catch}; siempre se usa el tipo más específico. Esta restricción no impide heredar de \texttt{Exception} ni recibirla como parámetro \texttt{innerException} en el constructor convencional de una excepción personalizada.
 
-\textbf{Descripción:} Regla de análisis \texttt{CA1031} de .NET: las excepciones genéricas ocultan problemas en tiempo de ejecución y dificultan la depuración (Microsoft, 2016).
+\textbf{Descripción:} Capturar una excepción genérica lo detecta la regla de análisis \texttt{CA1031} (Microsoft, 2016a) y lanzarla lo detecta \texttt{CA2201} (Microsoft, 2016c). Las excepciones genéricas ocultan problemas en tiempo de ejecución, obligan al llamador a capturar también los errores que no sabe manejar y dificultan la depuración.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -41,6 +41,8 @@ public void EstablishConnection()
 \subsubsection{Regla: preferir excepciones predefinidas}
 
 \textbf{Regla:} Se usa una excepción predefinida cuando expresa correctamente el error. Para argumentos nulos se usa \texttt{ArgumentNullException}; para argumentos inválidos, \texttt{ArgumentException} o una derivada; y para una operación incompatible con el estado actual, \texttt{InvalidOperationException}. Solo se crea una excepción personalizada cuando no existe una equivalente y el llamador necesita tratar esa condición por separado (Microsoft, 2025a).
+
+\textbf{Excepción:} Un rechazo de negocio esperado, como unas credenciales inválidas, se comunica con una excepción personalizada cuando debe cruzar un contrato de servicio WCF, porque el fallo tipado (\texttt{FaultException<T>}) es el mecanismo que el contrato ofrece para que el cliente distinga cada rechazo. Dentro del dominio, sin una frontera de red de por medio, sigue aplicándose la regla general.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

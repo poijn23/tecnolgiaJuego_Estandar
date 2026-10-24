@@ -2,7 +2,9 @@
 
 \subsubsection{Regla: referencias anulables y validación de argumentos}
 
-\textbf{Regla:} El proyecto habilita referencias anulables con \texttt{<Nullable>enable</Nullable>}. Un valor que puede ser nulo se declara con \texttt{?}. En los puntos de entrada que reciben una referencia obligatoria desde una fuente externa o no validada, el parámetro se comprueba al inicio con \texttt{ArgumentNullException.ThrowIfNull}; la validación no se repite en métodos internos cuando el contrato y el análisis estático ya garantizan que el valor no es nulo. Las comparaciones se expresan con \texttt{is null} o \texttt{is not null}, y se prohíbe ocultar advertencias con el operador \texttt{!} sin una garantía demostrable (Microsoft, 2026f; Microsoft, 2026a).
+\textbf{Regla:} El proyecto habilita referencias anulables con \texttt{<Nullable>enable</Nullable>}. Un valor que puede ser nulo se declara con \texttt{?}. Todo parámetro de tipo referencia no anulable de un miembro \texttt{public} o \texttt{protected}, incluidos los constructores, se comprueba al inicio con \texttt{ArgumentNullException.ThrowIfNull}, como exige la regla de análisis \texttt{CA1062} (Microsoft, 2020). Los miembros \texttt{private} e \texttt{internal} no repiten la comprobación, porque solo los invoca código que el análisis estático ya revisó. En un servicio WCF, un argumento nulo recibido del cliente se responde con el fallo que declara el contrato y no con \texttt{ArgumentNullException}, que el cliente no puede distinguir. Las comparaciones se expresan con \texttt{is null} o \texttt{is not null}, y se prohíbe ocultar advertencias con el operador \texttt{!} sin una garantía demostrable (Microsoft, 2026f; Microsoft, 2026a).
+
+\textbf{Descripción:} Las anotaciones de nulabilidad solo existen en tiempo de compilación. Un miembro público puede invocarse desde otro ensamblado o desde un deserializador que no las respeta, por lo que la comprobación en tiempo de ejecución es la única garantía; \texttt{CA1062} hace que esta regla se verifique al compilar en lugar de depender de la revisión de código.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -41,6 +43,10 @@ public void StartTurn(Player player)
 \textbf{Regla:} Cuando una expresión puede ser \texttt{null} y existe un valor alternativo válido para ese caso, el resultado se obtiene con el operador \texttt{??} en una sola expresión. Prohibido comparar la expresión con \texttt{null} mediante el operador ternario \texttt{?:} o un \texttt{if} solo para elegir entre ella y su alternativa. Si no existe un valor alternativo válido, el caso nulo se trata como un error (Sección 9.3.2).
 
 \textbf{Descripción:} El operador \texttt{??} evalúa su operando izquierdo una sola vez y evalúa el derecho únicamente cuando el izquierdo es \texttt{null} (Microsoft, 2026h). Esta regla precisa la Sección 4.5: cuando la única condición es que el valor sea nulo, se usa \texttt{??} en lugar de \texttt{?:}.
+
+\textbf{Datos deserializados:} Una propiedad de un objeto de transferencia que se deserializa desde la red o desde un archivo se declara anulable (\texttt{string?}) cuando el emisor puede omitirla, porque el deserializador asigna \texttt{null} aunque el tipo diga lo contrario. Prohibido aplicar \texttt{??} sobre una propiedad declarada no anulable: el tipo afirmaría algo que el código no cree.
+
+\textbf{Verificación:} Los analizadores \texttt{IDE0029} e \texttt{IDE0030} solo detectan el ternario escrito con \texttt{!= null} o \texttt{== null}, no con \texttt{is null} ni \texttt{is not null}, que es la forma que exige la Sección 9.4.1. Esta regla se comprueba en la revisión de código.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

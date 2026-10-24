@@ -1,17 +1,19 @@
 \subsection{Comentarios Especiales}
 
-\subsubsection{Regla: \texttt{TODO} y \texttt{FIXME} trazables}
+\subsubsection{Regla: \texttt{TODO} y \texttt{FIXME} solo en ramas de trabajo}
 
-\textbf{Regla:} \texttt{TODO} identifica trabajo planificado y \texttt{FIXME} un defecto conocido que requiere corrección. Ambos se escriben en inglés, incluyen el identificador de una tarea y describen una acción concreta. Se prohíben marcadores sin responsable o sin seguimiento.
+\textbf{Regla:} \texttt{TODO} identifica trabajo planificado y \texttt{FIXME} un defecto conocido que requiere corrección. Ambos se admiten únicamente en una rama de trabajo, se escriben en inglés, incluyen el identificador de una tarea y describen una acción concreta. Una solicitud de cambios enviada a revisión, y el código integrado a la rama principal, no contiene ningún \texttt{TODO} ni \texttt{FIXME}: antes de solicitar la revisión, el trabajo pendiente se completa o se registra como una tarea independiente en el sistema de seguimiento del equipo, y el comentario se retira del código.
 
-\textbf{Ejemplo correcto:} ``TODO(GAME-142): Replace the temporary save adapter.'' vincula una acción específica con la tarea correspondiente.
+\textbf{Código correcto (en una rama de trabajo, antes de solicitar la revisión):}
+\begin{lstlisting}[style=csharpstyle]
+// TODO(GAME-142): Replace the temporary save adapter.
+private readonly ISaveAdapter _saveAdapter = new MemorySaveAdapter();
+\end{lstlisting}
 
-\textbf{Ejemplo incorrecto:} ``TODO: Fix this later.'' no identifica una tarea ni explica el resultado esperado.
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+// TODO: Fix this later.
+private readonly ISaveAdapter _saveAdapter = new MemorySaveAdapter();
+\end{lstlisting}
 
-\subsubsection{Regla: sin marcadores pendientes al enviar a revisión}
-
-\textbf{Regla:} Una solicitud de cambios enviada a revisión, y el código integrado a la rama principal, no contiene ningún comentario \texttt{TODO} ni \texttt{FIXME}. Un \texttt{TODO} o \texttt{FIXME} es una herramienta de trabajo en progreso: antes de solicitar la revisión, el trabajo pendiente se completa o se registra como una tarea independiente en el sistema de seguimiento del equipo, y el comentario se retira del código.
-
-\textbf{Ejemplo correcto:} El módulo de guardado enviado a revisión no contiene ningún \texttt{TODO} ni \texttt{FIXME}; el trabajo pendiente quedó registrado como la tarea GAME-150 en el backlog del equipo.
-
-\textbf{Ejemplo incorrecto:} La solicitud de cambios incluye ``TODO(GAME-142): Replace the temporary save adapter.'' sin haberlo resuelto ni retirado antes de solicitar la revisión.
+\textbf{Ejemplo incorrecto:} La solicitud de cambios enviada a revisión conserva ``TODO(GAME-142): Replace the temporary save adapter.'' en lugar de resolverlo o registrarlo como tarea.

@@ -2,8 +2,35 @@
 
 \subsubsection{Regla: preferir comentarios de línea breves}
 
-\textbf{Regla:} Se usa un comentario de línea con \texttt{//} para una explicación breve y excepcional. Se evita el comentario de bloque \texttt{/* ... */}; si la explicación requiere varias líneas, se mejora el diseño o se traslada la explicación al documento técnico correspondiente. Ningún comentario conserva código deshabilitado (Microsoft, 2025e).
+\textbf{Regla:} Se usa un comentario de línea con \texttt{//} para una explicación breve y excepcional. Se evita el comentario de bloque \texttt{/* ... */}; si la explicación requiere varias líneas, se mejora el diseño o se traslada la explicación al documento técnico correspondiente. Ningún comentario conserva código deshabilitado (Microsoft, 2025e). El comentario de documentación \texttt{///} no es un comentario de bloque y se rige por la Sección 7.
 
-\textbf{Ejemplo correcto:} Una sola línea en inglés explica por qué se mantiene compatibilidad con una partida guardada por una versión anterior.
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+// Saves from version 1.x store the board without the wall count.
+int wallCount = saveData.WallCount ?? DefaultWallCount;
+\end{lstlisting}
 
-\textbf{Ejemplo incorrecto:} Un bloque extenso narra paso a paso el algoritmo, o conserva varias instrucciones deshabilitadas que deberían eliminarse del archivo.
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+/* Read the wall count from the save data.
+   If it is missing, use the default value.
+   Then assign it to the local variable. */
+int wallCount = saveData.WallCount ?? DefaultWallCount;
+// int wallCount = LegacyReader.ReadWalls(saveData);
+\end{lstlisting}
+
+\subsubsection{Regla: comentarios en scripts SQL}
+
+\textbf{Regla:} Un script SQL admite un único comentario de bloque como encabezado, que describe el propósito del script. Un comentario de línea \texttt{--} junto a una columna se admite solo cuando documenta una regla que el nombre no expresa: un rango de valores, el origen del dato o el requisito que la exige. Prohibido el comentario que repite el nombre de la columna.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[language=SQL,basicstyle=\ttfamily\small,frame=single,breaklines=true,columns=fullflexible]
+PlayerCount     TINYINT  NOT NULL,  -- 2 or 4, never 3 (CU-17 RN-02).
+WallsPerPlayer  TINYINT  NOT NULL,
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[language=SQL,basicstyle=\ttfamily\small,frame=single,breaklines=true,columns=fullflexible]
+GameModeId      TINYINT  NOT NULL,  -- Mode identifier.
+WallsPerPlayer  TINYINT  NOT NULL,  -- Walls per player.
+\end{lstlisting}

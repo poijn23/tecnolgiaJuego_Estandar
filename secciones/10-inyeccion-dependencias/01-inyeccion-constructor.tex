@@ -1,0 +1,49 @@
+\subsection{Inyección por Constructor}
+
+\subsubsection{Regla: inyección por constructor y dependencia de abstracciones}
+
+\textbf{Regla:} Toda clase que dependa de un servicio externo recibe esa dependencia por constructor, declarada mediante una interfaz o una clase abstracta, en lugar de instanciarla dentro de la propia clase. Un servicio externo es todo colaborador que realiza entrada o salida (red, disco, base de datos), que guarda estado compartido entre clases o cuyo resultado no es determinista, como el tiempo o el azar.
+
+\textbf{Descripción:} Principio de inversión de dependencias de Martin: los módulos de alto nivel dependen de abstracciones, no de módulos de bajo nivel (Martin, 2008). Las guías de .NET piden además evitar instanciar directamente las clases de las que depende un servicio, porque eso acopla el código a una implementación concreta (Microsoft, 2026i).
+
+\textbf{Excepciones:}
+\begin{itemize}
+    \item Una clase de la capa de adaptadores puede recibir un tipo concreto del framework que ella misma adapta, como un \texttt{DbContext} de Entity Framework Core en un repositorio.
+    \item El \texttt{ILog} de log4net se obtiene en un campo \texttt{private static readonly} con \texttt{LogManager.GetLogger(typeof(...))}, uno por clase (Sección 11), y no se inyecta.
+\end{itemize}
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private readonly IDiceRoller _diceRoller;
+
+    public TurnManager(IDiceRoller diceRoller)
+    {
+        _diceRoller = diceRoller;
+    }
+
+    public int PlayTurn()
+    {
+        return _diceRoller.Roll();
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class TurnManager
+{
+    private readonly DiceRoller _diceRoller;
+
+    public TurnManager()
+    {
+        _diceRoller = new DiceRoller();
+    }
+
+    public int PlayTurn()
+    {
+        return _diceRoller.Roll();
+    }
+}
+\end{lstlisting}

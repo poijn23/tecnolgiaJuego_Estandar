@@ -1,0 +1,46 @@
+\subsection{Localizador de Servicios}
+
+\subsubsection{Regla: prohibido pedir servicios al contenedor}
+
+\textbf{Regla:} Prohibido obtener una dependencia llamando a \texttt{GetService} o \texttt{GetRequiredService} dentro de una clase; la dependencia se declara en el constructor.
+
+\textbf{Descripción:} El localizador de servicios oculta las dependencias de una clase: su constructor ya no dice qué necesita y una dependencia faltante solo falla al ejecutar el método (van Deursen \& Seemann, 2019). Las guías de .NET recomiendan evitar este patrón cuando se puede usar inyección (Microsoft, 2026i).
+
+\textbf{Excepción:} En la frontera de red, donde el framework crea el servicio y no permite inyectar dependencias con un ámbito por llamada, se recibe \texttt{IServiceScopeFactory} por constructor, se crea un ámbito por llamada y se resuelve de él el servicio de aplicación que atiende la petición (Microsoft, 2026i).
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MatchService
+{
+    private readonly IMatchRepository _matchRepository;
+
+    public MatchService(IMatchRepository matchRepository)
+    {
+        _matchRepository = matchRepository;
+    }
+
+    public Match FindMatch(Guid matchId)
+    {
+        return _matchRepository.FindById(matchId);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MatchService
+{
+    private readonly IServiceProvider _services;
+
+    public MatchService(IServiceProvider services)
+    {
+        _services = services;
+    }
+
+    public Match FindMatch(Guid matchId)
+    {
+        IMatchRepository matchRepository = _services.GetRequiredService<IMatchRepository>();
+        return matchRepository.FindById(matchId);
+    }
+}
+\end{lstlisting}

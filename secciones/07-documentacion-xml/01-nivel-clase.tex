@@ -1,9 +1,17 @@
-\subsection{A Nivel de Clase}
+\subsection{A Nivel de Tipo}
 
-\subsubsection{Regla: etiqueta \texttt{summary} en servicios públicos}
+\subsubsection{Regla: etiqueta \texttt{summary} en la interfaz del servicio}
 
-\textbf{Regla:} La documentación XML se agrega únicamente en clases públicas de la capa de servicios, con una etiqueta \texttt{<summary>} redactada en inglés. Prohibido agregar documentación XML a clases de dominio, infraestructura, interfaz gráfica o pruebas, salvo que expongan una API pública externa al proyecto (Microsoft, 2026c).
+\textbf{Regla:} La interfaz pública de un servicio lleva una etiqueta \texttt{<summary>} en inglés que describe su responsabilidad. Prohibido agregar documentación XML a tipos que no son servicios: dominio, infraestructura, interfaz gráfica o pruebas (Microsoft, 2026c).
 
-\textbf{Ejemplo correcto:} \texttt{SaveGameService} incluye un \texttt{summary} en inglés que indica: ``Saves and restores game sessions.''
+\textbf{Ejemplo correcto:} \texttt{ISaveGameService} incluye un \texttt{summary} en inglés que indica: ``Saves and restores game sessions.''
 
-\textbf{Ejemplo incorrecto:} \texttt{SaveGameService} carece de \texttt{summary}, o lo redacta en español. También es incorrecto agregar documentación XML rutinaria a cada clase fuera de la capa de servicios.
+\textbf{Ejemplo incorrecto:} \texttt{ISaveGameService} carece de \texttt{summary}, o lo redacta en español. También es incorrecto documentar la entidad \texttt{Player} o la vista \texttt{BoardView}.
+
+\subsubsection{Regla: \texttt{inheritdoc} en la implementación}
+
+\textbf{Regla:} La clase que implementa la interfaz de un servicio no repite la documentación: coloca \texttt{<inheritdoc/>} sobre la clase y sobre cada miembro que implementa la interfaz. Así la documentación vive en un solo lugar y quien programa contra la interfaz la ve sin abrir la clase (Microsoft, 2026c).
+
+\textbf{Ejemplo correcto:} \texttt{SaveGameService} lleva \texttt{<inheritdoc/>} sobre la clase y sobre \texttt{Save}; el texto se hereda de \texttt{ISaveGameService}.
+
+\textbf{Ejemplo incorrecto:} \texttt{SaveGameService} copia el \texttt{summary} de la interfaz, o redacta uno distinto, o no lleva documentación.
