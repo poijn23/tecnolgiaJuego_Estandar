@@ -18,6 +18,28 @@ public sealed class BoardTiles
 }
 \end{lstlisting}
 
+\textbf{Excepción:} Una clase \texttt{static} que solo agrupa valores predefinidos del mismo tipo se nombra en plural, como \texttt{Colors} o \texttt{Brushes} en .NET. Una clase estática no representa un objeto, porque no se pueden crear instancias de ella; representa el conjunto, y cada miembro se lee como un elemento de ese conjunto: \texttt{TileColors.Highlight}.
+
+\textbf{Código correcto (clase estática):}
+\begin{lstlisting}[style=csharpstyle]
+public static class TileColors
+{
+    public static Color Highlight { get; } = new Color(0xF0, 0xC4, 0x88);
+
+    public static Color Blocked { get; } = new Color(0xB3, 0x26, 0x1E);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (clase estática):}
+\begin{lstlisting}[style=csharpstyle]
+public static class TileColorList
+{
+    public static Color Highlight { get; } = new Color(0xF0, 0xC4, 0x88);
+
+    public static Color Blocked { get; } = new Color(0xB3, 0x26, 0x1E);
+}
+\end{lstlisting}
+
 \subsubsection{Regla: sin prefijos ni abreviaturas poco claras}
 
 \textbf{Regla:} Sin prefijos que indiquen que un tipo es una clase (\texttt{CTile}, \texttt{ClsPlayer}) ni abreviaturas poco reconocidas (Cwalina \& Abrams, 2008).

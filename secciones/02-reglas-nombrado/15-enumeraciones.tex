@@ -1,0 +1,55 @@
+\subsection{Enumeraciones}
+
+\subsubsection{Regla: singular, o plural con \texttt{[Flags]}}
+
+\textbf{Regla:} Una enumeración se nombra en \texttt{PascalCase} con un sustantivo en singular. Solo una enumeración de indicadores, marcada con \texttt{[Flags]}, se nombra en plural. El nombre no lleva los sufijos \texttt{Enum}, \texttt{Flag} ni \texttt{Flags}, y sus valores no llevan prefijo (Microsoft, 2023c).
+
+\textbf{Descripción:} Una variable de una enumeración simple guarda un solo valor, por eso el tipo va en singular: \texttt{TurnState state}. Una de indicadores puede guardar varios valores combinados, por eso va en plural: \texttt{TileMarkers markers}.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public enum TurnState
+{
+    WaitingForRoll,
+    Moving,
+    Finished
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public enum TurnStatesEnum
+{
+    TsWaitingForRoll,
+    TsMoving,
+    TsFinished
+}
+\end{lstlisting}
+
+\subsubsection{Regla: valor \texttt{None} en las enumeraciones de indicadores}
+
+\textbf{Regla:} Una enumeración de indicadores lleva el atributo \texttt{[Flags]}, usa potencias de dos para sus valores y nombra \texttt{None} a su valor cero, que significa que ningún indicador está activo (Microsoft, 2023f).
+
+\textbf{Descripción:} Las potencias de dos permiten combinar los valores con el operador \texttt{|} sin que se mezclen entre sí. El valor cero es el que tiene la enumeración cuando no se le asigna nada, así que su nombre debe decir que no hay ningún indicador.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+[Flags]
+public enum TileMarkers
+{
+    None = 0,
+    Highlighted = 1,
+    Blocked = 2,
+    Targeted = 4
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public enum TileMarkers
+{
+    Highlighted,
+    Blocked,
+    Targeted
+}
+\end{lstlisting}

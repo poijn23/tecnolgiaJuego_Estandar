@@ -32,7 +32,9 @@ public class TurnManager
 
 \subsubsection{Regla: \texttt{EventHandler} y \texttt{EventArgs}}
 
-\textbf{Regla:} Se utiliza \texttt{EventHandler<TEventArgs>} para eventos con datos. La clase de datos termina en \texttt{EventArgs}; los parámetros del manejador se llaman \texttt{sender} y \texttt{e}; el método que eleva el evento comienza con \texttt{On} (Microsoft, 2023b).
+\textbf{Regla:} Se utiliza \texttt{EventHandler<TEventArgs>} para eventos con datos. La clase de datos termina en \texttt{EventArgs}; los parámetros del manejador se llaman \texttt{sender} y \texttt{e}; el método que eleva el evento comienza con \texttt{On} (Microsoft, 2023b). El método que maneja un evento se nombra \texttt{Handle} seguido del nombre del evento, como \texttt{HandleTurnChanged}; el prefijo \texttt{On} queda reservado para el método que lo eleva.
+
+\textbf{Descripción:} Las clases base de los frameworks declaran métodos \texttt{protected virtual} con prefijo \texttt{On}, como \texttt{OnActivated(object sender, EventArgs args)} en la clase \texttt{Game} de MonoGame. Un manejador llamado \texttt{OnClientSizeChanged(object? sender, EventArgs e)} en una clase derivada se confunde con una sobrescritura de ese framework.
 
 \textbf{Excepción:} \texttt{sender} y \texttt{e} son la única excepción admitida a la regla general de nombres descriptivos para parámetros (Sección 2.1): siguen la firma estándar del delegado \texttt{EventHandler} de .NET y no se renombran ni se sustituyen por un descarte.
 
@@ -53,5 +55,33 @@ public event Action<Player>? TurnChange;
 private void HandleTurnChange(Player player)
 {
     UpdateCurrentPlayer(player);
+}
+\end{lstlisting}
+
+\textbf{Excepción:} Cuando una biblioteca externa define un evento con un delegado distinto de \texttt{EventHandler}, como un \texttt{Action} sin parámetros, el manejador sigue la firma que impone la biblioteca y no lleva \texttt{sender} ni \texttt{e}. Su nombre sí sigue el prefijo \texttt{Handle}. Los eventos que declara el propio proyecto siempre usan \texttt{EventHandler} o \texttt{EventHandler<TEventArgs>}.
+
+\textbf{Código correcto (evento de una biblioteca externa):}
+\begin{lstlisting}[style=csharpstyle]
+public LanguageSelector(ILocalizationService localization)
+{
+    localization.CurrentLanguageChanged += HandleCurrentLanguageChanged;
+}
+
+private void HandleCurrentLanguageChanged()
+{
+    RefreshLabels();
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (evento de una biblioteca externa):}
+\begin{lstlisting}[style=csharpstyle]
+public LanguageSelector(ILocalizationService localization)
+{
+    localization.CurrentLanguageChanged += OnCurrentLanguageChanged;
+}
+
+private void OnCurrentLanguageChanged()
+{
+    RefreshLabels();
 }
 \end{lstlisting}

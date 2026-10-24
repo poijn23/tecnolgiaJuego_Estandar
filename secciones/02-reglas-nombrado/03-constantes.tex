@@ -24,9 +24,9 @@ public sealed class GameBoard
 
 \subsubsection{Regla: \texttt{const} frente a \texttt{static readonly}}
 
-\textbf{Regla:} Un valor conocido en tiempo de compilación se declara \texttt{const}. Un valor calculado una sola vez en tiempo de ejecución se declara \texttt{static readonly}.
+\textbf{Regla:} Un valor conocido en tiempo de compilación se declara \texttt{const}. Un valor privado calculado una sola vez en tiempo de ejecución se declara como campo \texttt{private static readonly}. Un valor público que no puede ser \texttt{const}, como un \texttt{Color} o un \texttt{TimeSpan}, se expone como propiedad estática de solo lectura en \texttt{PascalCase}: \texttt{public static T Nombre \{ get; \} = valor;}.
 
-\textbf{Descripción:} El compilador de C\# exige que todo \texttt{const} sea evaluable en tiempo de compilación; rechaza cualquier expresión que dependa de una llamada a método.
+\textbf{Descripción:} El compilador de C\# exige que todo \texttt{const} sea evaluable en tiempo de compilación; rechaza cualquier expresión que dependa de una llamada a método. Un valor público se expone como propiedad y no como campo para que todo lo que una clase hace visible sea una propiedad, igual que en la sección de propiedades (Sección 2.11), y para poder cambiar después cómo se obtiene sin cambiar a quien lo usa.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -49,5 +49,25 @@ public sealed class DiceRoller
 {
     private static readonly int _minimumFaceValue = 1;
     private static readonly int _maximumFaceValue = 6;
+}
+\end{lstlisting}
+
+\textbf{Código correcto (valor público):}
+\begin{lstlisting}[style=csharpstyle]
+public static class TurnTiming
+{
+    private const int TurnLimitSeconds = 45;
+
+    public static TimeSpan TurnLimit { get; } = TimeSpan.FromSeconds(TurnLimitSeconds);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (valor público):}
+\begin{lstlisting}[style=csharpstyle]
+public static class TurnTiming
+{
+    private const int TurnLimitSeconds = 45;
+
+    public static readonly TimeSpan TurnLimit = TimeSpan.FromSeconds(TurnLimitSeconds);
 }
 \end{lstlisting}

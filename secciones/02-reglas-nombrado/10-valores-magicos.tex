@@ -50,3 +50,33 @@ public sealed class TurnManager
     }
 }
 \end{lstlisting}
+
+\textbf{Aclaraciones:}
+\begin{itemize}
+    \item Los literales \texttt{0} y \texttt{1} se permiten como valores neutros: un contador que empieza en cero, un incremento o el primer índice. McConnell (2004) los señala como los únicos literales aceptables dentro de la lógica. Si el \texttt{0} o el \texttt{1} tiene significado en el dominio, como el primer turno de la partida, lleva nombre.
+    \item Un literal se permite cuando es el valor de una definición con nombre: el inicializador de una constante, de una propiedad estática de solo lectura (Sección 2.3.2) o de un miembro de un \texttt{enum}. Esa definición es el lugar donde el valor recibe su nombre.
+    \item Un valor que ya tiene nombre no se repite como literal en otro lugar, tampoco dentro de una cadena o de una expresión regular. La cadena se construye a partir de la constante, para que ambas no puedan quedar distintas.
+\end{itemize}
+
+\textbf{Código correcto (expresión regular):}
+\begin{lstlisting}[style=csharpstyle]
+public static class PlayerNameRules
+{
+    public const int MinimumLength = 3;
+    public const int MaximumLength = 16;
+
+    private static readonly Regex _namePattern = new Regex(
+        $"^[A-Za-z0-9_]{{{MinimumLength},{MaximumLength}}}$");
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (expresión regular):}
+\begin{lstlisting}[style=csharpstyle]
+public static class PlayerNameRules
+{
+    public const int MinimumLength = 3;
+    public const int MaximumLength = 16;
+
+    private static readonly Regex _namePattern = new Regex(@"^[A-Za-z0-9_]{3,16}$");
+}
+\end{lstlisting}
