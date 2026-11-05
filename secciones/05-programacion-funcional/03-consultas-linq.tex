@@ -1,0 +1,51 @@
+\subsection{Consultas LINQ a Objetos}
+
+\subsubsection{Regla: un operador por línea y materialización aparte}
+
+\textbf{Regla:} En LINQ a objetos, una consulta que devuelve una secuencia se guarda en una variable \texttt{IEnumerable<T>} con nombre en plural (Sección 2.1.2) y solo se materializa cuando se necesita una colección, en una instrucción aparte con \texttt{new List<T>(consulta)}. Si la consulta encadena dos o más operadores, como \texttt{Where}, \texttt{Select}, \texttt{OrderBy} o \texttt{Chunk}, la colección de origen queda en la primera línea y cada operador va en su propia línea, con un nivel más de indentación (Sección 3.5). Prohibido escribir en una sola línea una cadena de dos o más operadores, así como encadenar \texttt{ToList()} o \texttt{ToArray()} al final de la consulta (Microsoft, 2025h).
+
+\textbf{Descripción:} Los operadores que devuelven una secuencia no se ejecutan al declarar la consulta, sino cuando esta se recorre (Microsoft, 2025h); materializarla aparte deja a la vista ese momento, y un operador por línea permite leerla como una lista de pasos. Se necesita una colección cuando el resultado se devuelve o se guarda como lista, o se recorre más de una vez; una secuencia que se recorre una sola vez con \texttt{foreach} no se materializa.
+
+\textbf{Excepción:} Una cadena que termina en un operador de valor único, como \texttt{Count}, \texttt{Any}, \texttt{First} o \texttt{Sum}, se ejecuta en ese momento y devuelve un valor, no una secuencia: conserva un operador por línea, pero no se guarda en \texttt{IEnumerable<T>} ni se materializa. Una consulta de EF Core sobre \texttt{IQueryable<T>} no es LINQ a objetos, porque se traduce a SQL (Microsoft, 2025h), y se rige solo por la Sección 3.5.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+public IReadOnlyList<string> GetActivePlayerNames()
+{
+    IEnumerable<string> activeNames = _players
+        .Where(player => player.IsActive)
+        .Select(player => player.Name);
+    return new List<string>(activeNames);
+}
+
+public void NotifyWaitingPlayers()
+{
+    IEnumerable<Player> waitingPlayers = _players
+        .Where(player => !player.IsActive)
+        .OrderBy(player => player.Name);
+    foreach (Player player in waitingPlayers)
+    {
+        NotifyWaiting(player);
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+public IReadOnlyList<string> GetActivePlayerNames()
+{
+    return _players.Where(player => player.IsActive).Select(player => player.Name).ToList();
+}
+
+public void NotifyWaitingPlayers()
+{
+    IEnumerable<Player> waitingPlayers = _players
+        .Where(player => !player.IsActive)
+        .OrderBy(player => player.Name)
+        .ToList();
+    foreach (Player player in waitingPlayers)
+    {
+        NotifyWaiting(player);
+    }
+}
+\end{lstlisting}

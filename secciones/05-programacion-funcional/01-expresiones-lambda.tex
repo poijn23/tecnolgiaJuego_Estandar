@@ -109,10 +109,11 @@ public int CalculateTotalScore()
 \textbf{Prohibido --- lambda dentro de otra lambda:} La lambda interior se extrae a un método privado y se pasa como grupo de método (Sección 5.2).
 
 \textbf{Código correcto:}
-\begin{lstlisting}[style=csharpstyle]
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
 public IReadOnlyList<Player> FindPlayersWithWinningCard()
 {
-    return _players.Where(HasWinningCard).ToList();
+    IEnumerable<Player> winners = _players.Where(HasWinningCard);
+    return new List<Player>(winners);
 }
 
 private bool HasWinningCard(Player player)
@@ -122,9 +123,10 @@ private bool HasWinningCard(Player player)
 \end{lstlisting}
 
 \textbf{Código incorrecto:}
-\begin{lstlisting}[style=csharpstyle]
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
 public IReadOnlyList<Player> FindPlayersWithWinningCard()
 {
-    return _players.Where(player => player.Cards.Any(card => card.IsWinning)).ToList();
+    IEnumerable<Player> winners = _players.Where(player => player.Cards.Any(card => card.IsWinning));
+    return new List<Player>(winners);
 }
 \end{lstlisting}
