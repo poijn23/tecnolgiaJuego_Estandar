@@ -1,0 +1,47 @@
+\subsection{Controles de Gum}
+
+\subsubsection{Regla: inicializador de objeto al crear un control de Gum}
+
+\textbf{Regla:} Un control de Gum que se crea con \texttt{new}, como \texttt{StackPanel}, \texttt{Panel}, \texttt{Label} o \texttt{Button}, se declara con \texttt{var} (Sección 3.4) y recibe en un inicializador de objeto las propiedades cuyo valor se conoce al crearlo: tamaño, unidades, posición, separación y texto. Prohibido construirlo vacío y asignarle esas propiedades una por una en las instrucciones siguientes (Microsoft, 2026k). Con \texttt{dotnet\_style\_object\_initializer = true:warning}, la regla \texttt{IDE0017} señala en la compilación las asignaciones escritas justo después de la construcción (Microsoft, 2023g).
+
+\textbf{Descripción:} El inicializador reúne en un solo bloque cómo es el control al aparecer. Después de él van las llamadas a métodos (\texttt{AddChild}, \texttt{SetBinding}, \texttt{Anchor}, \texttt{Dock}) y las suscripciones a eventos, que un inicializador no admite, y las propiedades del objeto \texttt{Visual} del control, que no se anidan en el inicializador.
+
+\textbf{Excepción:} \texttt{Anchor} reescribe la posición del control y \texttt{Dock} reescribe su posición y su tamaño, por lo que una propiedad que deba quedar sobre el anclaje, como el desplazamiento \texttt{X} de un control anclado a la izquierda, se asigna después de la llamada. Un control que devuelve un método de fábrica ya está creado: sus propiedades se asignan después de la llamada y su declaración sigue la Sección 3.4.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+var menu = new StackPanel
+{
+    Width = MenuWidth,
+    WidthUnits = DimensionUnitType.Absolute,
+    Spacing = ButtonSpacing,
+};
+menu.Anchor(Anchor.Left);
+menu.X = MenuX;
+
+var playButton = new Button
+{
+    Text = Strings.PlayButton,
+    Width = ButtonWidth,
+    Height = ButtonHeight,
+};
+playButton.Click += HandleClick;
+menu.AddChild(playButton);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+var menu = new StackPanel();
+menu.Width = MenuWidth;
+menu.WidthUnits = DimensionUnitType.Absolute;
+menu.Spacing = ButtonSpacing;
+menu.Anchor(Anchor.Left);
+menu.X = MenuX;
+
+var playButton = new Button();
+playButton.Text = Strings.PlayButton;
+playButton.Width = ButtonWidth;
+playButton.Height = ButtonHeight;
+playButton.Click += HandleClick;
+menu.AddChild(playButton);
+\end{lstlisting}
