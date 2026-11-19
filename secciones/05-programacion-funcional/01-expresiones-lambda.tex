@@ -113,7 +113,7 @@ public int CalculateTotalScore()
 public IReadOnlyList<Player> FindPlayersWithWinningCard()
 {
     IEnumerable<Player> winners = _players.Where(HasWinningCard);
-    return new List<Player>(winners);
+    return [.. winners];
 }
 
 private bool HasWinningCard(Player player)
@@ -127,6 +127,6 @@ private bool HasWinningCard(Player player)
 public IReadOnlyList<Player> FindPlayersWithWinningCard()
 {
     IEnumerable<Player> winners = _players.Where(player => player.Cards.Any(card => card.IsWinning));
-    return new List<Player>(winners);
+    return [.. winners];
 }
 \end{lstlisting}

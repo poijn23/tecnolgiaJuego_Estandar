@@ -7,7 +7,8 @@
 \begin{itemize}
   \item una construcción con \texttt{new} y el nombre del tipo, con argumentos o con inicializador;
   \item una conversión explícita \texttt{(T)expresion} o el operador \texttt{as T};
-  \item una llamada a un método estático que devuelve el mismo tipo que lo declara, como \texttt{Board.Create(...)}, que devuelve \texttt{Board}.
+  \item una llamada a un método estático que devuelve el mismo tipo que lo declara, como \texttt{Board.Create(...)}, que devuelve \texttt{Board};
+  \item una llamada a un método que se llama \texttt{To} seguido del nombre exacto del tipo que devuelve, cuando la llamada lleva delante su objeto o su tipo, como \texttt{MatchmakingTranslator.\allowbreak ToMatchFoundNotification(match)}, que devuelve \texttt{MatchFoundNotification}.
 \end{itemize}
 
 En cualquier otro caso se escribe el tipo explícito: tipos integrados (\texttt{int}, \texttt{string}, \texttt{bool} y sus arreglos), aunque se construyan con \texttt{new}, y llamadas a métodos cuyo tipo de retorno no aparece en la expresión. Esta definición coincide con la que aplican las reglas \texttt{IDE0007} e \texttt{IDE0008} con la opción \texttt{csharp\_style\_var\_when\_type\_is\_apparent}, de modo que la compilación la verifica (Microsoft, 2022c).
@@ -17,14 +18,53 @@ En cualquier otro caso se escribe el tipo explícito: tipos integrados (\texttt{
 var player = new Player("Alice");
 var board = Board.Create(BoardSize);
 var human = participant as HumanPlayer;
+var notification = MatchmakingTranslator.ToMatchFoundNotification(match);
 int remainingTurns = CalculateRemainingTurns();
 string[] playerNames = new string[MaximumPlayers];
 \end{lstlisting}
 
 \textbf{Código incorrecto:}
-\begin{lstlisting}[style=csharpstyle]
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
 Player player = new Player("Alice");
 Board board = Board.Create(BoardSize);
+MatchFoundNotification notification = MatchmakingTranslator.ToMatchFoundNotification(match);
 var remainingTurns = CalculateRemainingTurns();
 var playerNames = new string[MaximumPlayers];
+\end{lstlisting}
+
+\subsubsection{Regla: expresión de colección para crear una colección}
+
+\textbf{Regla:} Una colección vacía se crea con la expresión de colección \texttt{[]} y una con elementos conocidos, con \texttt{[a, b]}; prohibido crearlas con \texttt{new} y el tipo, como \texttt{new List<T>()}, \texttt{new()}, \texttt{new Dictionary<TKey, TValue>()} o el inicializador \texttt{new List<T> \{ a \}}. Lo mismo vale para un arreglo: uno vacío se crea con \texttt{[]} y no con \texttt{Array.Empty<T>()}, y uno con elementos conocidos, con \texttt{[a, b]} y no con \texttt{new[] \{ a, b \}}. El tipo queda escrito donde se declara el campo, la propiedad, el parámetro o el valor de retorno; en una variable local se escribe el tipo explícito, porque \texttt{var} no puede deducir el tipo de una expresión de colección (Microsoft, 2026l).
+
+\textbf{Descripción:} La expresión de colección evita repetir tipos largos como \texttt{Dictionary<int, List<Player>{}>} sin cambiar el comportamiento: con destino \texttt{List<T>}, el compilador genera lo mismo que con \texttt{new List<T>()}. La regla \texttt{IDE0028} la sugiere en la compilación (Microsoft, 2025i).
+
+\textbf{Excepción:} Un diccionario con elementos se crea con su inicializador, \texttt{new Dictionary<TKey, TValue> \{ [clave] = valor \}}, porque la expresión de colección solo admite el diccionario vacío. Una colección que se crea con argumentos que no son sus elementos, como la capacidad inicial o un comparador, conserva \texttt{new}: \texttt{new List<T>(capacidad)} o \texttt{new HashSet<string>(StringComparer.\allowbreak Ordinal)}; esos argumentos se pasan al construirla, no después. Un arreglo creado con su tamaño, \texttt{new T[n]}, también conserva \texttt{new}. Para materializar una consulta con \texttt{[.. consulta]} se sigue la Sección 5.3.1.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+private readonly Dictionary<int, List<Player>> _playersByTeam = [];
+
+List<Card> drawnCards = [];
+List<BoardCoordinates> openingSquares = [startSquare, goalSquare];
+Wall[] noWalls = [];
+var pawnPositions = new List<BoardCoordinates>(PlayerCount);
+var playersByTurn = new Dictionary<int, Player>
+{
+    [FirstTurn] = firstPlayer,
+    [SecondTurn] = secondPlayer,
+};
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+private readonly Dictionary<int, List<Player>> _playersByTeam = new Dictionary<int, List<Player>>();
+
+var drawnCards = new List<Card>();
+var openingSquares = new List<BoardCoordinates> { startSquare, goalSquare };
+Wall[] noWalls = Array.Empty<Wall>();
+var pawnPositions = new List<BoardCoordinates>();
+pawnPositions.Capacity = PlayerCount;
+var playersByTurn = new Dictionary<int, Player>();
+playersByTurn.Add(FirstTurn, firstPlayer);
+playersByTurn.Add(SecondTurn, secondPlayer);
 \end{lstlisting}

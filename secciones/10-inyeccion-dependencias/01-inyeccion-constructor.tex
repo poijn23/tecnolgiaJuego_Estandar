@@ -4,7 +4,7 @@
 
 \textbf{Regla:} Toda clase que dependa de un servicio externo recibe esa dependencia por constructor, declarada mediante una interfaz o una clase abstracta, en lugar de instanciarla dentro de la propia clase. Un servicio externo es todo colaborador que realiza entrada o salida (red, disco, base de datos), que guarda estado compartido entre clases o cuyo resultado no es determinista, como el tiempo o el azar.
 
-\textbf{Descripción:} Principio de inversión de dependencias de Martin: los módulos de alto nivel dependen de abstracciones, no de módulos de bajo nivel (Martin, 2008). Las guías de .NET piden además evitar instanciar directamente las clases de las que depende un servicio, porque eso acopla el código a una implementación concreta (Microsoft, 2026i).
+\textbf{Descripción:} Principio de inversión de dependencias de Martin: los módulos de alto nivel dependen de abstracciones, no de módulos de bajo nivel (Martin, 2008). Las guías de .NET piden además evitar instanciar directamente las clases de las que depende un servicio, porque eso acopla el código a una implementación concreta (Microsoft, 2026p).
 
 \textbf{Excepciones:}
 \begin{itemize}

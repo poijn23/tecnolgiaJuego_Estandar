@@ -2,9 +2,9 @@
 
 \subsubsection{Regla: un operador por línea y materialización aparte}
 
-\textbf{Regla:} En LINQ a objetos, una consulta que devuelve una secuencia se guarda en una variable \texttt{IEnumerable<T>} con nombre en plural (Sección 2.1.2) y solo se materializa cuando se necesita una colección, en una instrucción aparte con \texttt{new List<T>(consulta)}. Si la consulta encadena dos o más operadores, como \texttt{Where}, \texttt{Select}, \texttt{OrderBy} o \texttt{Chunk}, la colección de origen queda en la primera línea y cada operador va en su propia línea, con un nivel más de indentación (Sección 3.5). Prohibido escribir en una sola línea una cadena de dos o más operadores, así como encadenar \texttt{ToList()} o \texttt{ToArray()} al final de la consulta (Microsoft, 2025h).
+\textbf{Regla:} En LINQ a objetos, una consulta que devuelve una secuencia se guarda en una variable \texttt{IEnumerable<T>} con nombre en plural (Sección 2.1.2) y solo se materializa cuando se necesita una colección, en una instrucción aparte con la expresión de colección \texttt{[.. consulta]} (Sección 3.4.2). Una consulta de \texttt{KeyValuePair<TKey, TValue>} que se necesita como diccionario se materializa con \texttt{new Dictionary<TKey, TValue>(consulta)}, porque la expresión de colección no admite diccionarios con elementos. Si la consulta encadena dos o más operadores, como \texttt{Where}, \texttt{Select}, \texttt{OrderBy} o \texttt{Chunk}, la colección de origen queda en la primera línea y cada operador va en su propia línea, con un nivel más de indentación (Sección 3.5). Prohibido escribir en una sola línea una cadena de dos o más operadores, así como encadenar \texttt{ToList()}, \texttt{ToArray()}, \texttt{ToHashSet()} o \texttt{ToDictionary()} al final de la consulta (Microsoft, 2025h).
 
-\textbf{Descripción:} Los operadores que devuelven una secuencia no se ejecutan al declarar la consulta, sino cuando esta se recorre (Microsoft, 2025h); materializarla aparte deja a la vista ese momento, y un operador por línea permite leerla como una lista de pasos. Se necesita una colección cuando el resultado se devuelve o se guarda como lista, o se recorre más de una vez; una secuencia que se recorre una sola vez con \texttt{foreach} no se materializa.
+\textbf{Descripción:} Los operadores que devuelven una secuencia no se ejecutan al declarar la consulta, sino cuando esta se recorre (Microsoft, 2025h); materializarla aparte deja a la vista ese momento, y un operador por línea permite leerla como una lista de pasos. Se necesita una colección cuando el resultado se devuelve o se guarda como lista, o se recorre más de una vez; una secuencia que se recorre una sola vez con \texttt{foreach} no se materializa. El operador \texttt{..} se lee «todos los elementos de»: \texttt{[.. consulta]} crea una colección del tipo de destino con todos los elementos de la consulta, así que sirve igual para una lista, un conjunto o un arreglo (Microsoft, 2026l).
 
 \textbf{Excepción:} Una cadena que termina en un operador de valor único, como \texttt{Count}, \texttt{Any}, \texttt{First} o \texttt{Sum}, se ejecuta en ese momento y devuelve un valor, no una secuencia: conserva un operador por línea, pero no se guarda en \texttt{IEnumerable<T>} ni se materializa. Una consulta de EF Core sobre \texttt{IQueryable<T>} no es LINQ a objetos, porque se traduce a SQL (Microsoft, 2025h), y se rige solo por la Sección 3.5.
 
@@ -15,7 +15,15 @@ public IReadOnlyList<string> GetActivePlayerNames()
     IEnumerable<string> activeNames = _players
         .Where(player => player.IsActive)
         .Select(player => player.Name);
-    return new List<string>(activeNames);
+    return [.. activeNames];
+}
+
+public Dictionary<string, int> MapScoresByName()
+{
+    IEnumerable<KeyValuePair<string, int>> scoresByName = _players
+        .Where(player => player.IsActive)
+        .Select(player => KeyValuePair.Create(player.Name, player.Score));
+    return new Dictionary<string, int>(scoresByName);
 }
 
 public void NotifyWaitingPlayers()
@@ -35,6 +43,12 @@ public void NotifyWaitingPlayers()
 public IReadOnlyList<string> GetActivePlayerNames()
 {
     return _players.Where(player => player.IsActive).Select(player => player.Name).ToList();
+}
+
+public Dictionary<string, int> MapScoresByName()
+{
+    IEnumerable<Player> activePlayers = _players.Where(player => player.IsActive);
+    return activePlayers.ToDictionary(player => player.Name, player => player.Score);
 }
 
 public void NotifyWaitingPlayers()

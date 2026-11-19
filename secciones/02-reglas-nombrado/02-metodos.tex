@@ -45,18 +45,18 @@ public static MoveSummary SummaryOf(MoveResult moveResult)
 \textbf{Descripción:} McConnell señala que una lista larga de parámetros incrementa la probabilidad de invocar el método con el orden o el valor incorrecto (McConnell, 2004). El riesgo es el mismo al invocar un constructor. En cambio, los argumentos de un \texttt{params} son todos del mismo tipo y cumplen el mismo papel, así que su orden no se puede confundir con el de otro parámetro.
 
 \textbf{Código correcto:}
-\textit{Archivo \texttt{MoveRequest.cs}:}
+\textit{Archivo \texttt{ChosenMove.cs}:}
 \begin{lstlisting}[style=csharpstyle]
-public sealed record MoveRequest(Player Player, Tile Origin, Tile Destination);
+public sealed record ChosenMove(Player Player, Tile Origin, Tile Destination);
 \end{lstlisting}
 
 \textit{Archivo \texttt{MoveExecutor.cs}:}
 \begin{lstlisting}[style=csharpstyle]
 public sealed class MoveExecutor
 {
-    public MoveResult ExecuteMove(MoveRequest moveRequest)
+    public MoveResult ExecuteMove(ChosenMove chosenMove)
     {
-        return new MoveResult(moveRequest.Player, moveRequest.Destination);
+        return new MoveResult(chosenMove.Player, chosenMove.Destination);
     }
 }
 \end{lstlisting}
@@ -74,7 +74,7 @@ public sealed class MoveExecutor
 
 \subsubsection{Regla: métodos booleanos como pregunta}
 
-\textbf{Regla:} Un método que devuelve \texttt{bool} y expresa una pregunta se nombra con uno de los prefijos \texttt{Is}, \texttt{Are}, \texttt{Has}, \texttt{Can} o \texttt{Should} (Martin, 2008). Es la misma lista que la de las variables booleanas (Sección 2.1.4), escrita en mayúscula. Se exceptúan patrones convencionales de .NET como \texttt{Try...} y miembros definidos por la plataforma o por una interfaz, como \texttt{Equals}.
+\textbf{Regla:} Un método que devuelve \texttt{bool} y expresa una pregunta se nombra con uno de los prefijos \texttt{Is}, \texttt{Are}, \texttt{Has}, \texttt{Can} o \texttt{Should} (Martin, 2008). Es la misma lista que la de las variables booleanas (Sección 2.1.4), escrita en mayúscula. Se exceptúan los métodos de .NET que siguen el patrón \texttt{Try}, como \texttt{int.TryParse} o \texttt{Dictionary.TryGetValue}, y los miembros definidos por la plataforma o por una interfaz, como \texttt{Equals}.
 
 \textbf{Excepción:} Un método que verifica una contraseña, una firma o un certificado se nombra con el verbo \texttt{Verify}, aunque devuelva \texttt{bool}. Así nombra .NET sus propias operaciones criptográficas (\texttt{RSA.VerifyData}, \texttt{X509Certificate2.Verify}). En estos métodos importa el trabajo que realizan, no solo la respuesta: una verificación señuelo se ejecuta aunque su resultado se descarte, para que el tiempo de respuesta no revele si la cuenta existe.
 
@@ -91,5 +91,92 @@ public bool IsMoveValid(Tile origin, Tile destination)
 public bool CheckMove(Tile origin, Tile destination)
 {
     return destination.IsWithinBoard && !destination.IsOccupied;
+}
+\end{lstlisting}
+
+\textbf{Métodos \texttt{Try} propios:} Un método propio se nombra \texttt{Try...} y devuelve \texttt{bool} solo cuando comprobar y actuar ocurren en un único paso que no se puede partir: porque otro hilo podría cambiar el estado entre la pregunta y la acción, ya que el método actúa dentro de un \texttt{lock} o con \texttt{Interlocked}, o porque el resultado solo se conoce al intentarlo, como al llamar al servidor. En cualquier otro caso se parte en una pregunta con \texttt{Can} o \texttt{Is} y una acción \texttt{void} que lanza \texttt{InvalidOperationException} si se llama cuando no se puede (Sección 9.3.2). Son los patrones Tester-Doer y Try-Parse de las guías de diseño de .NET (Cwalina \& Abrams, 2008).
+
+\textbf{Código correcto (\texttt{Try}):}
+\begin{lstlisting}[style=csharpstyle]
+public bool CanUndoMove()
+{
+    return _playedMoves.Count > 0;
+}
+
+public void UndoMove()
+{
+    if (!CanUndoMove())
+    {
+        throw new InvalidOperationException("There is no move to undo.");
+    }
+
+    _playedMoves.Pop();
+}
+
+public bool TryTakeSeat(int playerId)
+{
+    lock (_seatsLock)
+    {
+        if (_seatedPlayerIds.Count == MaximumPlayers)
+        {
+            return false;
+        }
+
+        _seatedPlayerIds.Add(playerId);
+        return true;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto (\texttt{Try}):}
+\begin{lstlisting}[style=csharpstyle]
+public bool TryUndoMove()
+{
+    if (_playedMoves.Count == 0)
+    {
+        return false;
+    }
+
+    _playedMoves.Pop();
+    return true;
+}
+\end{lstlisting}
+
+\subsubsection{Regla: un método propio no declara parámetros \texttt{out}}
+
+\textbf{Regla:} Un método propio no declara parámetros \texttt{out}: devuelve su resultado y, cuando no lo hay, un valor bandera o un tipo de resultado como \texttt{Lookup<T>} (Sección 9.4.3). Las llamadas a métodos de .NET que declaran \texttt{out}, como \texttt{int.TryParse} o \texttt{TryGetValue}, se conservan (Sección 9.4.4) (Martin, 2008; Microsoft, 2026o).
+
+\textbf{Descripción:} Un parámetro \texttt{out} hace que el método entregue su resultado por dos caminos y obliga a declarar una variable antes de cada llamada; devolver un solo valor deja ver en la firma qué produce el método.
+
+\textbf{Excepción:} Un método que implementa una interfaz de .NET que declara \texttt{out}, como \texttt{IDictionary<TKey, TValue>.TryGetValue}, la conserva.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+private static readonly BoardCoordinates OffBoardSquare = new(-1, -1);
+
+public BoardCoordinates FindSquareUnderCursor(ScreenPoint cursor)
+{
+    if (!_boardArea.Contains(cursor))
+    {
+        return OffBoardSquare;
+    }
+
+    return ToCoordinates(cursor);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+private static readonly BoardCoordinates OffBoardSquare = new(-1, -1);
+
+public BoardCoordinates FindSquareUnderCursor(ScreenPoint cursor, out bool isOnBoard)
+{
+    isOnBoard = _boardArea.Contains(cursor);
+    if (!isOnBoard)
+    {
+        return OffBoardSquare;
+    }
+
+    return ToCoordinates(cursor);
 }
 \end{lstlisting}

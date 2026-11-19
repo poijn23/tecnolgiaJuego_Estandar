@@ -70,9 +70,9 @@ public sealed class DiceRolled
 
 \textbf{Código correcto (dato sensible):}
 \begin{lstlisting}[style=csharpstyle]
-public sealed class JoinRequest
+public sealed class RoomCredentials
 {
-    public JoinRequest(string playerName, string roomPassword)
+    public RoomCredentials(string playerName, string roomPassword)
     {
         PlayerName = playerName;
         RoomPassword = roomPassword;
@@ -86,5 +86,5 @@ public sealed class JoinRequest
 
 \textbf{Código incorrecto (dato sensible):}
 \begin{lstlisting}[style=csharpstyle]
-public sealed record JoinRequest(string PlayerName, string RoomPassword);
+public sealed record RoomCredentials(string PlayerName, string RoomPassword);
 \end{lstlisting}

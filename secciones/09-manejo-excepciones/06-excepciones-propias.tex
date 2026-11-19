@@ -31,3 +31,88 @@ public class TileOccupiedException : Exception
     public Tile? Tile { get; set; }
 }
 \end{lstlisting}
+
+\subsubsection{Regla: un rechazo cruza el contrato como falla tipada}
+
+\textbf{Regla:} Una operación de servicio devuelve solo su resultado de éxito, y una operación sin resultado es \texttt{void}, nunca \texttt{bool}. Un rechazo no viaja como un código dentro de la respuesta: se declara con \texttt{[FaultContract]} y se envía como \texttt{FaultException<T>}, cuyo detalle es una clase de datos terminada en \texttt{Fault}. Los motivos parecidos se agrupan en una sola falla, con un enum que dice el motivo (Microsoft, 2017).
+
+\textbf{Descripción:} La falla que declara el contrato es el mecanismo de WCF para el error, y el cliente la recibe como excepción; un código dentro de la respuesta, o un \texttt{bool} que no dice qué pasó, obliga al cliente a revisar cada respuesta y deja pasar en silencio el caso que olvide.
+
+\textbf{Excepción:} Se conserva un enum de respuesta que distingue entre resultados de éxito y no entre rechazos, como el que dice si una solicitud de amistad se envió o si la amistad ya empezó. Una falla cuyo motivo no debe revelarse no se agrupa con las demás: la de credenciales inválidas no dice si la cuenta existe (Sección 9.3.2).
+
+\textbf{Código correcto:}
+
+\textit{Archivo \texttt{IRoomService.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+[ServiceContract]
+public interface IRoomService
+{
+    [OperationContract]
+    [FaultContract(typeof(RoomRejectedFault))]
+    JoinedRoom JoinRoom(string roomCode);
+
+    [OperationContract]
+    [FaultContract(typeof(RoomRejectedFault))]
+    void LeaveRoom(string roomCode);
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{RoomRejectedFault.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+[DataContract]
+public sealed class RoomRejectedFault
+{
+    [DataMember]
+    public RoomRejectionReason Reason { get; set; }
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{RoomRejectionReason.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public enum RoomRejectionReason
+{
+    RoomNotFound,
+    RoomFull,
+    PlayerBanned,
+    NotInRoom,
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+
+\textit{Archivo \texttt{IRoomService.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+[ServiceContract]
+public interface IRoomService
+{
+    [OperationContract]
+    JoinAttempt JoinRoom(string roomCode);
+
+    [OperationContract]
+    bool LeaveRoom(string roomCode);
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{JoinAttempt.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+[DataContract]
+public sealed class JoinAttempt
+{
+    [DataMember]
+    public JoinAttemptCode Code { get; set; }
+
+    [DataMember]
+    public string? RoomCode { get; set; }
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{JoinAttemptCode.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public enum JoinAttemptCode
+{
+    Joined,
+    RoomNotFound,
+    RoomFull,
+    PlayerBanned,
+}
+\end{lstlisting}

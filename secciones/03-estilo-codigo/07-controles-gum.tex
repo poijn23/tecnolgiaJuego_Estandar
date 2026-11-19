@@ -10,14 +10,14 @@
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
-var menu = new StackPanel
+var menuStackPanel = new StackPanel
 {
     Width = MenuWidth,
     WidthUnits = DimensionUnitType.Absolute,
     Spacing = ButtonSpacing,
 };
-menu.Anchor(Anchor.Left);
-menu.X = MenuX;
+menuStackPanel.Anchor(Anchor.Left);
+menuStackPanel.X = MenuX;
 
 var playButton = new Button
 {
@@ -26,22 +26,22 @@ var playButton = new Button
     Height = ButtonHeight,
 };
 playButton.Click += HandleClick;
-menu.AddChild(playButton);
+menuStackPanel.AddChild(playButton);
 \end{lstlisting}
 
 \textbf{Código incorrecto:}
 \begin{lstlisting}[style=csharpstyle]
-var menu = new StackPanel();
-menu.Width = MenuWidth;
-menu.WidthUnits = DimensionUnitType.Absolute;
-menu.Spacing = ButtonSpacing;
-menu.Anchor(Anchor.Left);
-menu.X = MenuX;
+var menuStackPanel = new StackPanel();
+menuStackPanel.Width = MenuWidth;
+menuStackPanel.WidthUnits = DimensionUnitType.Absolute;
+menuStackPanel.Spacing = ButtonSpacing;
+menuStackPanel.Anchor(Anchor.Left);
+menuStackPanel.X = MenuX;
 
 var playButton = new Button();
 playButton.Text = Strings.PlayButton;
 playButton.Width = ButtonWidth;
 playButton.Height = ButtonHeight;
 playButton.Click += HandleClick;
-menu.AddChild(playButton);
+menuStackPanel.AddChild(playButton);
 \end{lstlisting}
