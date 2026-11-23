@@ -4,6 +4,12 @@
 
 \textbf{Regla:} Los eventos se nombran en \texttt{PascalCase} con un verbo o frase verbal. El presente progresivo indica que la acción está por ocurrir (\texttt{TurnChanging}) y el pasado indica que ya ocurrió (\texttt{TurnChanged}); no se usan prefijos como \texttt{Before} o \texttt{After} (Microsoft, 2023a).
 
+\textbf{Descripción:} Las guías de diseño de .NET (Microsoft, 2023a) explican que un evento siempre se refiere a una acción que está ocurriendo o que ya ocurrió, por lo que su tiempo verbal dice cuándo se eleva, como \texttt{Closing} antes de cerrar una ventana y \texttt{Closed} después; por eso prohíben marcarlo con una palabra:
+\begin{quote}
+DO NOT use ``Before'' or ``After'' prefixes or postfixes to indicate pre- and post-events. (sección Names of Events, párr. 6)
+\end{quote}
+\noindent En su lugar, la guía remite a los tiempos presente y pasado (Microsoft, 2023a, sección Names of Events, párr. 6).
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 public class TurnManager
@@ -34,7 +40,11 @@ public class TurnManager
 
 \textbf{Regla:} Se utiliza \texttt{EventHandler<TEventArgs>} para eventos con datos. La clase de datos termina en \texttt{EventArgs}; los parámetros del manejador se llaman \texttt{sender} y \texttt{e}; el método que eleva el evento comienza con \texttt{On} (Microsoft, 2023b). El método que maneja un evento se nombra \texttt{Handle} seguido del nombre del evento, como \texttt{HandleTurnChanged}; el prefijo \texttt{On} queda reservado para el método que lo eleva.
 
-\textbf{Descripción:} Las clases base de los frameworks declaran métodos \texttt{protected virtual} con prefijo \texttt{On}, como \texttt{OnActivated(object sender, EventArgs args)} en la clase \texttt{Game} de MonoGame. Un manejador llamado \texttt{OnClientSizeChanged(object? sender, EventArgs e)} en una clase derivada se confunde con una sobrescritura de ese framework.
+\textbf{Descripción:} Las guías de diseño de .NET piden un solo tipo de delegado para los eventos:
+\begin{quote}
+DO use \texttt{System.EventHandler<TEventArgs>} instead of manually creating new delegates to be used as event handlers. (Microsoft, 2023b, párr. 4)
+\end{quote}
+\noindent Incluso cuando hace falta un delegado propio, su primer parámetro es un \texttt{object} llamado \texttt{sender} y el segundo, un \texttt{EventArgs} llamado \texttt{e} (Microsoft, 2023b, sección Custom Event Handler Design, párrs. 4--5); un \texttt{Action<Player>} no cumple ninguna de las dos guías. Las clases base de los frameworks declaran métodos \texttt{protected virtual} con prefijo \texttt{On}, como \texttt{OnActivated(object sender, EventArgs args)} en la clase \texttt{Game} de MonoGame. Un manejador llamado \texttt{OnClientSizeChanged(object? sender, EventArgs e)} en una clase derivada se confunde con una sobrescritura de ese framework.
 
 \textbf{Excepción:} \texttt{sender} y \texttt{e} son la única excepción admitida a la regla general de nombres descriptivos para parámetros (Sección 2.1): siguen la firma estándar del delegado \texttt{EventHandler} de .NET y no se renombran ni se sustituyen por un descarte.
 

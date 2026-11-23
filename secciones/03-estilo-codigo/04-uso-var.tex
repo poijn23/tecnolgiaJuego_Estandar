@@ -13,6 +13,11 @@
 
 En cualquier otro caso se escribe el tipo explícito: tipos integrados (\texttt{int}, \texttt{string}, \texttt{bool} y sus arreglos), aunque se construyan con \texttt{new}, y llamadas a métodos cuyo tipo de retorno no aparece en la expresión. Esta definición coincide con la que aplican las reglas \texttt{IDE0007} e \texttt{IDE0008} con la opción \texttt{csharp\_style\_var\_when\_type\_is\_apparent}, de modo que la compilación la verifica (Microsoft, 2022c).
 
+\textbf{Descripción:} \texttt{IDE0007} exige \texttt{var} e \texttt{IDE0008} exige el tipo explícito, y tres opciones deciden cuál aplica (Microsoft, 2022c): \texttt{csharp\_style\_var\_for\_built\_in\_types} en \texttt{false} deja explícitos los tipos integrados, \texttt{csharp\_style\_var\_when\_type\_is\_apparent} en \texttt{true} pide \texttt{var} cuando el tipo ya aparece en el lado derecho, y \texttt{csharp\_style\_var\_elsewhere} en \texttt{false} cubre el resto:
+\begin{quote}
+Prefer explicit type over \texttt{var} in all cases, unless overridden by another code style rule (sección \texttt{csharp\_style\_var\_elsewhere}, valor \texttt{false})
+\end{quote}
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 var player = new Player("Alice");
@@ -36,7 +41,11 @@ var playerNames = new string[MaximumPlayers];
 
 \textbf{Regla:} Una colección vacía se crea con la expresión de colección \texttt{[]} y una con elementos conocidos, con \texttt{[a, b]}; prohibido crearlas con \texttt{new} y el tipo, como \texttt{new List<T>()}, \texttt{new()}, \texttt{new Dictionary<TKey, TValue>()} o el inicializador \texttt{new List<T> \{ a \}}. Lo mismo vale para un arreglo: uno vacío se crea con \texttt{[]} y no con \texttt{Array.Empty<T>()}, y uno con elementos conocidos, con \texttt{[a, b]} y no con \texttt{new[] \{ a, b \}}. El tipo queda escrito donde se declara el campo, la propiedad, el parámetro o el valor de retorno; en una variable local se escribe el tipo explícito, porque \texttt{var} no puede deducir el tipo de una expresión de colección (Microsoft, 2026l).
 
-\textbf{Descripción:} La expresión de colección evita repetir tipos largos como \texttt{Dictionary<int, List<Player>{}>} sin cambiar el comportamiento: con destino \texttt{List<T>}, el compilador genera lo mismo que con \texttt{new List<T>()}. La regla \texttt{IDE0028} la sugiere en la compilación (Microsoft, 2025i).
+\textbf{Descripción:} La guía de C\# presenta la expresión de colección como la forma de crear colecciones:
+\begin{quote}
+Use a collection expression to create common collection values. (Microsoft, 2026l, párr. 1)
+\end{quote}
+\noindent Es una sintaxis breve que se asigna a muchos tipos de colección (Microsoft, 2026l, párr. 1), y el compilador elige la forma más eficiente de crearla; por ejemplo, puede realizar \texttt{[]} como \texttt{Array.Empty<T>()} cuando el destino no se modifica después (Microsoft, 2026l, sección Conversions, párr. 15). Además, evita repetir tipos largos como \texttt{Dictionary<int, List<Player>{}>} sin cambiar el comportamiento: con destino \texttt{List<T>}, el compilador genera lo mismo que con \texttt{new List<T>()}. La regla \texttt{IDE0028} la sugiere en la compilación: con su opción predeterminada prefiere la expresión de colección aunque los tipos solo coincidan de forma laxa, y su ejemplo marca como infracción \texttt{new List<int>() \{ 1, 2, 3 \}} (Microsoft, 2025i, secciones Options y Examples).
 
 \textbf{Excepción:} Un diccionario con elementos se crea con su inicializador, \texttt{new Dictionary<TKey, TValue> \{ [clave] = valor \}}, porque la expresión de colección solo admite el diccionario vacío. Una colección que se crea con argumentos que no son sus elementos, como la capacidad inicial o un comparador, conserva \texttt{new}: \texttt{new List<T>(capacidad)} o \texttt{new HashSet<string>(StringComparer.\allowbreak Ordinal)}; esos argumentos se pasan al construirla, no después. Un arreglo creado con su tamaño, \texttt{new T[n]}, también conserva \texttt{new}. Para materializar una consulta con \texttt{[.. consulta]} se sigue la Sección 5.3.1.
 

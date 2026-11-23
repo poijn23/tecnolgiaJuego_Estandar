@@ -146,7 +146,11 @@ public bool TryUndoMove()
 
 \textbf{Regla:} Un método propio no declara parámetros \texttt{out}: devuelve su resultado y, cuando no lo hay, un valor bandera o un tipo de resultado como \texttt{Lookup<T>} (Sección 9.4.3). Las llamadas a métodos de .NET que declaran \texttt{out}, como \texttt{int.TryParse} o \texttt{TryGetValue}, se conservan (Sección 9.4.4) (Martin, 2008; Microsoft, 2026o).
 
-\textbf{Descripción:} Un parámetro \texttt{out} hace que el método entregue su resultado por dos caminos y obliga a declarar una variable antes de cada llamada; devolver un solo valor deja ver en la firma qué produce el método.
+\textbf{Descripción:} Un parámetro \texttt{out} hace que el método entregue su resultado por dos caminos y obliga a declarar una variable antes de cada llamada; devolver un solo valor deja ver en la firma qué produce el método. La regla \texttt{CA1021} (Microsoft, 2026o) explica que pasar un argumento por referencia exige experiencia con punteros, distinguir los tipos de valor de los de referencia y manejar métodos con varios valores de retorno, y añade:
+\begin{quote}
+Also, the difference between \texttt{out} and \texttt{ref} parameters is not widely understood. (sección Rule description, párr. 1)
+\end{quote}
+\noindent Su corrección es devolver el objeto como valor de retorno y, si el método debe devolver varios valores, un solo objeto que los reúna (Microsoft, 2026o, sección How to fix violations, párr. 1).
 
 \textbf{Excepción:} Un método que implementa una interfaz de .NET que declara \texttt{out}, como \texttt{IDictionary<TKey, TValue>.TryGetValue}, la conserva.
 

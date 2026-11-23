@@ -4,7 +4,11 @@
 
 \textbf{Regla:} Prohibido obtener una dependencia llamando a \texttt{GetService} o \texttt{GetRequiredService} dentro de una clase; la dependencia se declara en el constructor.
 
-\textbf{Descripción:} El localizador de servicios oculta las dependencias de una clase: su constructor ya no dice qué necesita y una dependencia faltante solo falla al ejecutar el método (van Deursen \& Seemann, 2019). Las guías de .NET recomiendan evitar este patrón cuando se puede usar inyección (Microsoft, 2026p).
+\textbf{Descripción:} El localizador de servicios oculta las dependencias de una clase: su constructor ya no dice qué necesita y una dependencia faltante solo falla al ejecutar el método (van Deursen \& Seemann, 2019). Las guías de inyección de dependencias de .NET lo establecen así:
+\begin{quote}
+Avoid using the service locator pattern. (Microsoft, 2026p, sección Recommendations, párr. 5)
+\end{quote}
+\noindent Como ejemplo, la misma guía pide no llamar a \texttt{GetService} para obtener un servicio cuando se puede usar la inyección de dependencias (Microsoft, 2026p, sección Recommendations, párr. 5).
 
 \textbf{Excepción:} En la frontera de red, donde el framework crea el servicio y no permite inyectar dependencias con un ámbito por llamada, se recibe \texttt{IServiceScopeFactory} por constructor, se crea un ámbito por llamada y se resuelve de él el servicio de aplicación que atiende la petición (Microsoft, 2026p).
 

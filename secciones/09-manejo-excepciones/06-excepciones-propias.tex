@@ -2,7 +2,7 @@
 
 \subsubsection{Regla: constructores de una excepción propia}
 
-\textbf{Regla:} Una excepción propia hereda de \texttt{Exception}, se declara \texttt{sealed}, termina en \texttt{Exception} (Sección 2.14.1), fija su mensaje en inglés dentro del constructor y expone sus datos mediante propiedades de solo lectura. Si no lleva datos, declara los tres constructores estándar que exige la regla de análisis \texttt{CA1032} (Microsoft, 2016b). Si lleva datos obligatorios, declara solo los constructores que los reciben.
+\textbf{Regla:} Una excepción propia hereda de \texttt{Exception}, se declara \texttt{sealed}, termina en \texttt{Exception} (Sección 2.14.1), fija su mensaje en inglés dentro del constructor y expone sus datos mediante propiedades de solo lectura. Si no lleva datos, declara los tres constructores estándar que exige la regla de análisis \texttt{CA1032} (Microsoft, 2016). Si lleva datos obligatorios, declara solo los constructores que los reciben.
 
 \textbf{Descripción:} Un constructor sin parámetros dejaría una excepción con datos sin asignar, lo que contradice la Sección 2.6.3. Como la clase es \texttt{sealed}, ninguna clase derivada necesita los constructores restantes.
 
@@ -36,7 +36,11 @@ public class TileOccupiedException : Exception
 
 \textbf{Regla:} Una operación de servicio devuelve solo su resultado de éxito, y una operación sin resultado es \texttt{void}, nunca \texttt{bool}. Un rechazo no viaja como un código dentro de la respuesta: se declara con \texttt{[FaultContract]} y se envía como \texttt{FaultException<T>}, cuyo detalle es una clase de datos terminada en \texttt{Fault}. Los motivos parecidos se agrupan en una sola falla, con un enum que dice el motivo (Microsoft, 2017).
 
-\textbf{Descripción:} La falla que declara el contrato es el mecanismo de WCF para el error, y el cliente la recibe como excepción; un código dentro de la respuesta, o un \texttt{bool} que no dice qué pasó, obliga al cliente a revisar cada respuesta y deja pasar en silencio el caso que olvide.
+\textbf{Descripción:} La guía de fallas de WCF (Microsoft, 2017) explica que un método de servicio comunica sus errores con mensajes de falla SOAP, que forman un contrato de fallas que el cliente usa, y lo recomienda así:
+\begin{quote}
+It is strongly recommended that service operations declare their faults by using the FaultContractAttribute attribute to formally specify all SOAP faults that a client can expect to receive in the normal course of an operation. (sección Error Handling Overview, párr. 4)
+\end{quote}
+\noindent El cliente recibe la falla como excepción (Microsoft, 2017, sección Error Handling Overview, párr. 7), y una sola falla general puede describir todos los errores de un servicio, como la \texttt{MathFault} de una calculadora (Microsoft, 2017, sección Map Exceptions to SOAP Faults, párr. 1). Un código dentro de la respuesta, o un \texttt{bool} que no dice qué pasó, obliga al cliente a revisar cada respuesta y deja pasar en silencio el caso que olvide.
 
 \textbf{Excepción:} Se conserva un enum de respuesta que distingue entre resultados de éxito y no entre rechazos, como el que dice si una solicitud de amistad se envió o si la amistad ya empezó. Una falla cuyo motivo no debe revelarse no se agrupa con las demás: la de credenciales inválidas no dice si la cuenta existe (Sección 9.3.2).
 

@@ -4,7 +4,10 @@
 
 \textbf{Regla:} Para comprobar el tipo de un valor y usarlo convertido se emplea el patrón \texttt{is Tipo nombre}, o \texttt{is not Tipo nombre} cuando forma parte de una cláusula de guarda (Sección 4.2). Prohibido usar \texttt{as} seguido de una comprobación de nulo o una conversión explícita después de \texttt{is}. La variable que introduce el patrón sigue las reglas de nombrado de variables (Sección 2.1) (Microsoft, 2026i).
 
-\textbf{Descripción:} El patrón comprueba el tipo y declara la variable en una sola expresión, y el compilador solo la considera asignada en la rama donde el patrón se cumple, por lo que no puede usarse por error cuando la comprobación falla.
+\textbf{Descripción:} El patrón comprueba el tipo y declara la variable en una sola expresión, y el compilador solo la considera asignada en la rama donde el patrón se cumple, por lo que no puede usarse por error cuando la comprobación falla ni necesita una conversión aparte (Microsoft, 2026i, sección Test one condition with is, párr. 2). La regla \texttt{IDE0019} (Microsoft, 2026r) trata justo el caso de \texttt{as} seguido de una comprobación de nulo, y su opción predeterminada lo resuelve así:
+\begin{quote}
+Prefer pattern matching to determine if something is of a particular type (sección Options, valor \texttt{true})
+\end{quote}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

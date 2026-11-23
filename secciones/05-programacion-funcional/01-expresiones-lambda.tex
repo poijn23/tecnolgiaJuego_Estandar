@@ -25,7 +25,11 @@ _players.RemoveAll(player =>
 
 \textbf{Descripción:} Las lambdas se retiran del código sobre todo por pérdida de legibilidad, dificultad para depurar y degradación del rendimiento (Zheng et al., 2021); los tres contextos prohibidos concentran esas causas en defectos que el compilador no señala.
 
-\textbf{Prohibido --- evento cuya suscripción deba cancelarse:} Cada aparición de una lambda crea un delegado distinto, por lo que \texttt{-=} no retira lo que registró \texttt{+=}; el manejador se declara como método con nombre (Microsoft, 2015).
+\textbf{Prohibido --- evento cuya suscripción deba cancelarse:} Cada aparición de una lambda crea un delegado distinto, por lo que \texttt{-=} no retira lo que registró \texttt{+=}; el manejador se declara como método con nombre. La guía de eventos de C\# lo explica así:
+\begin{quote}
+You cannot easily unsubscribe from an event if you used an anonymous function to subscribe to it. To unsubscribe in this scenario, go back to the code where you subscribe to the event, store the anonymous function in a delegate variable, and then add the delegate to the event. We recommend that you don't use anonymous functions to subscribe to events if you have to unsubscribe from the event at some later point in your code. (Microsoft, 2015, sección To subscribe to events by using an anonymous function, párr. 2)
+\end{quote}
+\noindent Cancelarla importa: mientras el publicador conserva el delegado, el suscriptor no se libera de la memoria (Microsoft, 2015, sección Unsubscribing, párr. 1).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

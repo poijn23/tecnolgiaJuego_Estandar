@@ -4,7 +4,11 @@
 
 \textbf{Regla:} Prohibido leer el reloj del sistema con \texttt{DateTime.Now}, \texttt{DateTime.UtcNow} o \texttt{DateTimeOffset.UtcNow} fuera de la raíz de composición. Una clase que necesita la hora actual recibe un \texttt{TimeProvider} por constructor y llama a \texttt{GetUtcNow()}. En la raíz de composición se registra \texttt{TimeProvider.System}.
 
-\textbf{Descripción:} El tiempo es un resultado no determinista y, por lo tanto, un servicio externo (Sección 10.1). \texttt{TimeProvider} es la abstracción del tiempo que ofrece .NET; con ella el código se vuelve predecible y una prueba puede fijar la hora mediante \texttt{FakeTimeProvider} (Microsoft, 2026j).
+\textbf{Descripción:} El tiempo es un resultado no determinista y, por lo tanto, un servicio externo (Sección 10.1). \texttt{TimeProvider} es la abstracción del tiempo que ofrece .NET, y su guía lo justifica así:
+\begin{quote}
+By using \texttt{TimeProvider}, you ensure that your code is testable and predictable. (Microsoft, 2026j, párr. 1)
+\end{quote}
+\noindent Para las pruebas, el paquete \texttt{Microsoft.\allowbreak Extensions.\allowbreak TimeProvider.\allowbreak Testing} ofrece \texttt{FakeTimeProvider}, una implementación que se puede controlar (Microsoft, 2026j, sección FakeTimeProvider implementation, párr. 1).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

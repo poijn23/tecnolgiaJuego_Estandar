@@ -38,9 +38,13 @@ public void ValidateMoveFormat(string rawInput)
 
 \subsubsection{Regla: descarte \texttt{\_} en expresiones lambda}
 
-\textbf{Regla:} Un parámetro de lambda se nombra con el descarte \texttt{\_} únicamente cuando no participa en el cuerpo de la expresión: comunica de forma explícita al resto del equipo que ese valor es irrelevante para la operación y evita que el analizador de estilo señale un parámetro sin usar (Microsoft, 2025b). En una lambda con más de un parámetro no utilizado, cada uno se descarta por separado con su propio \texttt{\_}; el compilador los trata como posiciones independientes, no como una variable compartida.
+\textbf{Regla:} Un parámetro de lambda se nombra con el descarte \texttt{\_} únicamente cuando no participa en el cuerpo de la expresión: comunica de forma explícita al resto del equipo que ese valor es irrelevante para la operación y evita que el analizador de estilo señale un parámetro sin usar (Microsoft, 2026q). En una lambda con más de un parámetro no utilizado, cada uno se descarta por separado con su propio \texttt{\_}; el compilador los trata como posiciones independientes, no como una variable compartida.
 
-\textbf{Prohibido:} Usar el descarte cuando el parámetro sí se lee en el cuerpo de la lambda, aunque sea una sola vez. El compilador lo permite como un identificador válido, pero oculta la intención del valor y obliga a quien lee el código a inferir por el contexto qué representa.
+\textbf{Prohibido:} Usar el descarte cuando el parámetro sí se lee en el cuerpo de la lambda, aunque sea una sola vez. El compilador lo permite como un identificador válido, pero oculta la intención del valor y obliga a quien lee el código a inferir por el contexto qué representa. La guía de descartes lo establece así:
+\begin{quote}
+Choose discard parameters when a delegate signature requires inputs that the lambda body doesn't use. If a lambda has only one parameter named \texttt{\_}, \texttt{\_} remains an ordinary parameter name for backward compatibility. (Microsoft, 2026q, sección Mark unused lambda parameters, párr. 2)
+\end{quote}
+\noindent La misma guía pide no declarar variables, constantes ni tipos propios llamados \texttt{\_} y reservarlo para mostrar la intención de descartar (Microsoft, 2026q, sección Avoid \_ as an identifier, párr. 1).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

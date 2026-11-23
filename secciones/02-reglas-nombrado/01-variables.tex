@@ -4,6 +4,11 @@
 
 \textbf{Regla:} Variables locales y parámetros en \texttt{camelCase}. Se permite \texttt{i} únicamente como índice de un ciclo corto, simple y no anidado. Se permiten \texttt{j} y \texttt{k} solo como segundo y tercer índice de una operación posicional o matemática breve, sin significado de dominio. Cuando el contador representa filas, columnas, jugadores, rondas u otro concepto del juego, o cuando el cuerpo del ciclo no es inmediato, se usa un nombre descriptivo como \texttt{rowIndex}, \texttt{columnIndex} o \texttt{playerIndex} (Microsoft, 2025c).
 
+\textbf{Descripción:} La guía de nombres de C\# admite un nombre de una sola letra únicamente en un contador de ciclo:
+\begin{quote}
+Avoid using single-letter names, except for simple loop counters. (Microsoft, 2025c, sección Naming conventions, párr. 17)
+\end{quote}
+
 \textbf{Excepción:} Los parámetros de un \texttt{record} posicional se escriben en \texttt{PascalCase}, como en \texttt{record DiceRolled(Player Player, int FaceValue)}, porque el compilador los convierte en propiedades públicas del tipo (Microsoft, 2025c).
 
 \textbf{Código correcto:}

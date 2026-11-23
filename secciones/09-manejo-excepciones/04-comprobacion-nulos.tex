@@ -4,7 +4,10 @@
 
 \textbf{Regla:} El proyecto habilita referencias anulables con \texttt{<Nullable>enable</Nullable>}. Un valor que puede ser nulo se declara con \texttt{?}. Todo parámetro de tipo referencia no anulable de un miembro \texttt{public} o \texttt{protected}, incluidos los constructores, se comprueba al inicio con \texttt{ArgumentNullException.ThrowIfNull}, como exige la regla de análisis \texttt{CA1062} (Microsoft, 2020). Los miembros \texttt{private} e \texttt{internal} no repiten la comprobación, porque solo los invoca código que el análisis estático ya revisó. En un servicio WCF, un argumento nulo recibido del cliente se responde con el fallo que declara el contrato y no con \texttt{ArgumentNullException}, que el cliente no puede distinguir. Las comparaciones se expresan con \texttt{is null} o \texttt{is not null}, y se prohíbe ocultar advertencias con el operador \texttt{!} sin una garantía demostrable (Microsoft, 2026f; Microsoft, 2026a).
 
-\textbf{Descripción:} Las anotaciones de nulabilidad solo existen en tiempo de compilación. Un miembro público puede invocarse desde otro ensamblado o desde un deserializador que no las respeta, por lo que la comprobación en tiempo de ejecución es la única garantía; \texttt{CA1062} hace que esta regla se verifique al compilar en lugar de depender de la revisión de código.
+\textbf{Descripción:} Las anotaciones de nulabilidad solo existen en tiempo de compilación. Un miembro público puede invocarse desde otro ensamblado o desde un deserializador que no las respeta, por lo que la comprobación en tiempo de ejecución es la única garantía; \texttt{CA1062} hace que esta regla se verifique al compilar en lugar de depender de la revisión de código. Sobre el operador \texttt{!}, la guía de tipos de referencia anulables (Microsoft, 2026f) pide usarlo con moderación y preferir una comprobación de nulo, reestructurar el código o anotar la API, porque:
+\begin{quote}
+Each occurrence is a place the compiler can no longer protect you. (sección Override the warnings with !, párr. 2)
+\end{quote}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
@@ -145,7 +148,11 @@ public MoveRejection? FindRejection(BoardCoordinates target)
 
 \textbf{Regla:} Cuando una clave puede faltar y su valor es de tipo referencia, se lee con \texttt{GetValueOrDefault} en una variable anulable que se revisa en seguida con \texttt{if (x is null)}, que lanza, sale, salta o crea el valor; si existe un valor alternativo, se usa \texttt{??} (Sección 9.4.2). Cuando el valor es de tipo valor, se lee con \texttt{TryGetValue} y su resultado se guarda primero en una variable \texttt{bool} con nombre (Sección 2.1.4); si existe un valor alternativo, se usa \texttt{GetValueOrDefault(clave, alternativa)}. Prohibido comprobar la clave con \texttt{ContainsKey} y leerla después con el indexador, así como usar \texttt{?? throw} para el caso en que falta (Microsoft, 2026n).
 
-\textbf{Descripción:} \texttt{GetValueOrDefault} y \texttt{TryGetValue} buscan la clave una sola vez, mientras que \texttt{ContainsKey} seguido del indexador la busca dos veces, lo que señala \texttt{CA1854}. Con un valor de tipo valor, \texttt{GetValueOrDefault} sin alternativa devuelve \texttt{default(T)}, como un 0, que se confunde con un dato real. Con un tipo referencia, \texttt{is null} conserva el seguimiento de nulos del compilador, que se pierde si el \texttt{bool} de \texttt{TryGetValue} se guarda aparte.
+\textbf{Descripción:} \texttt{GetValueOrDefault} y \texttt{TryGetValue} buscan la clave una sola vez, mientras que \texttt{ContainsKey} seguido del indexador la busca dos veces, porque la implementación del indexador ya llama a \texttt{ContainsKey} (Microsoft, 2026n, sección Rule description, párr. 1). Por eso la regla \texttt{CA1854} pide:
+\begin{quote}
+Replace the IDictionary.\allowbreak ContainsKey invocation and element access with a call to the IDictionary.\allowbreak TryGetValue method. (Microsoft, 2026n, sección How to fix violations, párr. 1)
+\end{quote}
+\noindent Con un valor de tipo valor, \texttt{GetValueOrDefault} sin alternativa devuelve \texttt{default(T)}, como un 0, que se confunde con un dato real. Con un tipo referencia, \texttt{is null} conserva el seguimiento de nulos del compilador, que se pierde si el \texttt{bool} de \texttt{TryGetValue} se guarda aparte.
 
 \textbf{Excepción:} Se conserva el \texttt{out} de los métodos de .NET que lo necesitan: \texttt{int.TryParse} sobre un texto que puede venir mal formado y el \texttt{TryGetValue} de una colección que no ofrece \texttt{GetValueOrDefault}, como un \texttt{IDictionary} que no es \texttt{IReadOnlyDictionary}.
 

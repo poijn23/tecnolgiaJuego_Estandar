@@ -4,7 +4,11 @@
 
 \textbf{Regla:} \texttt{async void} se usa únicamente en manejadores de eventos. Todo su cuerpo queda dentro de un \texttt{try} que captura cada excepción que la operación puede lanzar y la maneja según la Sección 11.1.
 
-\textbf{Descripción:} Un método \texttt{async void} no devuelve una \texttt{Task} donde guardar la excepción: la lanza directamente sobre el contexto de sincronización activo, ningún \texttt{catch} del llamador la recibe y el proceso termina (Cleary, 2013).
+\textbf{Descripción:} Cleary (2013) limita \texttt{async void} a un solo uso:
+\begin{quote}
+Void-returning async methods have a specific purpose: to make asynchronous event handlers possible. (sección Avoid Async Void, párr. 2)
+\end{quote}
+\noindent Un método \texttt{async void} no devuelve una \texttt{Task} donde guardar la excepción: la lanza directamente sobre el contexto de sincronización activo, ningún \texttt{catch} del llamador la recibe y el proceso termina (Cleary, 2013).
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

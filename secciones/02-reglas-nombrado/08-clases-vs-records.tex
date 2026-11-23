@@ -66,7 +66,11 @@ public sealed class DiceRolled
 }
 \end{lstlisting}
 
-\textbf{Excepción:} Un valor inmutable que contiene un dato sensible (una contraseña, un token de sesión o su hash) se declara \texttt{sealed class}, no \texttt{record}. El compilador genera para todo \texttt{record} un \texttt{ToString} que escribe el nombre y el valor de cada propiedad pública (Microsoft, 2026b), así que registrar el objeto en la bitácora o verlo en un mensaje de error expone el secreto. Además, la igualdad que genera un \texttt{record} compara los arreglos por referencia, por lo que no sirve para un hash guardado en un \texttt{byte[]}.
+\textbf{Excepción:} Un valor inmutable que contiene un dato sensible (una contraseña, un token de sesión o su hash) se declara \texttt{sealed class}, no \texttt{record}. El compilador genera para todo \texttt{record} un \texttt{ToString} que escribe el nombre y el valor de cada propiedad pública (Microsoft, 2026b), así que registrar el objeto en la bitácora o verlo en un mensaje de error expone el secreto. Es lo que la debilidad CWE-209 (MITRE, 2026) pide evitar: advierte que una bitácora puede quedar a la vista de un atacante y concluye:
+\begin{quote}
+Highly sensitive information such as passwords should never be saved to log files. (sección Potential Mitigations, párr. 2)
+\end{quote}
+\noindent Además, la igualdad que genera un \texttt{record} compara los arreglos por referencia, por lo que no sirve para un hash guardado en un \texttt{byte[]}.
 
 \textbf{Código correcto (dato sensible):}
 \begin{lstlisting}[style=csharpstyle]

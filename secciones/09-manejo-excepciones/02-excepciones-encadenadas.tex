@@ -4,7 +4,10 @@
 
 \textbf{Regla:} Cuando una excepción se traduce a otro tipo porque la capa actual puede aportar contexto útil, se conserva la excepción original como \texttt{innerException}. Se prefiere un tipo predefinido de .NET y solo se utiliza una excepción personalizada cuando el llamador necesita distinguir una condición propia del dominio (Microsoft, 2025a).
 
-\textbf{Excepción:} En la frontera de red, el servicio que responde a un cliente remoto descarta la excepción original al traducirla al fallo que recibe el cliente, siempre que antes la registre con \texttt{Error} (Sección 11.1). La causa original contiene la traza de la pila, nombres de tablas y mensajes del motor de base de datos; enviarla al cliente expone información interna (MITRE, 2026), y como \texttt{innerException} de un fallo de red no llega al cliente.
+\textbf{Excepción:} En la frontera de red, el servicio que responde a un cliente remoto descarta la excepción original al traducirla al fallo que recibe el cliente, siempre que antes la registre con \texttt{Error} (Sección 11.1). La causa original contiene la traza de la pila, nombres de tablas y mensajes del motor de base de datos; enviarla al cliente expone información interna, y como \texttt{innerException} de un fallo de red no llega al cliente. Es la debilidad CWE-209 (MITRE, 2026), un mensaje de error que incluye información sensible sobre el entorno, los usuarios o los datos, y esta excepción aplica una de sus mitigaciones:
+\begin{quote}
+Create default error pages or messages that do not leak any information. (sección Potential Mitigations, párr. 10)
+\end{quote}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -65,7 +68,10 @@ public MatchSummary SaveMatch(MatchResult result)
 
 \textbf{Regla:} Al relanzar la misma excepción capturada, se usa \texttt{throw;} sin especificar la variable (Microsoft, 2026a).
 
-\textbf{Descripción:} \texttt{throw ex;} reinicia la traza de la pila; \texttt{throw;} conserva la original completa (Microsoft, 2025a).
+\textbf{Descripción:} \texttt{throw ex;} reinicia la traza de la pila; \texttt{throw;} conserva la original completa (Microsoft, 2025a). La referencia de C\# (Microsoft, 2026a) pide relanzar dentro del \texttt{catch} con \texttt{throw;}, que conserva la traza original de la excepción, y lo contrasta con la otra forma:
+\begin{quote}
+In contrast, \texttt{throw e;} updates the StackTrace property of \texttt{e}. (sección The throw statement, párr. 5)
+\end{quote}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
