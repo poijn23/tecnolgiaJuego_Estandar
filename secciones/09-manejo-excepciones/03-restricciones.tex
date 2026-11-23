@@ -4,7 +4,19 @@
 
 \textbf{Regla:} Prohibido lanzar directamente \texttt{System.Exception} u otro tipo genérico de excepción base, o capturarlo en un bloque \texttt{catch}; siempre se usa el tipo más específico. Esta restricción no impide heredar de \texttt{Exception} ni recibirla como parámetro \texttt{innerException} en el constructor convencional de una excepción personalizada.
 
-\textbf{Descripción:} Capturar una excepción genérica lo detecta la regla de análisis \texttt{CA1031} (Microsoft, 2016a) y lanzarla lo detecta \texttt{CA2201} (Microsoft, 2016c). Las excepciones genéricas ocultan problemas en tiempo de ejecución, obligan al llamador a capturar también los errores que no sabe manejar y dificultan la depuración.
+\textbf{Descripción:} Las convenciones de código de .NET lo establecen así:
+\begin{quote}
+Only catch exceptions that can be properly handled; avoid catching general exceptions. (Microsoft, 2025e, sección Language guidelines, párr. 4)
+\end{quote}
+\noindent La regla de análisis \texttt{CA1031} (Microsoft, 2026t) detecta un \texttt{catch} que recibe \texttt{System.Exception} o \texttt{System.SystemException}, pero acepta como corrección relanzarla al final del bloque (sección How to fix violations, párr. 1); por eso el código incorrecto de esta regla, que la relanza, solo se detecta en la revisión de código.
+
+\noindent Lanzarla lo detecta \texttt{CA2201} (Microsoft, 2026u), que considera demasiado generales \texttt{System.Exception}, \texttt{System.ApplicationException} y \texttt{System.SystemException} para dar información suficiente a quien las recibe, y explica:
+\begin{quote}
+If you throw a general exception type, such as Exception or SystemException, in a library or framework, it forces consumers to catch all exceptions, including unknown exceptions that they don't know how to handle.
+
+Instead, either throw a more derived type that already exists in the framework, or create your own type that derives from Exception. (sección Rule description, apartado Don't throw general exceptions, párrs. 1--2)
+\end{quote}
+\noindent Las excepciones genéricas ocultan problemas en tiempo de ejecución, obligan al llamador a capturar también los errores que no sabe manejar y dificultan la depuración.
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -41,6 +53,12 @@ public void EstablishConnection()
 \subsubsection{Regla: preferir excepciones predefinidas}
 
 \textbf{Regla:} Se usa una excepción predefinida cuando expresa correctamente el error. Para argumentos nulos se usa \texttt{ArgumentNullException}; para argumentos inválidos, \texttt{ArgumentException} o una derivada; y para una operación incompatible con el estado actual, \texttt{InvalidOperationException}. Solo se crea una excepción personalizada cuando no existe una equivalente y el llamador necesita tratar esa condición por separado (Microsoft, 2025a).
+
+\textbf{Descripción:} La guía de buenas prácticas de .NET lo establece así:
+\begin{quote}
+Introduce a new exception class only when a predefined one doesn't apply. (Microsoft, 2025a, sección Use predefined exception types, párr. 1)
+\end{quote}
+\noindent Sus ejemplos son los mismos de esta regla: \texttt{InvalidOperationException} cuando una operación no corresponde al estado actual del objeto, y \texttt{ArgumentException} o una derivada cuando los argumentos no son válidos (Microsoft, 2025a, sección Use predefined exception types, párrs. 2--3).
 
 \textbf{Excepción:} Un rechazo de negocio esperado, como unas credenciales inválidas, se comunica con una excepción personalizada cuando debe cruzar un contrato de servicio WCF, porque el fallo tipado (\texttt{FaultException<T>}) es el mecanismo que el contrato ofrece para que el cliente distinga cada rechazo. Dentro del dominio, sin una frontera de red de por medio, sigue aplicándose la regla general.
 

@@ -4,6 +4,11 @@
 
 \textbf{Regla:} Llaves \texttt{\{\}} obligatorias en toda estructura de control, incluso con una única instrucción; regla \texttt{IDE0011} (Microsoft, 2023e).
 
+\textbf{Descripción:} La regla \texttt{IDE0011} (Microsoft, 2023e) decide con la opción \texttt{csharp\_\allowbreak prefer\_\allowbreak braces} si las llaves se exigen siempre, nunca o solo en los bloques de varias líneas; este estándar adopta su valor predeterminado, \texttt{true}, que la página describe así:
+\begin{quote}
+Prefer curly braces even for one line of code (sección \texttt{csharp\_prefer\_braces}, valor \texttt{true})
+\end{quote}
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 if (diceRoll == MaximumFaceValue)

@@ -87,3 +87,91 @@ public sealed class MoveNotation : ValueConverter<Move, string>
 \end{lstlisting}
 
 \textbf{Nota:} Las lambdas de este ejemplo no se pueden sustituir por grupos de método, porque el constructor de \texttt{ValueConverter} recibe árboles de expresión.
+
+\subsubsection{Regla: sin vocabulario de transporte ni sufijo \texttt{Async}}
+
+\textbf{Regla:} Un tipo o un método se nombra por lo que es o hace en el juego, no por la técnica que lo transporta o lo ejecuta. Prohibido usar \texttt{Request}, \texttt{Response}, \texttt{Reply}, \texttt{Dto} o \texttt{Payload} como parte del nombre de un tipo, y terminar en \texttt{Async} el nombre de un método propio, aunque devuelva \texttt{Task}.
+
+\textbf{Descripción:} Esas palabras dicen cómo viaja o cómo se ejecuta el dato, no qué es, y obligan a cambiar el nombre si cambia la técnica; un nombre del juego, como \texttt{RoomSettings} u \texttt{OpenedRoom}, sigue valiendo con otro transporte. Esta regla se aparta de la convención de .NET, que agrega \texttt{Async} a todo método que devuelve un tipo que se puede esperar (Microsoft, 2026m).
+
+\textbf{Excepción:} \texttt{Request} se conserva cuando nombra un objeto del juego, como la solicitud de amistad (\texttt{FriendRequest}), o cuando funciona como adjetivo (\texttt{RequestedRoomSettings}). \texttt{Async} se conserva en los métodos que impone .NET, como \texttt{ExecuteAsync} de \texttt{BackgroundService} (Sección 2.2.1).
+
+\textbf{Código correcto:}
+
+\textit{Archivo \texttt{RoomSettings.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed record RoomSettings(int SeatCount, int TurnSeconds);
+\end{lstlisting}
+
+\textit{Archivo \texttt{OpenedRoom.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed record OpenedRoom(string RoomCode, int SeatCount);
+\end{lstlisting}
+
+\textit{Archivo \texttt{IRoomService.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IRoomService
+{
+    OpenedRoom OpenRoom(RoomSettings settings);
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{LobbyViewModel.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class LobbyViewModel
+{
+    private readonly IRoomService _rooms;
+
+    public LobbyViewModel(IRoomService rooms)
+    {
+        ArgumentNullException.ThrowIfNull(rooms);
+        _rooms = rooms;
+    }
+
+    public Task<OpenedRoom> OpenRoom(RoomSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        return Task.Run(() => _rooms.OpenRoom(settings));
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+
+\textit{Archivo \texttt{OpenRoomRequest.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed record OpenRoomRequest(int SeatCount, int TurnSeconds);
+\end{lstlisting}
+
+\textit{Archivo \texttt{OpenRoomResponse.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed record OpenRoomResponse(string RoomCode, int SeatCount);
+\end{lstlisting}
+
+\textit{Archivo \texttt{IRoomService.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IRoomService
+{
+    OpenRoomResponse OpenRoom(OpenRoomRequest request);
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{LobbyViewModel.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class LobbyViewModel
+{
+    private readonly IRoomService _rooms;
+
+    public LobbyViewModel(IRoomService rooms)
+    {
+        ArgumentNullException.ThrowIfNull(rooms);
+        _rooms = rooms;
+    }
+
+    public Task<OpenRoomResponse> OpenRoomAsync(OpenRoomRequest request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return Task.Run(() => _rooms.OpenRoom(request));
+    }
+}
+\end{lstlisting}

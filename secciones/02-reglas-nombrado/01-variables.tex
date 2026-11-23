@@ -4,6 +4,12 @@
 
 \textbf{Regla:} Variables locales y parámetros en \texttt{camelCase}. Se permite \texttt{i} únicamente como índice de un ciclo corto, simple y no anidado. Se permiten \texttt{j} y \texttt{k} solo como segundo y tercer índice de una operación posicional o matemática breve, sin significado de dominio. Cuando el contador representa filas, columnas, jugadores, rondas u otro concepto del juego, o cuando el cuerpo del ciclo no es inmediato, se usa un nombre descriptivo como \texttt{rowIndex}, \texttt{columnIndex} o \texttt{playerIndex} (Microsoft, 2025c).
 
+\textbf{Descripción:} La guía de nombres de C\# admite un nombre de una sola letra únicamente en un contador de ciclo:
+\begin{quote}
+Avoid using single-letter names, except for simple loop counters. (Microsoft, 2025c, sección Naming conventions, párr. 17)
+\end{quote}
+\noindent La misma lista pide nombres significativos y descriptivos y preferir la claridad a la brevedad (Microsoft, 2025c, sección Naming conventions, párrs. 7--8); por eso un contador con significado en el dominio lleva nombre.
+
 \textbf{Excepción:} Los parámetros de un \texttt{record} posicional se escriben en \texttt{PascalCase}, como en \texttt{record DiceRolled(Player Player, int FaceValue)}, porque el compilador los convierte en propiedades públicas del tipo (Microsoft, 2025c).
 
 \textbf{Código correcto:}
@@ -101,4 +107,100 @@ bool hasReachedFinalTile = false;
 \begin{lstlisting}[style=csharpstyle]
 bool playerTurnActive = true;
 bool finalTileReached = false;
+\end{lstlisting}
+
+\subsubsection{Regla: un dato se nombra con un sustantivo}
+
+\textbf{Regla:} Una variable local, un parámetro, un parámetro de lambda o un campo que guarda un dato se nombra con un sustantivo o una frase nominal que dice qué dato es, nunca con una palabra que se lea como acción, como \texttt{move}, \texttt{search}, \texttt{look} o \texttt{fill}. Un parámetro que recibe un delegado también se nombra con un sustantivo que dice su papel, como \texttt{converter}, \texttt{matchStarter} o \texttt{turnSubmission} (Martin, 2008).
+
+\textbf{Descripción:} Un verbo hace que el nombre se lea como una llamada y no dice qué dato llega: \texttt{move} puede ser la orden de mover o una jugada, mientras que \texttt{chosenMove} dice cuál. Los métodos se nombran con verbo (Sección 2.2.1) porque hacen algo; los datos, con sustantivo, porque son algo.
+
+\textbf{Excepción:} Una variable local que guarda un delegado que se ejecuta en seguida se nombra con un verbo, como un método (Sección 2.2.1): \mbox{\texttt{Action sendMove = () =>\ ...}}. Las variables \texttt{bool} siguen la Sección 2.1.4.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+public Task SubmitMove(ChosenMove chosenMove)
+{
+    ArgumentNullException.ThrowIfNull(chosenMove);
+    Action sendMove = () => _matches.MovePawn(chosenMove);
+    return SubmitTurn(sendMove);
+}
+
+private static Task SubmitTurn(Action turnSubmission)
+{
+    return Task.Run(turnSubmission);
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public Task SubmitMove(ChosenMove move)
+{
+    ArgumentNullException.ThrowIfNull(move);
+    Action sendMove = () => _matches.MovePawn(move);
+    return SubmitTurn(sendMove);
+}
+
+private static Task SubmitTurn(Action submit)
+{
+    return Task.Run(submit);
+}
+\end{lstlisting}
+
+\subsubsection{Regla: una variable que guarda un control termina con el nombre de su tipo}
+
+\textbf{Regla:} Una variable local, un campo o un parámetro que guarda un control de la interfaz gráfica termina con el nombre exacto de su tipo, como \texttt{cancelButton}, \texttt{titleLabel} o \texttt{menuStackPanel}. Si no hace falta distinguirlo de otro, el nombre es solo el tipo, como \texttt{label}.
+
+\textbf{Descripción:} El sufijo deja ver qué pieza de la pantalla es sin buscar la declaración, que es la misma idea que la Sección 2.14.3 aplica a las clases, y evita que el nombre de un botón se lea como acción (Sección 2.1.5): \texttt{cancel} puede ser la orden de cancelar, y \texttt{cancelButton} es el botón.
+
+\textbf{Excepción:} Una figura de Gum que no es un control, como \texttt{RectangleRuntime}, \texttt{TextRuntime} o \texttt{ContainerRuntime}, se nombra por lo que dibuja, como \texttt{background}. Una variable de un tipo base que recibe varios controles, como \texttt{FrameworkElement} o \texttt{ButtonBase}, conserva un nombre genérico, como \texttt{element} o \texttt{button}.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle]
+var background = new RectangleRuntime
+{
+    FillColor = Color.Black,
+};
+var menuStackPanel = new StackPanel
+{
+    Width = MenuWidth,
+    WidthUnits = DimensionUnitType.Absolute,
+    Spacing = ButtonSpacing,
+};
+var titleLabel = new Label
+{
+    Text = Strings.MenuTitle,
+};
+var settingsButton = new Button
+{
+    Text = Strings.SettingsButton,
+};
+menuStackPanel.AddChild(background);
+menuStackPanel.AddChild(titleLabel);
+menuStackPanel.AddChild(settingsButton);
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+var background = new RectangleRuntime
+{
+    FillColor = Color.Black,
+};
+var menu = new StackPanel
+{
+    Width = MenuWidth,
+    WidthUnits = DimensionUnitType.Absolute,
+    Spacing = ButtonSpacing,
+};
+var title = new Label
+{
+    Text = Strings.MenuTitle,
+};
+var settings = new Button
+{
+    Text = Strings.SettingsButton,
+};
+menu.AddChild(background);
+menu.AddChild(title);
+menu.AddChild(settings);
 \end{lstlisting}

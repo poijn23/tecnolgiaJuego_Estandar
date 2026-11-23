@@ -7,7 +7,7 @@
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 [DataContract]
-public sealed class MoveRequest
+public sealed class PieceMove
 {
     [DataMember]
     public int PieceId { get; set; }
@@ -16,7 +16,7 @@ public sealed class MoveRequest
 
 \textbf{Código incorrecto:}
 \begin{lstlisting}[style=csharpstyle]
-[DataContract] public sealed class MoveRequest
+[DataContract] public sealed class PieceMove
 {
     [DataMember, Required]
     public int PieceId { get; set; }

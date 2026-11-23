@@ -4,7 +4,18 @@
 
 \textbf{Regla:} Una enumeración se nombra en \texttt{PascalCase} con un sustantivo en singular. Solo una enumeración de indicadores, marcada con \texttt{[Flags]}, se nombra en plural. El nombre no lleva los sufijos \texttt{Enum}, \texttt{Flag} ni \texttt{Flags}, y sus valores no llevan prefijo (Microsoft, 2023c).
 
-\textbf{Descripción:} Una variable de una enumeración simple guarda un solo valor, por eso el tipo va en singular: \texttt{TurnState state}. Una de indicadores puede guardar varios valores combinados, por eso va en plural: \texttt{TileMarkers markers}.
+\textbf{Descripción:} Una variable de una enumeración simple guarda un solo valor, por eso el tipo va en singular: \texttt{TurnState state}. Una de indicadores puede guardar varios valores combinados, por eso va en plural: \texttt{TileMarkers markers}. Las guías de diseño de .NET lo establecen así:
+\begin{quote}
+DO use a singular type name for an enumeration unless its values are bit fields.
+
+DO use a plural type name for an enumeration with bit fields as values, also called flags enum.
+
+DO NOT use an ``Enum'' suffix in enum type names.
+
+DO NOT use ``Flag'' or ``Flags'' suffixes in enum type names.
+
+DO NOT use a prefix on enumeration value names (e.g., ``ad'' for ADO enums, ``rtf'' for rich text enums, etc.). (Microsoft, 2023c, sección Naming Enumerations, párrs. 2--6)
+\end{quote}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]

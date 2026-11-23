@@ -4,7 +4,11 @@
 
 \textbf{Regla:} Cada archivo contiene exactamente un tipo de nivel superior: clase, interfaz, \texttt{record}, \texttt{struct}, \texttt{enum} o \texttt{delegate}. El nombre del archivo coincide con el del tipo; en un tipo genérico se omiten los parámetros de tipo, de modo que \texttt{ServiceChannel<TContract>} se guarda en \texttt{ServiceChannel.cs} (McConnell, 2004).
 
-\textbf{Tipos anidados:} Prohibido declarar un tipo anidado visible fuera de la clase que lo contiene (\texttt{public}, \texttt{internal} o \texttt{protected}); un tipo que otras clases usan se declara en su propio archivo. Se permite un tipo anidado \texttt{private} que solo sirve a la clase que lo contiene. El analizador \texttt{CA1034} detecta los tipos anidados visibles (Microsoft, s.~f.-a).
+\textbf{Tipos anidados:} Prohibido declarar un tipo anidado visible fuera de la clase que lo contiene (\texttt{public}, \texttt{internal} o \texttt{protected}); un tipo que otras clases usan se declara en su propio archivo. Se permite un tipo anidado \texttt{private} que solo sirve a la clase que lo contiene. La regla \texttt{CA1034} (Microsoft, 2026s) explica que un tipo anidado sirve para encapsular detalles privados de la implementación de la clase que lo contiene, y concluye:
+\begin{quote}
+Used for this purpose, nested types should not be externally visible. (sección Rule description, párr. 1)
+\end{quote}
+\noindent Para agrupar tipos o evitar choques de nombres, la misma regla pide usar espacios de nombres (Microsoft, 2026s, sección Rule description, párr. 2). El analizador solo detecta un tipo anidado \texttt{public} dentro de un tipo \texttt{public} y exime los \texttt{protected} y las enumeraciones (Microsoft, 2026s, sección Cause); los demás casos se comprueban en la revisión de código. Al prohibir también los anidados \texttt{protected}, este estándar se aparta de \texttt{CA1034}, que los admite para que las subclases los usen (Microsoft, 2026s, sección Rule description, párr. 4).
 
 \textbf{Código generado:} Los archivos que produce una herramienta, como \texttt{Strings.Designer.cs} a partir de un archivo \texttt{.resx}, quedan exentos de esta sección porque se regeneran en cada cambio y cualquier corrección manual se pierde.
 
@@ -98,7 +102,7 @@ public sealed class DiceRoller
 
 \subsection{Regla: orden y continuidad de directivas \texttt{using}}
 
-\textbf{Regla:} Las directivas \texttt{using} se colocan fuera del espacio de nombres en un único bloque sin líneas en blanco. Primero van los espacios de nombres de \texttt{System}, en orden alfabético; después, todos los demás en un solo grupo alfabético, sin separar bibliotecas de terceros y espacios de nombres propios del proyecto (Microsoft, 2022a; Microsoft, 2022b). El orden alfabético no distingue mayúsculas de minúsculas, por lo que \texttt{log4net} va después de \texttt{CoreWCF} y antes de \texttt{Microsoft}.
+\textbf{Regla:} Las directivas \texttt{using} se colocan fuera del espacio de nombres en un único bloque sin líneas en blanco. Primero van los espacios de nombres de \texttt{System}, en orden alfabético; después, todos los demás en un solo grupo alfabético, sin separar bibliotecas de terceros y espacios de nombres propios del proyecto (Microsoft, 2022a, 2022b). El orden alfabético no distingue mayúsculas de minúsculas, por lo que \texttt{log4net} va después de \texttt{CoreWCF} y antes de \texttt{Microsoft}.
 
 \textbf{Descripción:} Es el orden que produce el comando de ordenar \texttt{using} del editor con la configuración siguiente, de modo que no requiere revisión manual:
 
@@ -107,6 +111,11 @@ public sealed class DiceRoller
   \item \texttt{dotnet\_sort\_system\_directives\_first = true}
   \item \texttt{dotnet\_separate\_import\_directive\_groups = false}
 \end{itemize}
+
+\noindent Las tres opciones tienen aquí su valor predeterminado (Microsoft, 2022a, 2022b): la primera coloca las directivas fuera del espacio de nombres, la segunda ordena alfabéticamente las de \texttt{System} y las pone antes de las demás, y la tercera, en \texttt{false}, se describe así:
+\begin{quote}
+Do not place a blank line between \texttt{using} directive groups. (Microsoft, 2022a, sección \texttt{dotnet\_separate\_\allowbreak import\_\allowbreak directive\_\allowbreak groups}, valor \texttt{false})
+\end{quote}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -135,7 +144,7 @@ namespace BoardGame.Services;
 
 \textbf{Regla:} Todo tipo pertenece a un espacio de nombres que coincide con la carpeta en la que está el archivo, a partir de la carpeta raíz del proyecto, y que refleja la responsabilidad del archivo. Se usa la declaración de ámbito de archivo y un solo espacio de nombres por archivo; por ejemplo, los servicios de guardado en la carpeta \texttt{Services/Saves} se agrupan bajo \texttt{BoardGame.Services.Saves} (Microsoft, 2026d).
 
-\textbf{Descripción:} La compilación verifica ambas condiciones: \texttt{IDE0161} exige la declaración de ámbito de archivo y \texttt{IDE0130} exige que el espacio de nombres coincida con la carpeta (Microsoft, s.~f.-b; Microsoft, s.~f.-c). La configuración equivalente es:
+\textbf{Descripción:} La compilación verifica ambas condiciones: \texttt{IDE0161} exige la declaración de ámbito de archivo y \texttt{IDE0130} exige que el espacio de nombres coincida con la carpeta (Microsoft, s.~f.-a, s.~f.-b). La configuración equivalente es:
 
 \begin{itemize}
   \item \texttt{csharp\_style\_namespace\_declarations = file\_scoped}

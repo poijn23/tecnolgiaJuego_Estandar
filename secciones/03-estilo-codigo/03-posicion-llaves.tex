@@ -4,6 +4,12 @@
 
 \textbf{Regla:} Llave de apertura y cierre en su propia línea, alineadas con el bloque que delimitan. Prohibido que \texttt{else}, \texttt{catch} o \texttt{finally} compartan línea con la llave anterior. La misma disposición aplica a los inicializadores de objetos y colecciones: \texttt{new} y el tipo en una línea y la llave de apertura en la siguiente (Microsoft, 2025e).
 
+\textbf{Descripción:} Las convenciones de código de .NET (Microsoft, 2025e) lo establecen así:
+\begin{quote}
+Use the ``Allman'' style for braces: open and closing brace its own new line. (sección Style guidelines, párr. 6)
+\end{quote}
+\noindent La misma guía alinea las llaves con el nivel de indentación actual (Microsoft, 2025e, sección Style guidelines, párr. 6). Como la llave de cierre queda sola en su línea, un \texttt{else}, un \texttt{catch} o un \texttt{finally} no puede compartirla.
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 if (player.IsActive)

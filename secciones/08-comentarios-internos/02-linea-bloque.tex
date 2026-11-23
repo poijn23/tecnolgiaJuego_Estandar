@@ -4,6 +4,11 @@
 
 \textbf{Regla:} Se usa un comentario de línea con \texttt{//} para una explicación breve y excepcional. Se evita el comentario de bloque \texttt{/* ... */}; si la explicación requiere varias líneas, se mejora el diseño o se traslada la explicación al documento técnico correspondiente. Ningún comentario conserva código deshabilitado (Microsoft, 2025e). El comentario de documentación \texttt{///} no es un comentario de bloque y se rige por la Sección 7.
 
+\textbf{Descripción:} Las convenciones de código de .NET (Microsoft, 2025e) reservan el comentario de línea para las explicaciones breves y descartan el de bloque:
+\begin{quote}
+Avoid multi-line comments (\texttt{/* */}) for longer explanations. (sección Comment style, párr. 2)
+\end{quote}
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 // Saves from version 1.x store the board without the wall count.

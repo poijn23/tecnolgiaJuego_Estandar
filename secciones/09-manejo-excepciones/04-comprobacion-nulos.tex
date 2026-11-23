@@ -2,15 +2,24 @@
 
 \subsubsection{Regla: referencias anulables y validación de argumentos}
 
-\textbf{Regla:} El proyecto habilita referencias anulables con \texttt{<Nullable>enable</Nullable>}. Un valor que puede ser nulo se declara con \texttt{?}. Todo parámetro de tipo referencia no anulable de un miembro \texttt{public} o \texttt{protected}, incluidos los constructores, se comprueba al inicio con \texttt{ArgumentNullException.ThrowIfNull}, como exige la regla de análisis \texttt{CA1062} (Microsoft, 2020). Los miembros \texttt{private} e \texttt{internal} no repiten la comprobación, porque solo los invoca código que el análisis estático ya revisó. En un servicio WCF, un argumento nulo recibido del cliente se responde con el fallo que declara el contrato y no con \texttt{ArgumentNullException}, que el cliente no puede distinguir. Las comparaciones se expresan con \texttt{is null} o \texttt{is not null}, y se prohíbe ocultar advertencias con el operador \texttt{!} sin una garantía demostrable (Microsoft, 2026f; Microsoft, 2026a).
+\textbf{Regla:} El proyecto habilita referencias anulables con \texttt{<Nullable>enable</Nullable>}. Un valor que puede ser nulo se declara con \texttt{?}. Todo parámetro de tipo referencia no anulable de un miembro \texttt{public} o \texttt{protected}, incluidos los constructores, se comprueba al inicio con \texttt{ArgumentNullException.ThrowIfNull}, como exige la regla de análisis \texttt{CA1062} (Microsoft, 2020). Los miembros \texttt{private} e \texttt{internal} no repiten la comprobación, porque solo los invoca código que el análisis estático ya revisó. En un servicio WCF, un argumento nulo recibido del cliente se responde con el fallo que declara el contrato y no con \texttt{ArgumentNullException}, que el cliente no puede distinguir. Las comparaciones se expresan con \texttt{is null} o \texttt{is not null}, y se prohíbe ocultar advertencias con el operador \texttt{!} sin una garantía demostrable (Microsoft, 2026a, 2026f).
 
-\textbf{Descripción:} Las anotaciones de nulabilidad solo existen en tiempo de compilación. Un miembro público puede invocarse desde otro ensamblado o desde un deserializador que no las respeta, por lo que la comprobación en tiempo de ejecución es la única garantía; \texttt{CA1062} hace que esta regla se verifique al compilar en lugar de depender de la revisión de código.
+\textbf{Descripción:} Las anotaciones de nulabilidad solo existen en tiempo de compilación. Un miembro público puede invocarse desde otro ensamblado o desde un deserializador que no las respeta, por lo que la comprobación en tiempo de ejecución es la única garantía; \texttt{CA1062} hace que esta regla se verifique al compilar en lugar de depender de la revisión de código. Sobre el operador \texttt{!}, la guía de tipos de referencia anulables (Microsoft, 2026f) pide usarlo con moderación y preferir una comprobación de nulo, reestructurar el código o anotar la API, porque:
+\begin{quote}
+Each occurrence is a place the compiler can no longer protect you. (sección Override the warnings with !, párr. 2)
+\end{quote}
 
 \textbf{Código correcto:}
-\begin{lstlisting}[style=csharpstyle]
-public Player? FindPlayer(Guid playerId)
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+public Player GetPlayer(Guid playerId)
 {
-    return _players.SingleOrDefault(player => player.Id == playerId);
+    Player? player = _players.SingleOrDefault(candidate => candidate.Id == playerId);
+    if (player is null)
+    {
+        throw new KeyNotFoundException($"No player has the id {playerId}.");
+    }
+
+    return player;
 }
 
 public void StartTurn(Player player)
@@ -22,9 +31,9 @@ public void StartTurn(Player player)
 
 \textbf{Código incorrecto:}
 \begin{lstlisting}[style=csharpstyle]
-public Player FindPlayer(Guid playerId)
+public Player GetPlayer(Guid playerId)
 {
-    return _players.SingleOrDefault(player => player.Id == playerId)!;
+    return _players.SingleOrDefault(candidate => candidate.Id == playerId)!;
 }
 
 public void StartTurn(Player player)
@@ -87,5 +96,106 @@ public sealed class PlayerProfile
     {
         return Nickname is not null ? Nickname : AccountName;
     }
+}
+\end{lstlisting}
+
+\subsubsection{Regla: un método no devuelve \texttt{null}}
+
+\textbf{Regla:} Ningún método ni operación de servicio devuelve \texttt{null} ni declara un tipo de retorno anulable. Cuando lo buscado puede faltar, el método devuelve un tipo de resultado que dice si se encontró, como \texttt{Lookup<T>} con su propiedad \texttt{IsFound}, o un valor bandera del tipo que devuelve: el miembro \texttt{None} de un enum, el índice -1 o un texto vacío acompañado de una propiedad \texttt{Has...}. Un valor anulable dentro de un método se resuelve en seguida con \texttt{??} (Sección 9.4.2) o con \texttt{is null}, y nunca sale como resultado (Martin, 2008).
+
+\textbf{Descripción:} Un retorno anulable deja en cada llamador la obligación de comprobarlo, y un olvido solo aparece como \texttt{NullReferenceException} cuando el programa ya se está ejecutando; un tipo de resultado o un valor bandera muestra en la firma que el dato puede faltar.
+
+\textbf{Excepción:} Una propiedad que guarda un dato opcional conserva su tipo anulable, como la fecha de fin de una partida que no ha terminado o la propiedad de un objeto de transferencia que puede llegar sin valor (Sección 9.4.2). Un método de .NET que devuelve \texttt{null}, como \texttt{SingleOrDefault}, se usa dentro del método y su resultado se resuelve ahí mismo.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+public Lookup<Player> FindPlayer(Guid playerId)
+{
+    Player? player = _players.SingleOrDefault(candidate => candidate.Id == playerId);
+    return Lookup.FromNullable(player, $"PlayerId={playerId}");
+}
+
+public MoveRejection FindRejection(BoardCoordinates target)
+{
+    if (_board.IsOccupied(target))
+    {
+        return MoveRejection.SquareOccupied;
+    }
+
+    return MoveRejection.None;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle]
+public Player? FindPlayer(Guid playerId)
+{
+    return _players.SingleOrDefault(candidate => candidate.Id == playerId);
+}
+
+public MoveRejection? FindRejection(BoardCoordinates target)
+{
+    if (_board.IsOccupied(target))
+    {
+        return MoveRejection.SquareOccupied;
+    }
+
+    return null;
+}
+\end{lstlisting}
+
+\subsubsection{Regla: leer un diccionario que puede no tener la clave}
+
+\textbf{Regla:} Cuando una clave puede faltar y su valor es de tipo referencia, se lee con \texttt{GetValueOrDefault} en una variable anulable que se revisa en seguida con \texttt{if (x is null)}, que lanza, sale, salta o crea el valor; si existe un valor alternativo, se usa \texttt{??} (Sección 9.4.2). Cuando el valor es de tipo valor, se lee con \texttt{TryGetValue} y su resultado se guarda primero en una variable \texttt{bool} con nombre (Sección 2.1.4); si existe un valor alternativo, se usa \texttt{GetValueOrDefault(clave, alternativa)}. Prohibido comprobar la clave con \texttt{ContainsKey} y leerla después con el indexador, así como usar \texttt{?? throw} para el caso en que falta (Microsoft, 2026n).
+
+\textbf{Descripción:} \texttt{GetValueOrDefault} y \texttt{TryGetValue} buscan la clave una sola vez, mientras que \texttt{ContainsKey} seguido del indexador la busca dos veces, porque la implementación del indexador ya llama a \texttt{ContainsKey} (Microsoft, 2026n, sección Rule description, párr. 1). Por eso la regla \texttt{CA1854} pide:
+\begin{quote}
+Replace the IDictionary.\allowbreak ContainsKey invocation and element access with a call to the IDictionary.\allowbreak TryGetValue method. (Microsoft, 2026n, sección How to fix violations, párr. 1)
+\end{quote}
+\noindent Con un valor de tipo valor, \texttt{GetValueOrDefault} sin alternativa devuelve \texttt{default(T)}, como un 0, que se confunde con un dato real. Con un tipo referencia, \texttt{is null} conserva el seguimiento de nulos del compilador, que se pierde si el \texttt{bool} de \texttt{TryGetValue} se guarda aparte.
+
+\textbf{Excepción:} Se conserva el \texttt{out} de los métodos de .NET que lo necesitan: \texttt{int.TryParse} sobre un texto que puede venir mal formado y el \texttt{TryGetValue} de una colección que no ofrece \texttt{GetValueOrDefault}, como un \texttt{IDictionary} que no es \texttt{IReadOnlyDictionary}.
+
+\textbf{Código correcto:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+public Player GetSeatedPlayer(int seatNumber)
+{
+    Player? player = _playersBySeat.GetValueOrDefault(seatNumber);
+    if (player is null)
+    {
+        throw new KeyNotFoundException($"No player sits in seat {seatNumber}.");
+    }
+
+    return player;
+}
+
+public bool HasWallsLeft(int turnOrder)
+{
+    bool isKnownPlayer = _wallsLeftByTurnOrder.TryGetValue(turnOrder, out int wallsLeft);
+    if (!isKnownPlayer)
+    {
+        throw new KeyNotFoundException($"No player has the turn order {turnOrder}.");
+    }
+
+    return wallsLeft > 0;
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+public Player GetSeatedPlayer(int seatNumber)
+{
+    if (!_playersBySeat.ContainsKey(seatNumber))
+    {
+        throw new KeyNotFoundException($"No player sits in seat {seatNumber}.");
+    }
+
+    return _playersBySeat[seatNumber];
+}
+
+public bool HasWallsLeft(int turnOrder)
+{
+    int wallsLeft = _wallsLeftByTurnOrder.GetValueOrDefault(turnOrder);
+    return wallsLeft > 0;
 }
 \end{lstlisting}

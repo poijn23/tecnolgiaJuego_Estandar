@@ -44,6 +44,12 @@ public static class TileColorList
 
 \textbf{Regla:} Sin prefijos que indiquen que un tipo es una clase (\texttt{CTile}, \texttt{ClsPlayer}) ni abreviaturas poco reconocidas (Cwalina \& Abrams, 2008).
 
+\textbf{Descripción:} Microsoft Learn reproduce las guías de diseño de Cwalina y Abrams, que lo prohíben de forma expresa:
+\begin{quote}
+DO NOT give class names a prefix (e.g., ``C''). (Microsoft, 2023c, párr. 6)
+\end{quote}
+\noindent La misma página pide evitar las abreviaturas en los nombres de tipo (Microsoft, 2023c, párr. 10).
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 public sealed class TurnManager

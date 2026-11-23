@@ -4,6 +4,11 @@
 
 \textbf{Regla:} Toda constante (de campo o local, incluidas \texttt{private} e \texttt{internal}) se escribe en \texttt{PascalCase}, sin \texttt{SCREAMING\_SNAKE\_CASE} (Microsoft, 2025c).
 
+\textbf{Descripción:} La guía de nombres de C\# (Microsoft, 2025c) toma esta convención del estilo del equipo de .NET Runtime y la aplica igual a todos los modificadores de acceso:
+\begin{quote}
+To maintain consistency across all access modifiers, use PascalCase for constant names, both fields and local constants, including \texttt{private} and \texttt{internal} constants. (sección Naming conventions, párr. 12)
+\end{quote}
+
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
 public sealed class GameBoard

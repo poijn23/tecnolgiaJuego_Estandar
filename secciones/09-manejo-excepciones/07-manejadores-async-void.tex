@@ -1,10 +1,17 @@
-\subsection{Manejadores \texttt{async void}}
+\subsection{Código asíncrono}
 
 \subsubsection{Regla: un manejador \texttt{async void} no deja escapar excepciones}
 
 \textbf{Regla:} \texttt{async void} se usa únicamente en manejadores de eventos. Todo su cuerpo queda dentro de un \texttt{try} que captura cada excepción que la operación puede lanzar y la maneja según la Sección 11.1.
 
-\textbf{Descripción:} Un método \texttt{async void} no devuelve una \texttt{Task} donde guardar la excepción: la lanza directamente sobre el contexto de sincronización activo, ningún \texttt{catch} del llamador la recibe y el proceso termina (Cleary, 2013).
+\textbf{Descripción:} Cleary (2013) limita \texttt{async void} a un solo uso:
+\begin{quote}
+Void-returning async methods have a specific purpose: to make asynchronous event handlers possible. (sección Avoid Async Void, párr. 2)
+\end{quote}
+\noindent Por eso el manejador atrapa todo en su cuerpo: sin una \texttt{Task} donde guardar la excepción, ningún \texttt{catch} del llamador la recibe.
+\begin{quote}
+With async void methods, there is no Task object, so any exceptions thrown out of an async void method will be raised directly on the SynchronizationContext that was active when the async void method started. (Cleary, 2013, sección Avoid Async Void, párr. 3)
+\end{quote}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
@@ -12,7 +19,7 @@ private async void HandleRollClick(object? sender, EventArgs e)
 {
     try
     {
-        await _dice.RollAsync();
+        await Task.Run(_dice.Roll);
     }
     catch (TimeoutException ex)
     {
@@ -26,6 +33,80 @@ private async void HandleRollClick(object? sender, EventArgs e)
 \begin{lstlisting}[style=csharpstyle]
 private async void HandleRollClick(object? sender, EventArgs e)
 {
-    await _dice.RollAsync();
+    await Task.Run(_dice.Roll);
+}
+\end{lstlisting}
+
+\subsubsection{Regla: contratos e interfaces sin \texttt{Task}}
+
+\textbf{Regla:} Un contrato de servicio y una interfaz propia no exponen \texttt{Task} ni \texttt{Task<T>}: cada operación devuelve el tipo de su resultado o \texttt{void}. La ejecución en otro hilo queda dentro de la implementación o en el llamador, que envuelve la llamada con \texttt{Task.Run} cuando no debe bloquear la interfaz gráfica.
+
+\textbf{Descripción:} Un contrato dice qué se pide y qué se obtiene; \texttt{Task} dice además cómo se ejecuta, y obliga a todas las implementaciones y a todos los llamadores a seguir esa técnica. Esta regla se aparta de la recomendación de usar código asíncrono «de principio a fin» (Cleary, 2013): una llamada envuelta en \texttt{Task.Run} ocupa un hilo mientras espera, un costo que en un cliente de escritorio con pocas llamadas a la vez no se nota.
+
+\textbf{Excepción:} Los métodos que impone .NET, como \texttt{ExecuteAsync} de \texttt{BackgroundService} o \texttt{StartAsync} y \texttt{StopAsync} de \texttt{IHostedService}, conservan su \texttt{Task} (Sección 2.14.4). Un método de un view model que espera una llamada al servidor devuelve \texttt{Task}, y si lo invoca un evento se sigue la Sección 9.7.1.
+
+\textbf{Código correcto:}
+
+\textit{Archivo \texttt{IMatchService.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IMatchService
+{
+    MoveOutcome SubmitMove(ChosenMove chosenMove);
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{MatchViewModel.cs}:}
+\begin{lstlisting}[style=csharpstyle,basicstyle=\ttfamily\scriptsize]
+public sealed class MatchViewModel
+{
+    private readonly IMatchService _matches;
+
+    public MatchViewModel(IMatchService matches)
+    {
+        ArgumentNullException.ThrowIfNull(matches);
+        _matches = matches;
+    }
+
+    public bool IsGameOver { get; private set; }
+
+    public async Task SubmitMove(ChosenMove chosenMove)
+    {
+        ArgumentNullException.ThrowIfNull(chosenMove);
+        MoveOutcome outcome = await Task.Run(() => _matches.SubmitMove(chosenMove));
+        IsGameOver = outcome.IsGameOver;
+    }
+}
+\end{lstlisting}
+
+\textbf{Código incorrecto:}
+
+\textit{Archivo \texttt{IMatchService.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public interface IMatchService
+{
+    Task<MoveOutcome> SubmitMove(ChosenMove chosenMove);
+}
+\end{lstlisting}
+
+\textit{Archivo \texttt{MatchViewModel.cs}:}
+\begin{lstlisting}[style=csharpstyle]
+public sealed class MatchViewModel
+{
+    private readonly IMatchService _matches;
+
+    public MatchViewModel(IMatchService matches)
+    {
+        ArgumentNullException.ThrowIfNull(matches);
+        _matches = matches;
+    }
+
+    public bool IsGameOver { get; private set; }
+
+    public async Task SubmitMove(ChosenMove chosenMove)
+    {
+        ArgumentNullException.ThrowIfNull(chosenMove);
+        MoveOutcome outcome = await _matches.SubmitMove(chosenMove);
+        IsGameOver = outcome.IsGameOver;
+    }
 }
 \end{lstlisting}
