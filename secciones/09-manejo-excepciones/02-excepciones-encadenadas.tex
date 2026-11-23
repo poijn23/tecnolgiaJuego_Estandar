@@ -6,7 +6,7 @@
 
 \textbf{Excepción:} En la frontera de red, el servicio que responde a un cliente remoto descarta la excepción original al traducirla al fallo que recibe el cliente, siempre que antes la registre con \texttt{Error} (Sección 11.1). La causa original contiene la traza de la pila, nombres de tablas y mensajes del motor de base de datos; enviarla al cliente expone información interna, y como \texttt{innerException} de un fallo de red no llega al cliente. Es la debilidad CWE-209 (MITRE, 2026), un mensaje de error que incluye información sensible sobre el entorno, los usuarios o los datos, y esta excepción aplica una de sus mitigaciones:
 \begin{quote}
-Create default error pages or messages that do not leak any information. (sección Potential Mitigations, párr. 10)
+Create default error pages or messages that do not leak any information. (sección Potential Mitigations, mitigación 7)
 \end{quote}
 
 \textbf{Código correcto:}

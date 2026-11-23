@@ -4,9 +4,9 @@
 
 \textbf{Regla:} Un control de Gum que se crea con \texttt{new}, como \texttt{StackPanel}, \texttt{Panel}, \texttt{Label} o \texttt{Button}, se declara con \texttt{var} (Sección 3.4) y recibe en un inicializador de objeto las propiedades cuyo valor se conoce al crearlo: tamaño, unidades, posición, separación y texto. Prohibido construirlo vacío y asignarle esas propiedades una por una en las instrucciones siguientes (Microsoft, 2026k). Con \texttt{dotnet\_style\_object\_initializer = true:warning}, la regla \texttt{IDE0017} señala en la compilación las asignaciones escritas justo después de la construcción (Microsoft, 2023g).
 
-\textbf{Descripción:} La guía de C\# (Microsoft, 2026k) presenta el inicializador de objeto como el reemplazo de ese patrón, porque asigna los campos y las propiedades accesibles al crear el objeto:
+\textbf{Descripción:} La guía de C\# (Microsoft, 2026k) presenta el inicializador de objeto como la forma de asignar los campos y las propiedades al crear el objeto, sin llamar al constructor y asignar después (sección Object initializers, párr. 1). Las convenciones de código de .NET lo piden así, junto a un contraejemplo que crea el mismo objeto vacío y lo asigna línea por línea:
 \begin{quote}
-You don't need to invoke a constructor and then use assignment statements. (sección Object initializers, párr. 1)
+Use object initializers to simplify object creation, as shown in the following example. (Microsoft, 2025e, sección new operator, párr. 3)
 \end{quote}
 \noindent El inicializador reúne en un solo bloque cómo es el control al aparecer. Después de él van las llamadas a métodos (\texttt{AddChild}, \texttt{SetBinding}, \texttt{Anchor}, \texttt{Dock}) y las suscripciones a eventos, que un inicializador no admite, y las propiedades del objeto \texttt{Visual} del control, que no se anidan en el inicializador.
 

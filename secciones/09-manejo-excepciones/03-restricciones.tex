@@ -4,10 +4,12 @@
 
 \textbf{Regla:} Prohibido lanzar directamente \texttt{System.Exception} u otro tipo genérico de excepción base, o capturarlo en un bloque \texttt{catch}; siempre se usa el tipo más específico. Esta restricción no impide heredar de \texttt{Exception} ni recibirla como parámetro \texttt{innerException} en el constructor convencional de una excepción personalizada.
 
-\textbf{Descripción:} Capturar una excepción genérica lo detecta la regla de análisis \texttt{CA1031} (Microsoft, 2026t), que se activa cuando un \texttt{catch} recibe \texttt{System.Exception} o \texttt{System.SystemException}, o cuando se usa un \texttt{catch} general, y lo establece así:
+\textbf{Descripción:} Las convenciones de código de .NET lo establecen así:
 \begin{quote}
-General exceptions should not be caught. (sección Rule description, párr. 1)
+Only catch exceptions that can be properly handled; avoid catching general exceptions. (Microsoft, 2025e, sección Language guidelines, párr. 4)
 \end{quote}
+\noindent La regla de análisis \texttt{CA1031} (Microsoft, 2026t) detecta un \texttt{catch} que recibe \texttt{System.Exception} o \texttt{System.SystemException}, pero acepta como corrección relanzarla al final del bloque (sección How to fix violations, párr. 1); por eso el código incorrecto de esta regla, que la relanza, solo se detecta en la revisión de código.
+
 \noindent Lanzarla lo detecta \texttt{CA2201} (Microsoft, 2026u), que considera demasiado generales \texttt{System.Exception}, \texttt{System.ApplicationException} y \texttt{System.SystemException} para dar información suficiente a quien las recibe, y explica:
 \begin{quote}
 If you throw a general exception type, such as Exception or SystemException, in a library or framework, it forces consumers to catch all exceptions, including unknown exceptions that they don't know how to handle.

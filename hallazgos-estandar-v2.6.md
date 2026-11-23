@@ -4,7 +4,7 @@ Revisión del 22 de noviembre de 2026. Base: v2.5 (`0a65ccd`). Rama `estandar-v2
 
 Cada prohibición que se apoya en una fuente de documentación recibió, si la fuente la respalda, un bloque `quote` con texto literal en formato APA 7. La frase de entrada parafrasea el contexto. Este archivo reúne dos cosas: de dónde salen los pasajes largos y las reglas que no recibieron cita.
 
-## 1. Pasajes largos pegados por el equipo (9)
+## 1. Pasajes largos pegados por el equipo (12)
 
 Los copió el equipo desde las páginas y se compararon palabra por palabra con las versiones descargadas el 22 de noviembre de 2026. Todos coinciden y ya están en el `.tex`, sin iconos (✔️/❌), con el formato de código del original en `\texttt{…}` y las comillas como ` ``…'' `.
 
@@ -19,6 +19,9 @@ Los copió el equipo desde las páginas y se compararon palabra por palabra con 
 | 26 | 9.3.1 | `secciones/09-manejo-excepciones/03-restricciones.tex` | https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2201 | Rule description, apartado Don't throw general exceptions: sus dos párrafos, sin el título |
 | 30 | 9.5.1 | `secciones/09-manejo-excepciones/05-liberacion-recursos.tex` | https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose | Sección Cascade dispose calls, recuadro Tip: la primera oración |
 | 32 | 9.6.2 | `secciones/09-manejo-excepciones/06-excepciones-propias.tex` | https://learn.microsoft.com/en-us/dotnet/framework/wcf/specifying-and-handling-faults-in-contracts-and-services | Sección Error Handling Overview, párrafo 4: la primera oración |
+| Rev. | 2.2.4 | `secciones/02-reglas-nombrado/02-metodos.tex` | https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1021 | Sección How to fix violations, párrafo 1, sus dos oraciones |
+| Rev. | 9.5.1 | `secciones/09-manejo-excepciones/05-liberacion-recursos.tex` | https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose | Sección Cascade dispose calls, párrafo 1: la primera oración |
+| Rev. | 9.7.1 | `secciones/09-manejo-excepciones/07-manejadores-async-void.tex` | https://learn.microsoft.com/en-us/archive/msdn-magazine/2013/march/async-await-best-practices-in-asynchronous-programming | Sección Avoid Async Void, párrafo 3: la tercera oración |
 
 Si una página cambia, el pasaje puede dejar de coincidir. Antes de publicar otra versión conviene comprobarlo de nuevo.
 
@@ -48,12 +51,11 @@ Si una página cambia, el pasaje puede dejar de coincidir. Antes de publicar otr
 - **5.1.2 (lambda dentro de lambda):** no tiene fuente propia.
 - **5.2.1:** la página de delegados (2024) no lo dice. IDE0200 lo respaldaría.
 - **5.3.1:** la página de operadores de consulta (2025h) no prohíbe encadenar `ToList` ni escribir la cadena en una línea.
-- **6.1:** CA1034 no detecta los tipos anidados `internal` ni `protected`. El texto de la v2.6 ya lo corrige.
+- **6.1:** CA1034 no detecta los tipos anidados `internal` ni `protected`, y además admite los `protected` para las subclases. El texto de la v2.6 ya lo dice y declara que el estándar se aparta de CA1034.
 - **7.1.2:** `inheritdoc` está en la página *Recommended XML tags*, no en 2026c. Las reglas 7.2.1 y 7.2.2 tampoco tienen respaldo en 2026c.
 - **8.2.1:** la prohibición del código deshabilitado no aparece en 2025e.
 - **9.4.2:** la prohibición de `?:` o `if` no está en 2026h. La de usar `??` sobre una propiedad no anulable no tiene fuente.
 - **9.6.2:** «`void`, nunca `bool`» y «el rechazo no viaja como código» son decisiones del equipo.
-- **9.7.1:** Cleary no dice que «el proceso termina».
 - **10.3.1:** la guía de inyección de dependencias (2026p) llama variante del localizador a inyectar una fábrica, pero recomienda `IServiceScopeFactory.CreateScope`, que es lo que usa la Excepción.
 - **11.1.1** (excepción según el nivel), **11.2.1** y **11.3.1:** las páginas de Apache no lo dicen; McConnell es un libro.
 - **2.14.4 y 9.7.2:** ya declaran que se apartan de .NET.
@@ -87,3 +89,28 @@ Dos datos que vienen de memoria y hay que comprobar en los libros:
 - **Logging in C# (2025d):** está en la lista, pero no se cita en ningún lugar.
 - **Letras sin usar:** 2023d y 2025b.
 - **Fecha de consulta:** APA 7 la pide para las páginas que cambian con el tiempo («Recuperado el 22 de noviembre de 2026, de …»). Es opcional y no se aplicó.
+
+## 7. Revisión final de las citas
+
+Una segunda lectura independiente revisó si cada cita establece o justifica la prohibición de su regla. Antes de corregir, se comprobaron en las páginas los puntos principales.
+
+**Corregido en esta versión:**
+- **2.1.1:** se añadió la paráfrasis de los nombres significativos, para respaldar el caso del contador con significado en el dominio.
+- **2.2.4:** el bloque es ahora la corrección de CA1021. La v2.6 declara que CA1021 solo revisa la API pública y exime el patrón `Try`.
+- **2.7.2:** el bloque pasó a la Descripción, que es la parte que respalda.
+- **3.4.2:** el bloque viene ahora de las convenciones de código (2025e), que piden expresiones de colección para inicializar todos los tipos de colección.
+- **3.7.1:** el bloque viene ahora de 2025e, que pide inicializadores de objeto junto a un contraejemplo.
+- **6.1:** se declara que el estándar se aparta de CA1034 en los anidados `protected`.
+- **9.3.1:** el bloque viene ahora de 2025e, que dice que no se capturen excepciones generales. CA1031 acepta como corrección relanzar la excepción, así que el código incorrecto de la regla solo se detecta en la revisión de código; la v2.6 ya lo dice.
+- **9.5.1:** se añadió el bloque que establece que la clase dueña implementa `IDisposable`. Se conservó la cursiva del original.
+- **9.5.2:** se añadió el bloque que explica por qué falla un `Close` directo.
+- **9.7.1:** se añadió el bloque que justifica el `try`. Se quitó «el proceso termina», que la fuente no dice.
+- **Formato APA:** se corrigieron los localizadores de CWE-209 (por número de mitigación) y las citas de varias obras del mismo autor, que ahora van separadas por coma.
+
+**Sigue siendo parcial (no se cambió):**
+- **2.7.2:** según la fuente, un `_` único es un nombre de parámetro común, no un descarte. Eso afecta al ejemplo correcto `_ => …`.
+- **3.4.1:** la cita describe la opción de configuración, no una razón.
+- **9.6.2:** `void`, nunca `bool`, y la prohibición de códigos en la respuesta son decisiones del equipo.
+- **9.4.4:** CA1854 corrige con `TryGetValue`; la regla pide `GetValueOrDefault` para los valores de tipo referencia.
+- **9.4.1:** la parte de `is null` frente a `== null` no tiene cita.
+- **APA:** el bloque se usa también para las citas de menos de 40 palabras. Es una decisión del equipo.

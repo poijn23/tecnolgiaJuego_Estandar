@@ -146,11 +146,11 @@ public bool TryUndoMove()
 
 \textbf{Regla:} Un método propio no declara parámetros \texttt{out}: devuelve su resultado y, cuando no lo hay, un valor bandera o un tipo de resultado como \texttt{Lookup<T>} (Sección 9.4.3). Las llamadas a métodos de .NET que declaran \texttt{out}, como \texttt{int.TryParse} o \texttt{TryGetValue}, se conservan (Sección 9.4.4) (Martin, 2008; Microsoft, 2026o).
 
-\textbf{Descripción:} Un parámetro \texttt{out} hace que el método entregue su resultado por dos caminos y obliga a declarar una variable antes de cada llamada; devolver un solo valor deja ver en la firma qué produce el método. La regla \texttt{CA1021} (Microsoft, 2026o) explica que pasar un argumento por referencia exige experiencia con punteros, distinguir los tipos de valor de los de referencia y manejar métodos con varios valores de retorno, y añade:
+\textbf{Descripción:} Un parámetro \texttt{out} hace que el método entregue su resultado por dos caminos y obliga a declarar una variable antes de cada llamada; devolver un solo valor deja ver en la firma qué produce el método. La regla \texttt{CA1021} (Microsoft, 2026o) explica que pasar un argumento por referencia exige experiencia con punteros, distinguir los tipos de valor de los de referencia y manejar varios valores de retorno, y que la diferencia entre \texttt{out} y \texttt{ref} no se entiende bien en general (sección Rule description, párr. 1). Su corrección establece la regla:
 \begin{quote}
-Also, the difference between \texttt{out} and \texttt{ref} parameters is not widely understood. (sección Rule description, párr. 1)
+To fix a violation of this rule that is caused by a value type, have the method return the object as its return value. If the method must return multiple values, redesign it to return a single instance of an object that holds the values. (sección How to fix violations, párr. 1)
 \end{quote}
-\noindent Su corrección es devolver el objeto como valor de retorno y, si el método debe devolver varios valores, un solo objeto que los reúna (Microsoft, 2026o, sección How to fix violations, párr. 1).
+\noindent \texttt{CA1021} solo revisa la API pública y exime el patrón \texttt{Try} (Microsoft, 2026o, secciones Cause y Try pattern methods); este estándar la aplica a todo método propio y deja los métodos \texttt{Try} propios a la Sección 2.2.3.
 
 \textbf{Excepción:} Un método que implementa una interfaz de .NET que declara \texttt{out}, como \texttt{IDictionary<TKey, TValue>.TryGetValue}, la conserva.
 

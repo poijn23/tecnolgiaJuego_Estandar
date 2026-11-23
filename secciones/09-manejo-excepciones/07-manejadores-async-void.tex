@@ -8,7 +8,10 @@
 \begin{quote}
 Void-returning async methods have a specific purpose: to make asynchronous event handlers possible. (sección Avoid Async Void, párr. 2)
 \end{quote}
-\noindent Un método \texttt{async void} no devuelve una \texttt{Task} donde guardar la excepción: la lanza directamente sobre el contexto de sincronización activo, ningún \texttt{catch} del llamador la recibe y el proceso termina (Cleary, 2013).
+\noindent Por eso el manejador atrapa todo en su cuerpo: sin una \texttt{Task} donde guardar la excepción, ningún \texttt{catch} del llamador la recibe.
+\begin{quote}
+With async void methods, there is no Task object, so any exceptions thrown out of an async void method will be raised directly on the SynchronizationContext that was active when the async void method started. (Cleary, 2013, sección Avoid Async Void, párr. 3)
+\end{quote}
 
 \textbf{Código correcto:}
 \begin{lstlisting}[style=csharpstyle]
